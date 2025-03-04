@@ -1,0 +1,16 @@
+@import '../../../styles/mixins.scss';
+
+.button-primary {
+    @include text-preset-4-bold;
+    background-color: $grey-900;
+    color: white;
+    border-radius: 0.8rem;
+    transition: border-radius 0.8s;
+
+    &:hover {
+        background-color: $grey-500;
+        cursor: pointer;
+        border-radius: 3.6rem;
+        transition: border-radius 0.8s;
+    }
+}

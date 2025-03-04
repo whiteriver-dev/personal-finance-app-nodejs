@@ -1,0 +1,65 @@
+@import '../../styles/mixins.scss';
+
+.login {
+    padding: 3.2rem;
+    border-radius: 1.2rem;
+    min-width: 34.3rem;
+    max-width: 49.6rem;
+}
+
+.login__container {
+    gap: 3.2rem;
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1 {
+        @include text-preset-1;
+    }
+
+    label {
+        @include text-preset-5-bold;
+        color: $grey-500;
+        margin: 0;
+        margin-bottom: 0.4rem;
+    }
+
+    input {
+        border-radius: 0.8rem;
+        height: 4.5rem;
+        border: 2px solid;
+    }
+
+    button {
+        height: 5.3rem;
+        border-radius: 0.8rem;
+        border: 2px solid;
+    }
+
+    p {
+        @include text-preset-4;
+        color: $grey-500;
+        text-align: center;
+
+        span {
+            @include text-preset-4-bold;
+            color: $grey-900;
+            text-decoration: underline;
+
+            &:hover {
+                cursor: pointer;
+                color: $grey-500;
+            }
+        }
+    }
+}
+
+.email-input {
+    margin-bottom: 1.6rem;
+}
+
+.password-input {
+    margin-bottom: 3.2rem;
+}
