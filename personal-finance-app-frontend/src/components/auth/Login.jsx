@@ -37,6 +37,7 @@ function Login() {
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
+            setIsLoading(false);
             return;
         }
 
@@ -57,8 +58,8 @@ function Login() {
 
         if (response.ok) {
             localStorage.setItem('token', data.token);
-            localStorage.setItem('name', JSON.stringify(data.name));
-            localStorage.setItem('email', JSON.stringify(data.email));
+            localStorage.setItem('name', data.name);
+            localStorage.setItem('email', data.email);
             navigate('/dashboard');
         } else {
             console.log('Login failed: ' + data.message);

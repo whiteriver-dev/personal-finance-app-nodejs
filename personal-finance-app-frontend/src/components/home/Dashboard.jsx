@@ -22,7 +22,7 @@ function Dashboard() {
         setEmail(email);   
         setToken(token);
 
-    }, []);
+    }, [navigate]);
 
 
     

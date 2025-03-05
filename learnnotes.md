@@ -13,3 +13,10 @@ FRONTEND
 - 
 
 
+TODO:
+
+- Double check why you are able to send empty form to database
+- Delete duplicate accounts
+- Ensure capitalization of name
+- See why its not displaying name and email in dashboard
+

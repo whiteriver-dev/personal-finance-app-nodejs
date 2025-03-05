@@ -33,29 +33,28 @@ function Register() {
 
         if (!name) {
             validationErrors.name = 'Name is required';
-        }
-        else if (!validateName(name)) {
+        } else if (!validateName(name)) {
             validationErrors.name = 'Name should contain letters only';
         }
 
         if (!password) {
             validationErrors.password = 'Password is required';
-        }
-        else if (password.length < 6) {
+        } else if (password.length < 6) {
             validationErrors.password = 'Password should be at least 6 characters long';
+        }
 
         if (!email) {
             validationErrors.email = 'Email is required';
-        } 
-        else if (!validateEmail(email)) {   
+        } else if (!validateEmail(email)) {   
             validationErrors.email = 'Email is invalid';
         }
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
+            setIsLoading(false);
             return;
         }
-    }
+    
 
         setErrors({}); // Clear the errors
 
@@ -74,7 +73,7 @@ function Register() {
         if (response.ok) {
             navigate('/login');
         }   else {
-            console.log('Login failed: ' + data.message);
+            console.log('Registration failed: ' + data.message);
             setErrors({ backend: data.message });
         }
 
