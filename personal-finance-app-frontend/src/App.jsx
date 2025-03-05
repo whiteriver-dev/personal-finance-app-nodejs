@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Register from './components/auth/Register'; 
-import Login from './components/auth/Login'; 
+import AuthTemplate from './components/auth/AuthTemplate';
 import Dashboard from './components/home/Dashboard';
 import './App.scss'; // 
 
@@ -10,8 +9,8 @@ function App() {
     <Router>
     <div className="App">
       <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login/>} />
+        <Route path="/register" element={<AuthTemplate />} />
+        <Route path="/login" element={<AuthTemplate/>} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>

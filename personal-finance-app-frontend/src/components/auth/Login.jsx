@@ -101,12 +101,13 @@ function Login() {
                         type="submit"
                         disabled={isLoading}/>
                 </form>
+                <p>Need to create an account? <Link to="/register">Register</Link></p>
             </div>
         </div>
     );
 }
 
-<p>Need to create an account? <Link to="/register">Register</Link></p>
+
 
 export default Login;
 
