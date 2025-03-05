@@ -63,7 +63,7 @@ function Login() {
             navigate('/dashboard');
         } else {
             console.log('Login failed: ' + data.message);
-            setErrors({ general: data.message });
+            setErrors({ backend: data.message });
         }
 
     }
@@ -87,6 +87,9 @@ function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     />
+
+                    {errors.backend && <span className='backend-error'>{errors.backend}</span>}
+
                     <ButtonPrimary
                         text={
                             isLoading ? (
