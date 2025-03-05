@@ -3,8 +3,6 @@
 .login {
     padding: 3.2rem;
     border-radius: 1.2rem;
-    min-width: 34.3rem;
-    max-width: 49.6rem;
     background-color: white;
     border-radius: 1.2em;
 }
@@ -34,6 +32,8 @@
         border-radius: 0.8rem;
         height: 4.5rem;
         border: 2px solid;
+        font-size: 1.2rem;
+        padding-left: 1.6rem;
     }
 
     button {
@@ -67,4 +67,18 @@
 
 .password-input {
     margin-bottom: 3.2rem;
+}
+
+@media screen and (min-width: 768px) {
+    .login {
+        min-width: 50rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .login {
+        min-width: 34.3rem;
+        width: 40%;
+        max-width: 49.6rem;
+    }
 }

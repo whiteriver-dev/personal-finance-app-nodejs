@@ -68,8 +68,12 @@ html, body {
 
         bottom: 4.0rem;
         left: 4.0rem;
-        font-size: 1rem;
+        font-size: 0.8rem;
         width: 60%;
+
+        p {
+            font-size: 1rem;
+        }
     }
 }
 
