@@ -10,13 +10,13 @@ BACKEND:
 - Tested all the endpoints using Postman - everything works well. Users are able to register, login, authenticate JSON token
 
 FRONTEND
-- 
+- Created basic buttons
+- Created Login and Register components
+- Created frontend form validation with user feedback when incorrect
+- Frontend successfuly sends API requests to backend and receives responses
+- Login form saves backend response into localStorage - saving the name, email, and JWT token
+- Created AuthTemplate and placed Register and Login components into it. Login/Register shows depending on the route (website.com/login or website.com/register). 
+- Polished up some bugs such as being able to register empty fields, and ensuring localStorage works correctly
 
 
-TODO:
-
-- Double check why you are able to send empty form to database
-- Delete duplicate accounts
-- Ensure capitalization of name
-- See why its not displaying name and email in dashboard
 
