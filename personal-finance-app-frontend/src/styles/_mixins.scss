@@ -8,6 +8,10 @@
     box-sizing: border-box;
 }
 
+:focus {
+  outline: none !important;
+}
+
 html {
     font-size: 60%; // This sets base font size to 10px (1rem = 10px)
 
@@ -16,7 +20,12 @@ html {
 body {
     margin: 0;
     all: unset;
+    -webkit-tap-highlight-color: transparent;
+
+
 }
+
+
 
 // COLOURS
 

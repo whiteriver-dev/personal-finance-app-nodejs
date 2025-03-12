@@ -1,5 +1,6 @@
 @import '../../styles/mixins.scss';
 
+
 .navbar {
     background-color: $grey-900;
     display: flex;
@@ -33,6 +34,31 @@
 
     border-radius: 0.8rem 0.8rem 0 0;
 
+
+    &.active {
+        background-color: $beige-100;
+        border-bottom: $green 4px solid;
+        outline: none;
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        
+        svg {
+            fill: $green;
+        }
+
+        span {
+            color: $grey-900;
+        }
+
+
+    }
+
+
+}
+
+button:focus {
+    box-shadow: none;
 }
 
 .navbar__text {
@@ -40,6 +66,8 @@
     color: $grey-300;
 
     @include text-preset-5-bold;
+
+
 }
 
 .navbar__icon {
@@ -58,6 +86,7 @@
 
     .navbar__text {
         display: flex;
+        
     }
 
 
