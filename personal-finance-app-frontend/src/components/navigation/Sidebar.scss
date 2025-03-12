@@ -1,0 +1,21 @@
+@import '../../styles/mixins.scss';
+
+.sidebar {
+    display: flex;
+    background-color: $grey-900;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.sidebar__container {
+    display: flex;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 1024px) {
+    .sidebar {
+        display: none;
+    }
+}

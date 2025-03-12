@@ -3,6 +3,7 @@ import React, {/*useEffect,*/ useState} from 'react';
 // import { useNavigate } from 'react-router-dom';
 
 import MobileNavbar from '../navigation/MobileNavbar';
+import Sidebar from '../navigation/Sidebar';
 import Overview from '../dashboard/Overview';
 import Transactions from '../dashboard/Transactions';   
 import Budgets from '../dashboard/Budgets';
@@ -55,6 +56,7 @@ function Dashboard() {
     return (
         <div className="dashboard">
             <MobileNavbar activeSection={activeSection} setActiveSection={setActiveSection} />
+            <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
             <div className='dashboard__content'>{renderContent()}</div>
         </div>
     );
