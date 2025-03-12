@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import AuthTemplate from './components/auth/AuthTemplate';
 import Dashboard from './components/home/Dashboard';
 import './App.scss'; // 
-import MobileNavbar from './components/navigation/MobileNavbar';
 
 function App() {
   return (
@@ -14,7 +13,7 @@ function App() {
         <Route path="/login" element={<AuthTemplate/>} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/componenttest" element={<MobileNavbar />} />
+        <Route path="/componenttest" element={<Dashboard />} />
       </Routes>
     </div>
   </Router>

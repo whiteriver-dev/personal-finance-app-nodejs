@@ -1,15 +1,41 @@
 import './Dashboard.scss';
-import React, {useEffect, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {/*useEffect,*/ useState} from 'react';
+// import { useNavigate } from 'react-router-dom';
+
+import MobileNavbar from '../navigation/MobileNavbar';
+import Overview from '../dashboard/Overview';
+import Transactions from '../dashboard/Transactions';   
+import Budgets from '../dashboard/Budgets';
+import Pots from '../dashboard/Pots';
+import RecurringBills from '../dashboard/RecurringBills';
 
 function Dashboard() {
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [token, setToken] = useState('');
-    const navigate = useNavigate();
+    const [activeSection, setActiveSection] = useState('overview');
 
-    useEffect(() => { 
+ /*   const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [token, setToken] = useState(''); 
+    const navigate = useNavigate(); */
+
+    const renderContent = () => {
+        switch(activeSection) {
+            case 'overview':
+                return <Overview />;
+            case 'transactions':
+                return <Transactions />;
+            case 'budgets':
+                return <Budgets />;
+            case 'pots':
+                return <Pots />;
+            case 'recurring-bills':
+                return <RecurringBills />;
+            default:
+                return <Overview />;
+        }
+    }
+
+ /*   useEffect(() => { 
         const token = localStorage.getItem('token');
         const name = localStorage.getItem('name');
         const email = localStorage.getItem('email');
@@ -22,16 +48,14 @@ function Dashboard() {
         setEmail(email);   
         setToken(token);
 
-    }, [navigate]);
+    }, [navigate]); */
 
 
     
     return (
         <div className="dashboard">
-            <h1>Dashboard</h1>
-            <p>Welcome to your dashboard, {name}</p>
-            <p>Email: {email}</p>
-            <p>Token: {token}</p>
+            <MobileNavbar activeSection={activeSection} setActiveSection={setActiveSection} />
+            <div className='dashboard__content'>{renderContent()}</div>
         </div>
     );
 }
