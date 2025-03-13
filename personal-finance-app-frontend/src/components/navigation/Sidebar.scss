@@ -1,17 +1,46 @@
 @import '../../styles/mixins.scss';
 
+svg {
+    vertical-align: middle;
+}
+
 .sidebar {
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: $grey-900;
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
+    width: 300px;
+}
+
+.sidebar__logo {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+    padding-left: 3.2rem;
+    padding-top: 4.0rem;
+    padding-bottom: 4.0rem;
 }
 
 .sidebar__container {
     display: flex;
     flex-direction: column;
+}
+
+.sidebar__item {
+    display: flex;
+    align-items: center;
+
+
+}
+
+
+.toggle-btn {
+
 }
 
 @media screen and (max-width: 1024px) {
