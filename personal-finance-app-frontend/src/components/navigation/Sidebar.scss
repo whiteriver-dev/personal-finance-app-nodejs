@@ -4,15 +4,20 @@ svg {
     vertical-align: middle;
 }
 
+span {
+    @include text-preset-3;
+    font-size: 100%;
+    text-align: left;
+    white-space: nowrap;
+}
+
 .sidebar {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background-color: $grey-900;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
+    border-radius: 0 1.6rem 1.6rem 0;
+
     width: 300px;
 }
 
@@ -26,6 +31,7 @@ svg {
     padding-bottom: 4.0rem;
 }
 
+
 .sidebar__container {
     display: flex;
     flex-direction: column;
@@ -34,10 +40,47 @@ svg {
 .sidebar__item {
     display: flex;
     align-items: center;
+    gap: 1.6rem;
+    background-color: $grey-900;
+    color: $grey-100;
+
+    border: none;
+
+    border-radius: 0 1.2rem 1.2rem 0;
+    border-left: 4px solid $grey-900;
+
+    padding: 1.6rem 3.2rem;
+    margin-right: 2.4rem;
+    
+    transition: 0.0s;
+
+    &.active {
+        background-color: $beige-100;
+        color: $grey-900;
+
+        border-left: 4px solid $green;
+
+        svg {
+            fill: $green;
+        }
+    }
+
+    &:not(.active):hover {
+        color: white;
+        border-left: 4px solid transparent;
+        
+        
+        svg {
+            fill: white;
+        }
+    }
 
 
 }
 
+.toggle-btn {
+    margin-bottom: 25%;
+}
 
 
 @media screen and (max-width: 1024px) {
