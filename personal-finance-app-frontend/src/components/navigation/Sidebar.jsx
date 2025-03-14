@@ -1,6 +1,7 @@
 import './Sidebar.scss';
 import React, { useState } from 'react';
 import LogoLarge from '../../assets/images/logo-large.svg';
+import LogoSmall from '../../assets/images/logo-small.svg';
 
 function Sidebar({ activeSection, setActiveSection }) {
 
@@ -11,10 +12,10 @@ function Sidebar({ activeSection, setActiveSection }) {
     }
 
     return (
-        <nav className="sidebar">
+        <nav className={`sidebar ${isMinimized ? "minimized" : ""}`}>
             <div className="sidebar__container">
                 <div className='sidebar__logo'>
-                    <img src={LogoLarge} alt="Logo" />
+                    <img src={isMinimized ? LogoSmall : LogoLarge} alt="Logo" />
                 </div>
                 <button className={`sidebar__item ${activeSection === "overview" ? "active" : ""}`}
                     onClick={() => setActiveSection("overview")}>

@@ -17,6 +17,7 @@ span {
     justify-content: space-between;
     background-color: $grey-900;
     border-radius: 0 1.6rem 1.6rem 0;
+    transition: 0.3s;
 
     width: 300px;
 }
@@ -79,7 +80,20 @@ span {
 }
 
 .toggle-btn {
-    margin-bottom: 25%;
+    margin-bottom: 5.0rem;
+}
+
+.minimized {
+    width: 8.8rem;
+    transition: 0.3s;
+
+    .sidebar__text {
+        display: none;
+    }
+
+    .toggle-btn .sidebar__icon {
+        transform: scaleX(-1);
+    }
 }
 
 
