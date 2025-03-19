@@ -32,7 +32,7 @@ function Search({ data, onSearchResults, placeholder }) {
             />
             <div className='icon-wrapper'>
                 <svg
-                    fill="black" 
+                    fill="#201F24" 
                     height="19" 
                     viewBox="0 0 16 16" 
                     xmlns="http://www.w3.org/2000/svg">
