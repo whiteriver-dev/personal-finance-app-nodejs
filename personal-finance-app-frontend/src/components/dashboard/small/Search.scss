@@ -1,0 +1,21 @@
+@import '../../../styles/mixins.scss';
+
+
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-input {
+    width: 32rem;
+    padding: 1.2rem 2.0rem;
+    border-radius: 0.8rem;
+    border: 1px solid $beige-500;
+    @include text-preset-4;
+}
+
+.icon-wrapper {
+    position: absolute;
+    top: 30%;
+    right: 5%;
+}
