@@ -1,1 +1,22 @@
 @import '../../../styles/mixins.scss';
+
+
+
+.sortby__desktop {
+    display: none;
+}
+
+.sortby__mobile {
+    all: unset;
+}
+
+
+
+
+@media screen and (min-width: 1024px) {
+    .sortby__desktop {
+        display: flex;
+        align-items: center;
+    }
+
+}

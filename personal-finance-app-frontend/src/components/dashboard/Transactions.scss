@@ -1,7 +1,15 @@
 @import '../../styles/mixins.scss';
 
+.transactions {
+    width: 100vw;
+}
+
 .search-sort-container {
     display: flex;
+    gap: 2.4rem;
+    width: 100%;
+    justify-content: space-between;
     flex-direction: row;
-    align-items: center;
+    align-items: center
+    
 }
