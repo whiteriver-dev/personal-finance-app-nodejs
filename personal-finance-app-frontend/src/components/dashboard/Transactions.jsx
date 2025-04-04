@@ -7,9 +7,11 @@ function Transactions() {
     return (
         <div className="transactions">
             <h1>Transactions</h1>
-            <div className='search-sort-container'>
-                <Search placeholder="Search transaction"/>
-                <SortBy/>
+            <div class='transactions__content'>
+                <div className='search-sort-container'>
+                    <Search placeholder="Search transaction"/>
+                    <SortBy/>
+                </div>
             </div>
         </div>
     );

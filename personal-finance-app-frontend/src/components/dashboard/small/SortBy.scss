@@ -1,25 +1,88 @@
 @import '../../../styles/mixins.scss';
 
 
+// Both desktop and mobile
 
-.sortby__desktop {
-    display: none;
+
+.sortby {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    justify-content: center;
+
 }
-
-.sortby__mobile {
-    all: unset;
-    position: absolute;
-    top: 9rem;
-    left: 25rem;
-    }
-
 
 .sortby__options {
     display: flex;
     flex-direction: column;
     list-style-type: none;
+    position: absolute;
+    width: 9rem;
+    top: 4rem;
+    padding: 1.2rem 2.0rem;
+    border-radius: 0.8rem;
+    border: 1px solid $grey-500;
+
+    background-color: white;
+
+
+    li {
+        @include text-preset-4;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+            &.selected{
+                font-weight: 700;
+            }
+
+            &:not(:last-child) {
+                border-bottom: 1px solid $grey-100;
+            }
+    }
 }
 
+// DESKTOP only
+
+.sortby__desktop {
+    display: none;
+
+    label {
+        @include text-preset-4;
+        color: $grey-500;
+        white-space: nowrap;
+    }
+
+    .sortby__dropdown {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-left: 0.8rem;
+        border: 1px solid $grey-500;
+        border-radius: 0.8rem;
+        padding: 1.2rem 2.0rem;
+        width: 11.5rem;
+
+        span {
+            @include text-preset-4;
+        }
+    }
+
+
+    
+}
+
+
+
+
+
+// MOBILE only
+
+.sortby__mobile {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+    }
 
 
 @media screen and (min-width: 1024px) {
@@ -30,6 +93,18 @@
 
     .sortby__mobile {
         display: none;
+    }
+
+    .sortby__options {
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+        position: absolute;
+        width: 11.5rem;
+        left: 5.8rem;
+        padding: 1.2rem 2.0rem;
+        border-radius: 0.8rem;
+        border: 1px solid $grey-500;
     }
 
 }

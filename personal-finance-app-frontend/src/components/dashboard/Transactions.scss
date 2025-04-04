@@ -1,12 +1,23 @@
 @import '../../styles/mixins.scss';
 
 .transactions {
-    width: 100%
+    width: 100%;
+
+    h1 {
+        @include text-preset-1;
+        background-color: $beige-100;
+    }
+}
+
+.transactions__content {
+    background-color: white;
+    border-radius: 1.2rem;
 }
 
 .search-sort-container {
     display: flex;
-    gap: 2.4rem;
+    justify-content: space-between;
     width: 100%;
+    padding: 3.2rem 3.2rem;
     
 }
