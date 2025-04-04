@@ -53,6 +53,7 @@ function SortBy( { onSortChange }) {
                 <span>{options.find((opt) => opt.value ==selectedOption)?.label}</span>
                     <span class='sortby__icon'>
                         <svg
+                            className={`sortby__icon ${isOpen ? 'rotated' : ''}`}
                             fill="#201F24" 
                             height="6"
                             width="11"

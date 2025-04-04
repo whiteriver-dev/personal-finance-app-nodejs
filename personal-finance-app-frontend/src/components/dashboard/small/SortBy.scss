@@ -66,9 +66,10 @@
             @include text-preset-4;
         }
     }
+}
 
-
-    
+.sortby__icon.rotated {
+    transform: rotate(180deg);
 }
 
 
