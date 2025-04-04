@@ -1,10 +1,11 @@
 import './SortBy.scss';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 function SortBy( { onSortChange }) {
 
     const [selectedOption, setSelectedOption] = useState('latest');
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
     const options = [
         { value: "latest", label: "Latest" },
@@ -21,8 +22,19 @@ function SortBy( { onSortChange }) {
         onSortChange(value);
     }
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsOpen(false);
+          }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }, []);
+
     return (
-        <div className='sortby'>
+        <div className='sortby' ref={dropdownRef}>
             <button className='sortby__mobile' onClick={() => setIsOpen(!isOpen)}>
                 <span class='sortby__icon'>
                     <svg
