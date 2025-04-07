@@ -169,8 +169,28 @@ app.post('/register', async (req, res) => {
     });
   });
   
+  app.get('/users/:id', (req, res) => {
+    const userId = req.params.id;
+    db.get('SELECT name FROM users WHERE id = ?', [userId], (err, row) => {
+      if (err) return res.status(500).json({ message: 'Error retrieving user' });
+      if (!row) return res.status(404).json({ message: 'User not found' });
+      res.json(row); // returns { name: 'User Name' }
+    });
+  });
+  
   app.get('/dashboard', authenticateToken, (req, res) => {
     res.send({ message: `Welcome ${req.user.email}, to your dashboard!` });
+  });
+
+  app.get('/budgets/:userId', (req, res) => {
+    const userId = req.params.userId;
+  
+    db.all('SELECT * FROM budgets WHERE user_id = ?', [userId], (err, rows) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error fetching budgets' });
+      }
+      res.json(rows);
+    });
   });
 
   app.use(cors({
@@ -178,4 +198,6 @@ app.post('/register', async (req, res) => {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   }))
+
+
 

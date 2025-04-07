@@ -13,6 +13,7 @@ import RecurringBills from '../dashboard/RecurringBills';
 function Dashboard() {
 
     const [activeSection, setActiveSection] = useState('overview');
+    const userId = 13;
 
  /*   const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -26,7 +27,7 @@ function Dashboard() {
             case 'transactions':
                 return <Transactions />;
             case 'budgets':
-                return <Budgets />;
+                return <Budgets userId={userId}/>;
             case 'pots':
                 return <Pots />;
             case 'recurring-bills':
