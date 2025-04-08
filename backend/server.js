@@ -168,7 +168,7 @@ app.post('/register', async (req, res) => {
       res.json(rows);
     });
   });
-  
+
   app.get('/users/:id', (req, res) => {
     const userId = req.params.id;
     db.get('SELECT name FROM users WHERE id = ?', [userId], (err, row) => {
@@ -182,6 +182,30 @@ app.post('/register', async (req, res) => {
     res.send({ message: `Welcome ${req.user.email}, to your dashboard!` });
   });
 
+  app.get('/budgets-with-spent/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    db.all(`
+      SELECT 
+        b.id, 
+        b.name, 
+        b.amount, 
+        IFNULL(SUM(t.amount), 0) as spent
+      FROM budgets b
+      LEFT JOIN transactions t 
+        ON t.category = b.name AND t.user_id = ?
+      WHERE b.user_id = ?
+      GROUP BY b.id;
+
+    `, [userId, userId], (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Database error');
+      }
+      res.json(rows);
+    });
+  });
+
   app.get('/budgets/:userId', (req, res) => {
     const userId = req.params.userId;
   
@@ -191,7 +215,11 @@ app.post('/register', async (req, res) => {
       }
       res.json(rows);
     });
+
+    // server.js or routes.js
   });
+
+  
 
   app.use(cors({
     origin: 'http://localhost:3000',

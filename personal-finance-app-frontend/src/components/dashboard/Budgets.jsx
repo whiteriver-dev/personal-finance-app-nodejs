@@ -13,18 +13,19 @@ function Budgets({ userId }) {
           .catch((err) => console.error('Error fetching budgets:', err));
       }, [userId]);
 
+      useEffect(() => { // Fetch $ spent of Budgets
+        fetch(`http://localhost:5000/budgets-with-spent/${userId}`)
+          .then((res) => res.json())
+          .then((data) => setBudgets(data))
+          .catch((err) => console.error('Error fetching budgets:', err));
+      }, [userId]);
+      
+
 
     return (
         <div className="budgets">
             <h1>Budgets</h1>
-            <p>Budgets for user {userId}</p>
-            <ul>
-                {budgets.map((budget) => (
-                <li key={budget.id}>
-                    {budget.name}: ${budget.amount}
-                </li>
-                ))}
-            </ul>
+
             <DonutChart data={budgets} width={240} height={240} />
         </div>
     );

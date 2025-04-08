@@ -1,1 +1,78 @@
 @import '../../../styles/mixins';
+
+// Global
+
+.donut-chart {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3.2rem;
+    border-radius: 1.2rem;
+    padding: 3.2rem;
+
+    g {
+        text-align: center;
+    }
+
+    .donut-legend{
+        width: 100%;
+    }
+}
+
+.donut-legend__label {
+    position: relative;
+    padding-left: 1.2rem;
+  
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.2rem;
+      width: 0.4rem;
+      height: 1.6rem;
+      border-radius: 0.8rem;
+      background-color: var(--legend-color); // you can set this inline or via classes
+    }
+  }
+
+  .donut-chart {
+    h2 {
+        @include text-preset-2;
+        color: $grey-900;
+    }
+
+    .legend__budget-name {
+        @include text-preset-4;
+        color: $grey-500;
+    }
+
+    .donut-legend__label {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .legend__budget-spent {
+        @include text-preset-3;
+        color: $grey-900;
+    }
+
+    .legend__budget-amount {
+        @include text-preset-5;
+        color: $grey-500;
+    }
+
+    .donut-center__label {
+        @include text-preset-1;
+        color: $grey-900;
+        margin-bottom: 0.8rem;
+
+    }
+    
+    .donut-center__subtext {
+        @include text-preset-5;
+        color: $grey-500;
+    }
+
+  }
+  
