@@ -215,8 +215,24 @@ app.post('/register', async (req, res) => {
       }
       res.json(rows);
     });
+  });
 
-    // server.js or routes.js
+  app.get('/transactions/:userId', (req, res) => {
+    const userId = req.params.userId;
+  
+     db.all(`
+      SELECT id, amount, description, category, date, user_id 
+      FROM transactions 
+      WHERE user_id = ? 
+      ORDER BY date DESC
+
+    `, [userId], (err, rows) => {
+      if (err) {
+        console.error('Error fetching transactions:', err);
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+      res.json(rows);
+    });
   });
 
   
