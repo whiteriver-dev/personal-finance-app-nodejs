@@ -10,6 +10,9 @@
     gap: 3.2rem;
     border-radius: 1.2rem;
     padding: 3.2rem;
+    padding-bottom: 0;
+    width: 42.8rem;
+
 
     g {
         text-align: center;
@@ -32,7 +35,7 @@
       width: 0.4rem;
       height: 1.6rem;
       border-radius: 0.8rem;
-      background-color: var(--legend-color); // you can set this inline or via classes
+      background-color: var(--legend-color); 
     }
   }
 
@@ -40,6 +43,13 @@
     h2 {
         @include text-preset-2;
         color: $grey-900;
+    }
+
+    .donut-legend__item {
+        padding: 1.6rem 0;
+        &:not(:last-child) {
+            border-bottom: 1px solid $grey-100;
+        }
     }
 
     .legend__budget-name {
@@ -55,6 +65,7 @@
     .legend__budget-spent {
         @include text-preset-3;
         color: $grey-900;
+        margin-right: 0.4rem;
     }
 
     .legend__budget-amount {
@@ -74,5 +85,27 @@
         color: $grey-500;
     }
 
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    .donut-chart {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+
+        .donut-legend {
+            width: 29.66rem;
+        }
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .donut-chart {
+        flex-direction: column;
+
+        .donut-legend {
+            width: 100%;
+        }
+    }
   }
   
