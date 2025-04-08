@@ -34,7 +34,7 @@ function BarSummary({ name, spent, amount, transactions, index }) {
                     ) : (
                         transactions.map(tx => (
                         <li key={tx.id} className="bar-summary__latest-item">
-                            ${tx.amount} – {tx.description}
+                            ${tx.amount} – {tx.description} on {new Date(tx.date).toLocaleDateString('en-GB', {day: '2-digit',month: 'short', year: 'numeric'})};
                         </li>
                         ))
                     )}
