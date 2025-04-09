@@ -12,13 +12,19 @@ span {
 
 .sidebar {
     display: flex;
+    position: sticky;
+    top: 0;
+    left: 0;
+    height: 100vh;
     flex-direction: column;
     justify-content: space-between;
     background-color: $grey-900;
     border-radius: 0 1.6rem 1.6rem 0;
     transition: 0.3s;
 
-    width: 300px;
+    z-index: 1000;
+
+    width: 30rem;
 }
 
 .sidebar__logo {

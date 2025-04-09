@@ -3,7 +3,10 @@
 // Global
 
 .bar-summary {
-    margin-bottom: 1.6rem;
+    margin-bottom: 2.4rem;
+    background-color: white;
+    border-radius: 1.2rem;
+    padding: 3.2rem;
   
     &__top {
       display: flex;
@@ -23,9 +26,153 @@
      // background-color: $green;
       transition: width 0.4s ease;
     }
+
+    button {
+        all: unset;
+    }
   }
 
 .bar-summary__header {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+
+
+    h2 {
+        @include text-preset-2;
+        color: $grey-900;
+    }
+
+    .bar-summary__header-title {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+    }
+
+    .bar-summary__color-dot {
+        width: 1.6rem;
+        height: 1.6rem;
+        border-radius: 50%;
+    }
+
+    .bar-summary__header-icon {
+        width: 2.4rem;
+        height: 2.4rem;
+    }
+
 }
+
+.bar-summary__progress {
+
+    margin-bottom: 2.0rem;
+
+   .max-budget {
+        @include text-preset-4;
+        color: $grey-500;
+    }
+
+    .bar-summary__bar-container {
+        background-color: $beige-100;
+        padding: 0.4rem;
+        height: 3.2rem;
+        margin-bottom: 1.6rem;
+
+        .bar-summary__bar-fill {
+            border-radius: 0.4rem;
+        }
+    }
+}
+
+.bar-summary__spent-remaining {
+    display: flex;
+    gap: 1.6rem;
+
+    .bar-summary__spent-remaining-colorcode {
+        width: 0.4rem;
+        height: auto;
+        border-radius: 0.8rem;
+    }
+
+    .spent, .remaining {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        gap: 0.4rem;
+        margin: 0;
+    }
+
+    .spent-remaining__amount {
+        @include text-preset-4-bold;
+        color: $grey-900;
+    }
+
+    .spent-remaining__label {
+        @include text-preset-5;
+        color: $grey-500;
+    }
+
+}
+
+//Latest transactions table
+
+.bar-summary__latest-transactions {
+    background-color: $beige-100;
+    padding: 2.0rem;
+    border-radius: 1.2rem;
+
+    h2 {
+        @include text-preset-3;
+        color: $grey-900;
+    }
+}
+
+.bar-summary__latest-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 1rem;
+
+  }
+  
+  .bar-summary__latest-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+    &:not(:last-child) {
+        border-bottom: 0.1rem solid rgba($grey-500, 0.15);
+    }
+
+  }
+  
+  .latest-description {
+    @include text-preset-5-bold;
+    color: $grey-900;
+    flex: 2;
+    font-weight: 500;
+  }
+
+  .latest-amount-date {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: right;
+  }
+  
+  .latest-amount {
+    @include text-preset-5-bold;
+    color: $grey-900;
+    flex: 1;
+    text-align: right;
+    font-weight: bold;
+  }
+  
+  .latest-date {
+    @include text-preset-5;
+    color: $grey-500;
+    flex: 1.2;
+    text-align: right;
+    color: #777;
+    font-size: 0.85rem;
+  }

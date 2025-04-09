@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import LogoLarge from '../../assets/images/logo-large.svg';
 import LogoSmall from '../../assets/images/logo-small.svg';
 
-function Sidebar({ activeSection, setActiveSection }) {
+function Sidebar({  activeSection, setActiveSection }) {
 
     const [isMinimized, setIsMinimized] = useState(false);
 

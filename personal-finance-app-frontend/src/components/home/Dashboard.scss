@@ -3,7 +3,7 @@
 .dashboard {
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    height: 100%;
     background-color: $beige-100;
 }
 
@@ -11,5 +11,5 @@
     width: 100%;
     margin: 3.2rem 4.0rem;
     border-radius: 1.2rem;
-}
 
+}

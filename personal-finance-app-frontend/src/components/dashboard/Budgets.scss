@@ -1,0 +1,23 @@
+@import '../../styles/mixins';
+
+@media screen and (min-width: 1024px) {
+    .budgets {
+        .budgets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+          }
+          
+          .budgets-chart {
+            position: sticky;
+            top: 2rem; // optional if you want it to stay in view while scrolling
+          }
+          
+          .budgets-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+          }
+    }
+}
