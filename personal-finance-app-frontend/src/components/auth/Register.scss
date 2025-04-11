@@ -1,4 +1,4 @@
-@import '../../styles/mixins.scss';
+@use '../../styles/mixins.scss' as *;
 
 .register {
     padding: 3.2rem;

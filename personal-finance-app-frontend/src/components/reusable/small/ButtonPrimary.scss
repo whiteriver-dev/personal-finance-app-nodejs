@@ -1,4 +1,4 @@
-@import '../../../styles/mixins.scss';
+@use '../../../styles/mixins.scss' as *;
 
 .button-primary {
     @include text-preset-4-bold;
