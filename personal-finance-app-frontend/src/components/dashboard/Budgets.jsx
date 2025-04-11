@@ -9,14 +9,14 @@ function Budgets({ userId }) {
     const [transactions, setTransactions] = useState([]);
     
       useEffect(() => { // Fetch $ spent of Budgets
-        fetch(`http://localhost:5000/budgets-with-spent/${userId}`)
+        fetch(`http://localhost:5050/budgets-with-spent/${userId}`)
           .then((res) => res.json())
           .then((data) => setBudgets(data))
           .catch((err) => console.error('Error fetching budgets:', err));
       }, [userId]);
 
       useEffect(() => {
-        fetch(`http://localhost:5000/transactions/${userId}`)
+        fetch(`http://localhost:5050/transactions/${userId}`)
           .then(res => res.json())
           .then(data => {
             console.log("Fetched transactions:", data); // 👈 What does this show?
