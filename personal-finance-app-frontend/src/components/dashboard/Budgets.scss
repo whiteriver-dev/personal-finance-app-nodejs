@@ -2,6 +2,10 @@
 
 @media screen and (min-width: 1024px) {
     .budgets {
+        h1 {
+            @include text-preset-1;
+            color: $grey-900;
+        }
         .budgets-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;

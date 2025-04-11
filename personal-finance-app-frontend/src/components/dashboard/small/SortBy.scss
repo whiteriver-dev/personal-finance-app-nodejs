@@ -64,6 +64,7 @@
 
         span {
             @include text-preset-4;
+            color: $grey-900;
         }
     }
 }

@@ -5,6 +5,7 @@
 
     h1 {
         @include text-preset-1;
+        color: $grey-900;
         background-color: $beige-100;
     }
 }
