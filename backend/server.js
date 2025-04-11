@@ -7,7 +7,11 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = "fryingpan69";
 const authenticateToken = require('./middleware/authMiddleware');
 app.use(express.json());  // Middleware to parse JSON requests
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // allow Vite frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 
 // Create the tables if they don't already exist
 db.serialize(() => {
@@ -60,7 +64,7 @@ db.serialize(() => {
 });
 
 const PORT = 5050;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0' () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
