@@ -4,7 +4,7 @@
 .search-container {
     position: relative;
     width: 100%;
-    background-color: white;
+
 }
 
 .search-input {
@@ -13,6 +13,7 @@
     border-radius: 0.8rem;
     border: 1px solid $beige-500;
     @include text-preset-4;
+    background-color: white;
 }
 
 .icon-wrapper {
