@@ -1,0 +1,90 @@
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal {
+    background-color: #ffffff;
+    padding: 2.4rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 38rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  
+    h2 {
+      margin: 0;
+      font-size: 2rem;
+      color: #1e1e1e;
+    }
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+  
+      label {
+        display: flex;
+        flex-direction: column;
+        font-weight: 600;
+        color: #333;
+  
+        input {
+          margin-top: 0.5rem;
+          padding: 1rem;
+          border: 1px solid #ccc;
+          border-radius: 0.6rem;
+          font-size: 1.6rem;
+  
+          &:focus {
+            border-color: #4caf50;
+            outline: none;
+          }
+        }
+      }
+    }
+  
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+  
+      button {
+        padding: 1rem 1.6rem;
+        font-size: 1.4rem;
+        border: none;
+        border-radius: 0.6rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+  
+        &:first-of-type {
+          background-color: #4caf50;
+          color: white;
+  
+          &:hover {
+            background-color: #449e48;
+          }
+        }
+  
+        &:last-of-type {
+          background-color: #ddd;
+  
+          &:hover {
+            background-color: #ccc;
+          }
+        }
+      }
+    }
+  }
+  

@@ -2,11 +2,19 @@ import './Budgets.scss';
 import React, { useState, useEffect } from 'react';
 import DonutChart from './budgets/DonutChart';
 import BarSummary from './budgets/BarSummary';
+import AddBudgetModal from './budgets/AddBudgetModal';
 
 function Budgets({ userId }) {
 
     const [budgets, setBudgets] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+
+    const fetchBudgets = async () => {
+      const res = await fetch(`http://localhost:5050/budgets-with-spent/${userId}`);
+      const data = await res.json();
+      setBudgets(data);
+    };
     
       useEffect(() => { // Fetch $ spent of Budgets
         fetch(`http://localhost:5050/budgets-with-spent/${userId}`)
@@ -29,7 +37,19 @@ function Budgets({ userId }) {
 
     return (
         <div className="budgets">
-            <h1>Budgets</h1>
+            <div class='budgets-header'>
+              <h1>Budgets</h1>
+              <button className='add-budget' onClick={() => setShowModal(true)}>+ Add New Budget</button>
+
+              {showModal && (
+                <AddBudgetModal
+                  userId={userId}
+                  onClose={() => setShowModal(false)}
+                  onBudgetCreated={fetchBudgets}
+                />
+              )}
+            </div>
+
             <div className='budgets-grid'>
                 <div className='budget-chart'>
                     <DonutChart data={budgets} width={240} height={240} />

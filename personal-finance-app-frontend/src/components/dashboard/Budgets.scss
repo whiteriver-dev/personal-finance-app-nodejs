@@ -6,6 +6,10 @@
             @include text-preset-1;
             color: $grey-900;
         }
+        .budgets-header {
+          display: flex;
+          justify-content: space-between;
+        }
         .budgets-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
