@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import './AddBudgetModal.scss';
+import { allBudgetColors } from '../../../constants/budgetColors';
 
-function AddBudgetModal({ userId, onClose, onBudgetCreated }) {
+function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
+  const [color, setColor] = useState('');
+
+  const availableColors = Object.entries(allBudgetColors).filter(
+    ([, hex]) => !usedColors.includes(hex)
+  );
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,10 +19,11 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated }) {
       name,
       amount: parseFloat(amount),
       user_id: userId,
+      color
     };
 
     try {
-      const res = await fetch('http://localhost:5000/budgets', {
+      const res = await fetch('http://localhost:5050/budgets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newBudget),
@@ -42,6 +50,15 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated }) {
           <label>
             Amount:
             <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required />
+          </label>
+          <label>
+            Color Tag:
+            <select value={color} onChange={(e) => setColor(e.target.value)} required>
+                <option value="">Select a color</option>
+                {availableColors.map(([name, hex]) => (
+                    <option key={name} value={hex}>{name}</option>
+                ))}
+                </select>
           </label>
           <div className="modal-actions">
             <button type="submit">Add Budget</button>

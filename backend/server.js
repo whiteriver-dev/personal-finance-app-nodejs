@@ -164,6 +164,9 @@ app.post('/register', async (req, res) => {
     });
   });
 
+  // USERS
+  // User GETs (fetch all users)
+
   app.get('/users', (req, res) => {
     db.all('SELECT * FROM users', [], (err, rows) => {
       if (err) {
@@ -186,22 +189,31 @@ app.post('/register', async (req, res) => {
     res.send({ message: `Welcome ${req.user.email}, to your dashboard!` });
   });
 
+  // BUDGETS CRUD OPERATIONS
+
+  // Budget GETs (fetch all budgets for a user)
+
   app.get('/budgets-with-spent/:userId', async (req, res) => {
     const userId = req.params.userId;
-
-    db.all(`
+  
+    const query = `
       SELECT 
         b.id, 
         b.name, 
         b.amount, 
-        IFNULL(SUM(t.amount), 0) as spent
+        b.color_id,
+        c.name AS color_name,
+        c.hex AS color_hex,
+        IFNULL(SUM(t.amount), 0) AS spent
       FROM budgets b
+      LEFT JOIN colors c ON b.color_id = c.id
       LEFT JOIN transactions t 
         ON t.category = b.name AND t.user_id = ?
       WHERE b.user_id = ?
       GROUP BY b.id;
-
-    `, [userId, userId], (err, rows) => {
+    `;
+  
+    db.all(query, [userId, userId], (err, rows) => {
       if (err) {
         console.error(err);
         return res.status(500).send('Database error');
@@ -209,17 +221,61 @@ app.post('/register', async (req, res) => {
       res.json(rows);
     });
   });
-
+  
   app.get('/budgets/:userId', (req, res) => {
     const userId = req.params.userId;
   
-    db.all('SELECT * FROM budgets WHERE user_id = ?', [userId], (err, rows) => {
+    const query = `
+      SELECT 
+        b.id, 
+        b.name, 
+        b.amount, 
+        b.color_id, 
+        c.name AS color_name, 
+        c.hex AS color_hex
+      FROM budgets b
+      LEFT JOIN colors c ON b.color_id = c.id
+      WHERE b.user_id = ?;
+    `;
+  
+    db.all(query, [userId], (err, rows) => {
       if (err) {
+        console.error(err);
         return res.status(500).json({ message: 'Error fetching budgets' });
       }
       res.json(rows);
     });
   });
+  
+  // Color GETs (fetch all colors for budgets)
+  app.get('/colors', (req, res) => {
+    db.all('SELECT * FROM colors', [], (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Error fetching colors' });
+      }
+      res.json(rows);
+    });
+  });
+
+  //Budget POSTs (add new budgets)
+
+  app.post('/budgets', (req, res) => {
+    const { name, amount, user_id } = req.body;
+    const query = `INSERT INTO budgets (name, amount, user_id) VALUES (?, ?, ?)`;
+  
+    db.run(query, [name, amount, user_id], function (err) {
+      if (err) {
+        console.error('Error adding budget:', err);
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+  
+      res.status(201).json({ id: this.lastID, name, amount, user_id });
+    });
+  });
+  
+// TRANSACTIONS
+// Transaction GETs (fetch all transactions for a user)
 
   app.get('/transactions/:userId', (req, res) => {
     const userId = req.params.userId;

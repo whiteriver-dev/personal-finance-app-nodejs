@@ -4,11 +4,13 @@ import DonutChart from './budgets/DonutChart';
 import BarSummary from './budgets/BarSummary';
 import AddBudgetModal from './budgets/AddBudgetModal';
 
+
 function Budgets({ userId }) {
 
     const [budgets, setBudgets] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const usedColors = budgets.map(b => b.color);
 
     const fetchBudgets = async () => {
       const res = await fetch(`http://localhost:5050/budgets-with-spent/${userId}`);
@@ -46,6 +48,7 @@ function Budgets({ userId }) {
                   userId={userId}
                   onClose={() => setShowModal(false)}
                   onBudgetCreated={fetchBudgets}
+                  usedColors={usedColors}
                 />
               )}
             </div>

@@ -1,11 +1,16 @@
 import './BarSummary.scss';
 import React from 'react';
-import colors from '../../../constants/budgetColors';
+import {defaultBudgetColors, allBudgetColors} from '../../../constants/budgetColors';
 
 function BarSummary({ name, spent, amount, transactions, index }) {
 
+    const defaultColor = defaultBudgetColors[name];
+    const fallbackColors = Object.values(allBudgetColors);
+    const color = defaultColor || fallbackColors[index % fallbackColors.length];
+
+
     const percentage = Math.min((spent / amount) * 100, 100);
-    const color = colors[index % colors.length];
+
 
     return (
         <div className="bar-summary">
