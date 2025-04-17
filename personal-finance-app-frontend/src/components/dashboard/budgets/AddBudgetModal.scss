@@ -54,6 +54,60 @@
         }
       }
     }
+
+    // Color selector dropdown
+
+    .custom-dropdown {
+        position: relative;
+        margin-top: 0.5rem;
+        cursor: pointer;
+        user-select: none;
+      
+        &__selected {
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          padding: 0.8rem;
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+          background: #fff;
+        }
+      
+        &__list {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: #fff;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          margin-top: 0.2rem;
+          max-height: 200px;
+          overflow-y: auto;
+          z-index: 999;
+        }
+      
+        &__option {
+          padding: 0.8rem;
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+          cursor: pointer;
+      
+          &:hover {
+            background-color: #f3f3f3;
+          }
+        }
+
+      }
+      
+      .color-circle {
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      
   
     .modal-actions {
       display: flex;

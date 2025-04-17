@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AddBudgetModal.scss';
 import { allBudgetColors } from '../../../constants/budgetColors';
 
@@ -6,11 +6,18 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [color, setColor] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const availableColors = Object.entries(allBudgetColors).filter(
     ([, hex]) => !usedColors.includes(hex)
   );
 
+  useEffect(() => { // Prevents background scroll when modal is open
+    document.body.style.overflow = 'hidden';  
+    return () => {
+      document.body.style.overflow = 'auto'; 
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,8 +38,8 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
 
       if (!res.ok) throw new Error('Failed to create budget');
 
-      onBudgetCreated(); // Triggers refetch in parent
-      onClose();         // Closes modal
+      onBudgetCreated();
+      onClose();
     } catch (err) {
       console.error('Error:', err);
     }
@@ -47,19 +54,43 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
             Budget Name:
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
           </label>
+
           <label>
             Amount:
             <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required />
           </label>
-          <label>
-            Color Tag:
-            <select value={color} onChange={(e) => setColor(e.target.value)} required>
-                <option value="">Select a color</option>
+
+          <label>Color Tag:</label>
+          <div className="custom-dropdown" onClick={() => setDropdownOpen(!dropdownOpen)}>
+            <div className="custom-dropdown__selected">
+              {color ? (
+                <>
+                  <span className="color-circle" style={{ backgroundColor: color }}></span>
+                  <span>{Object.keys(allBudgetColors).find(k => allBudgetColors[k] === color)}</span>
+                </>
+              ) : (
+                <span>Select a color</span>
+              )}
+            </div>
+            {dropdownOpen && (
+              <div className="custom-dropdown__list">
                 {availableColors.map(([name, hex]) => (
-                    <option key={name} value={hex}>{name}</option>
+                  <div
+                    key={hex}
+                    className="custom-dropdown__option"
+                    onClick={() => {
+                      setColor(hex);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    <span className="color-circle" style={{ backgroundColor: hex }}></span>
+                    {name}
+                  </div>
                 ))}
-                </select>
-          </label>
+              </div>
+            )}
+          </div>
+
           <div className="modal-actions">
             <button type="submit">Add Budget</button>
             <button type="button" onClick={onClose}>Cancel</button>
