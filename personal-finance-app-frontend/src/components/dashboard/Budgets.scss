@@ -1,10 +1,27 @@
 @use '../../styles/mixins' as *;
 
+.add-budget {
+  all: unset;
+  @include text-preset-4-bold;
+  color: white;
+  background-color: $grey-900;
+  border-radius: 0.8rem;
+  padding: 1.6rem 1.6rem;
+}
+
+.budgets-header {
+  margin-bottom: 3.2rem;
+  margin-top: 3.2rem;
+}
+
 @media screen and (min-width: 1024px) {
     .budgets {
         h1 {
             @include text-preset-1;
             color: $grey-900;
+            margin: 0;
+            display: flex;
+            align-items: center;
         }
         .budgets-header {
           display: flex;
@@ -19,7 +36,7 @@
           
           .budgets-chart {
             position: sticky;
-            top: 2rem; // optional if you want it to stay in view while scrolling
+            top: 2rem; 
           }
           
           .budgets-summary {

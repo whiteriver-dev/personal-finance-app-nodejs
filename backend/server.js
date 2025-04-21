@@ -246,18 +246,8 @@ app.post('/register', async (req, res) => {
       res.json(rows);
     });
   });
-  
-  // Color GETs (fetch all colors for budgets)
-  app.get('/colors', (req, res) => {
-    db.all('SELECT * FROM colors', [], (err, rows) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Error fetching colors' });
-      }
-      res.json(rows);
-    });
-  });
 
+  
   //Budget POSTs (add new budgets)
 
   app.post('/budgets', (req, res) => {
@@ -273,7 +263,59 @@ app.post('/register', async (req, res) => {
       res.status(201).json({ id: this.lastID, name, amount, user_id });
     });
   });
+
   
+  //Budget PUTs (update budgets)
+
+  app.put('/budgets/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, amount, color_id } = req.body;
+  
+    const query = `
+      UPDATE budgets
+      SET name = ?, amount = ?, color_id = ?
+      WHERE id = ?
+    `;
+  
+    db.run(query, [name, amount, color_id, id], function (err) {
+      if (err) {
+        console.error('Error updating budget:', err);
+        return res.status(500).json({ message: 'Failed to update budget' });
+      }
+  
+      res.json({ message: 'Budget updated successfully' });
+    });
+  });
+  
+  //Budget DELETEs (delete budgets)  
+  app.delete('/budgets/:id', (req, res) => {
+    const { id } = req.params;
+  
+    const query = `DELETE FROM budgets WHERE id = ?`;
+  
+    db.run(query, [id], function (err) {
+      if (err) {
+        console.error('Error deleting budget:', err);
+        return res.status(500).json({ message: 'Failed to delete budget' });
+      }
+  
+      res.json({ message: 'Budget deleted successfully' });
+    });
+  });
+  
+  
+  
+  // Color GETs (fetch all colors for budgets)
+  app.get('/colors', (req, res) => {
+    db.all('SELECT * FROM colors', [], (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Error fetching colors' });
+      }
+      res.json(rows);
+    });
+  });
+
 // TRANSACTIONS
 // Transaction GETs (fetch all transactions for a user)
 

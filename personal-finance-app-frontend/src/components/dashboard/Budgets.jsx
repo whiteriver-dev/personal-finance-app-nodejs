@@ -3,13 +3,16 @@ import React, { useState, useEffect } from 'react';
 import DonutChart from './budgets/DonutChart';
 import BarSummary from './budgets/BarSummary';
 import AddBudgetModal from './budgets/AddBudgetModal';
+import EditBudgetModal from './budgets/EditBudgetModal';
 
 
 function Budgets({ userId }) {
 
     const [budgets, setBudgets] = useState([]);
     const [transactions, setTransactions] = useState([]);
-    const [showModal, setShowModal] = useState(false);
+    const [showAddModal, setAddShowModal] = useState(false);
+    const [showEditModal, setEditModal] = useState(false);
+    const [budgetToEdit, setBudgetToEdit] = useState(null);
     const usedColors = budgets.map(b => b.color);
 
     const fetchBudgets = async () => {
@@ -41,14 +44,22 @@ function Budgets({ userId }) {
         <div className="budgets">
             <div class='budgets-header'>
               <h1>Budgets</h1>
-              <button className='add-budget' onClick={() => setShowModal(true)}>+ Add New Budget</button>
+              <button className='add-budget' onClick={() => setAddShowModal(true)}>+ Add New Budget</button>
 
-              {showModal && (
+              {showAddModal && (
                 <AddBudgetModal
                   userId={userId}
-                  onClose={() => setShowModal(false)}
+                  onClose={() => setAddShowModal(false)}
                   onBudgetCreated={fetchBudgets}
                   usedColors={usedColors}
+                />
+              )}
+
+              {showEditModal && (
+                <EditBudgetModal
+                  budget={budgetToEdit}
+                  onClose={() => setEditModal(false)}
+                  onBudgetUpdated={fetchBudgets}
                 />
               )}
             </div>
@@ -67,13 +78,20 @@ function Budgets({ userId }) {
             
                     return (
                         <BarSummary
-                        key={budget.id}
-                        name={budget.name}
-                        spent={budget.spent}
-                        amount={budget.amount}
-                        transactions={budgetTransactions}
-                        index={i}
+                          key={budget.id}
+                          budgetId={budget.id}
+                          name={budget.name}
+                          spent={budget.spent}
+                          amount={budget.amount}
+                          transactions={budgetTransactions}
+                          index={i}
+                          onBudgetUpdated={fetchBudgets}
+                          onEdit={() => {
+                              setBudgetToEdit(budget);
+                              setEditModal(true);
+                          }}
                         />
+                        
                     );
                     })}
                 </div>

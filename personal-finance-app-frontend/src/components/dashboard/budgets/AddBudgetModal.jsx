@@ -48,16 +48,19 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
   return (
     <div className="modal-backdrop">
       <div className="modal">
-        <h2>Add New Budget</h2>
+        <div className="modal-header">
+            <h2>Add New Budget</h2>
+            <button type="button" onClick={onClose}>X</button>
+        </div>
         <form onSubmit={handleSubmit}>
           <label>
             Budget Name:
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
           </label>
 
           <label>
             Amount:
-            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required />
+            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
           </label>
 
           <label>Color Tag:</label>
@@ -93,7 +96,6 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
 
           <div className="modal-actions">
             <button type="submit">Add Budget</button>
-            <button type="button" onClick={onClose}>Cancel</button>
           </div>
         </form>
       </div>
