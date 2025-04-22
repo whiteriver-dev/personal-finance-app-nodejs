@@ -55,8 +55,8 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
                     </button>
                     {isDropdownOpen && (
                         <div className="budget__dropdown">
-                        <button onClick={handleEdit}>Edit Budget</button>
-                        <button onClick={handleDelete}>Delete Budget</button>
+                        <button className='budget__dropdown-edit' onClick={handleEdit}>Edit Budget</button>
+                        <button className='budget__dropdown-delete' onClick={handleDelete}>Delete Budget</button>
                         </div>
                     )}
                 </div>

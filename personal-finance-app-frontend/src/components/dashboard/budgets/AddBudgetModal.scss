@@ -1,3 +1,5 @@
+@use '../../../styles/mixins' as *;
+
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -11,23 +13,41 @@
     align-items: center;
     z-index: 1000;
   }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+
+  .modal-description {
+    @include text-preset-4;
+    color: $grey-500;
+  }
   
   .modal {
     background-color: #ffffff;
-    padding: 2.4rem;
+    padding: 3.2rem;
     border-radius: 1.2rem;
     box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 38rem;
+    max-width: 56rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
   
     h2 {
+      @include text-preset-1;
+      color: $grey-900;
       margin: 0;
-      font-size: 2rem;
-      color: #1e1e1e;
     }
+
+    button {
+        all: unset;
+        cursor: pointer;
+
+    }
+
   
     form {
       display: flex;
@@ -35,22 +55,19 @@
       gap: 1.6rem;
   
       label {
+        @include text-preset-4-bold;
         display: flex;
         flex-direction: column;
-        font-weight: 600;
-        color: #333;
+        color: $grey-500;
   
         input {
+          @include text-preset-4;
           margin-top: 0.5rem;
-          padding: 1rem;
-          border: 1px solid #ccc;
+          padding: 1.2rem 2.0rem;
+          border: 1px solid $beige-500;
           border-radius: 0.6rem;
           font-size: 1.6rem;
-  
-          &:focus {
-            border-color: #4caf50;
-            outline: none;
-          }
+
         }
       }
     }
