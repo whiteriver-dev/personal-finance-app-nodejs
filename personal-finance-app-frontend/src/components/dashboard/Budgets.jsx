@@ -58,6 +58,7 @@ function Budgets({ userId }) {
                   budget={budgetToEdit}
                   onClose={() => setEditModal(false)}
                   onBudgetUpdated={fetchBudgets}
+                  color={budgets.color}
                 />
               )}
             </div>
