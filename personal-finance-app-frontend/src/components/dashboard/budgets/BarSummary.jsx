@@ -1,12 +1,7 @@
 import './BarSummary.scss';
 import React, { useState, useRef, useEffect} from 'react';
-import {defaultBudgetColors, allBudgetColors} from '../../../constants/budgetColors';
 
-function BarSummary({ budgetId, name, spent, amount, transactions, index, onBudgetUpdated, onEdit }) {
-
-    const defaultColor = defaultBudgetColors[name];
-    const fallbackColors = Object.values(allBudgetColors);
-    const color = defaultColor || fallbackColors[index % fallbackColors.length];
+function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudgetUpdated, onEdit }) {
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);

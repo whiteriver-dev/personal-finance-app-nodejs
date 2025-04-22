@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './AddBudgetModal.scss';
-import { allBudgetColors } from '../../../constants/budgetColors';
 
-function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
+function AddBudgetModal({ userId, onClose, onBudgetCreated }) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
-  const [color, setColor] = useState('');
+  const [colors, setColors] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedColorId, setSelectedColorId] = useState('');
 
-  const availableColors = Object.entries(allBudgetColors).filter(
-    ([, hex]) => !usedColors.includes(hex)
-  );
+
+  useEffect(() => {
+    fetch('http://localhost:5050/colors')
+      .then(res => res.json())
+      .then(data => setColors(data));
+  }, []);
 
   useEffect(() => { // Prevents background scroll when modal is open
     document.body.style.overflow = 'hidden';  
@@ -26,7 +29,7 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
       name,
       amount: parseFloat(amount),
       user_id: userId,
-      color
+      color_id: selectedColorId,
     };
 
     try {
@@ -65,29 +68,36 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
 
           <label>Color Tag:</label>
           <div className="custom-dropdown" onClick={() => setDropdownOpen(!dropdownOpen)}>
-            <div className="custom-dropdown__selected">
-              {color ? (
+          <div className="custom-dropdown__selected">
+            {selectedColorId ? (
                 <>
-                  <span className="color-circle" style={{ backgroundColor: color }}></span>
-                  <span>{Object.keys(allBudgetColors).find(k => allBudgetColors[k] === color)}</span>
+                {(() => {
+                    const selectedColor = colors.find(c => c.id === selectedColorId);
+                    return (
+                    <>
+                        <span className="color-circle" style={{ backgroundColor: selectedColor?.hex }}></span>
+                        <span>{selectedColor?.name}</span>
+                    </>
+                    );
+                })()}
                 </>
-              ) : (
+            ) : (
                 <span>Select a color</span>
-              )}
+            )}
             </div>
             {dropdownOpen && (
               <div className="custom-dropdown__list">
-                {availableColors.map(([name, hex]) => (
-                  <div
-                    key={hex}
+                {colors.map(color => (
+                <div
+                    key={color.id}
                     className="custom-dropdown__option"
                     onClick={() => {
-                      setColor(hex);
-                      setDropdownOpen(false);
+                    setSelectedColorId(color.id);
+                    setDropdownOpen(false);
                     }}
                   >
-                    <span className="color-circle" style={{ backgroundColor: hex }}></span>
-                    {name}
+                    <span className="color-circle" style={{ backgroundColor: color.hex }}></span>
+                    {color.name}
                   </div>
                 ))}
               </div>

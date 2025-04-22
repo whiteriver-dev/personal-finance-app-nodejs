@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './EditBudgetModal.scss';
-import { allBudgetColors } from '../../../constants/budgetColors';
 
 function EditBudgetModal({ budget, onClose, onBudgetUpdated }) {
   const [name, setName] = useState(budget.name);
   const [amount, setAmount] = useState(budget.amount);
-  const [color, setColor] = useState(budget.color_id);
+  const [colorId, setColorId] = useState(budget.color_id);
+  const [colors, setColors] = useState([]);
+
+  // Fetch all colors from the database
+  useEffect(() => {
+    fetch('http://localhost:5050/colors')
+      .then(res => res.json())
+      .then(data => setColors(data))
+      .catch(err => console.error('Error fetching colors:', err));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,7 +21,7 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated }) {
     const updatedBudget = {
       name,
       amount: parseFloat(amount),
-      color,
+      color_id: colorId,  // <- Use correct field name
     };
 
     try {
@@ -47,9 +55,11 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated }) {
           </label>
           <label>
             Color:
-            <select value={color} onChange={(e) => setColor(e.target.value)}>
-              {Object.entries(allBudgetColors).map(([label, hex]) => (
-                <option key={hex} value={hex}>{label}</option>
+            <select value={colorId} onChange={(e) => setColorId(Number(e.target.value))}>
+              {colors.map(color => (
+                <option key={color.id} value={color.id}>
+                  {color.name}
+                </option>
               ))}
             </select>
           </label>

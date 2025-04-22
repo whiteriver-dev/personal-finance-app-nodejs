@@ -197,20 +197,21 @@ app.post('/register', async (req, res) => {
     const userId = req.params.userId;
   
     const query = `
-      SELECT 
+    SELECT 
         b.id, 
         b.name, 
         b.amount, 
-        b.color_id,
-        c.name AS color_name,
-        c.hex AS color_hex,
-        IFNULL(SUM(t.amount), 0) AS spent
+        b.color_id,          
+        c.hex AS color,     
+        IFNULL(SUM(t.amount), 0) as spent
       FROM budgets b
-      LEFT JOIN colors c ON b.color_id = c.id
       LEFT JOIN transactions t 
         ON t.category = b.name AND t.user_id = ?
+      LEFT JOIN colors c 
+        ON b.color_id = c.id
       WHERE b.user_id = ?
-      GROUP BY b.id;
+      GROUP BY b.id
+
     `;
   
     db.all(query, [userId, userId], (err, rows) => {
@@ -232,7 +233,7 @@ app.post('/register', async (req, res) => {
         b.amount, 
         b.color_id, 
         c.name AS color_name, 
-        c.hex AS color_hex
+        c.hex AS color
       FROM budgets b
       LEFT JOIN colors c ON b.color_id = c.id
       WHERE b.user_id = ?;
@@ -251,10 +252,10 @@ app.post('/register', async (req, res) => {
   //Budget POSTs (add new budgets)
 
   app.post('/budgets', (req, res) => {
-    const { name, amount, user_id } = req.body;
-    const query = `INSERT INTO budgets (name, amount, user_id) VALUES (?, ?, ?)`;
+    const { name, amount, user_id, color_id } = req.body;
+    const query = `INSERT INTO budgets (name, amount, user_id, color_id) VALUES (?, ?, ?, ?)`;
   
-    db.run(query, [name, amount, user_id], function (err) {
+    db.run(query, [name, amount, user_id, color_id], function (err) {
       if (err) {
         console.error('Error adding budget:', err);
         return res.status(500).json({ message: 'Internal server error' });

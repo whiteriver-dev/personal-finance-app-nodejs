@@ -13,7 +13,6 @@ function Budgets({ userId }) {
     const [showAddModal, setAddShowModal] = useState(false);
     const [showEditModal, setEditModal] = useState(false);
     const [budgetToEdit, setBudgetToEdit] = useState(null);
-    const usedColors = budgets.map(b => b.color);
 
     const fetchBudgets = async () => {
       const res = await fetch(`http://localhost:5050/budgets-with-spent/${userId}`);
@@ -51,7 +50,6 @@ function Budgets({ userId }) {
                   userId={userId}
                   onClose={() => setAddShowModal(false)}
                   onBudgetCreated={fetchBudgets}
-                  usedColors={usedColors}
                 />
               )}
 
@@ -69,7 +67,7 @@ function Budgets({ userId }) {
                     <DonutChart data={budgets} width={240} height={240} />
                 </div>
                 <div className="budgets-summary">
-                    {budgets.map((budget, i) => {
+                    {budgets.map((budget) => {
                     const budgetTransactions = transactions
 
                         .filter(tx => tx.category === budget.name)
@@ -83,8 +81,8 @@ function Budgets({ userId }) {
                           name={budget.name}
                           spent={budget.spent}
                           amount={budget.amount}
+                          color={budget.color}
                           transactions={budgetTransactions}
-                          index={i}
                           onBudgetUpdated={fetchBudgets}
                           onEdit={() => {
                               setBudgetToEdit(budget);
