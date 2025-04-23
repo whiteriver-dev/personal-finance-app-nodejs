@@ -59,6 +59,7 @@
         display: flex;
         flex-direction: column;
         color: $grey-500;
+        gap: 0.4rem;
   
         input {
           @include text-preset-4;
@@ -66,7 +67,6 @@
           padding: 1.2rem 2.0rem;
           border: 1px solid $beige-500;
           border-radius: 0.6rem;
-          font-size: 1.6rem;
 
         }
       }
@@ -76,18 +76,25 @@
 
     .custom-dropdown {
         position: relative;
-        margin-top: 0.5rem;
         cursor: pointer;
         user-select: none;
+        background-color: white;
+
+        border-radius: 0.8rem;
+        border: 1px solid $beige-500;
+
       
         &__selected {
-          border: 1px solid #ccc;
-          border-radius: 6px;
           padding: 0.8rem;
           display: flex;
           align-items: center;
           gap: 0.8rem;
-          background: #fff;
+
+          span {
+            @include text-preset-4;
+            color: $grey-900;
+          }
+
         }
       
         &__list {
@@ -95,24 +102,32 @@
           top: 100%;
           left: 0;
           right: 0;
-          background: #fff;
-          border: 1px solid #ccc;
-          border-radius: 6px;
-          margin-top: 0.2rem;
-          max-height: 200px;
+          background: white;
+          border: 1px solid $beige-500;
+          box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.1);
+          border-radius: 0.8rem;
+          max-height: 30rem;
           overflow-y: auto;
           z-index: 999;
+          padding: 0 2rem;
+
+
         }
       
         &__option {
-          padding: 0.8rem;
+          padding: 1.2rem 0;
           display: flex;
           align-items: center;
-          gap: 0.8rem;
-          cursor: pointer;
-      
-          &:hover {
-            background-color: #f3f3f3;
+          gap: 1.2rem;
+
+          
+          &:not(:last-child) {
+            border-bottom: 1px solid $grey-100;
+        }
+
+          &.disabled {
+            pointer-events: none;
+            cursor: not-allowed;
           }
         }
 
@@ -123,6 +138,10 @@
         height: 1.2rem;
         border-radius: 50%;
         display: inline-block;
+
+        &.used {
+          opacity: 0.5;
+        }
       }
       
   
@@ -132,30 +151,46 @@
       gap: 1rem;
   
       button {
-        padding: 1rem 1.6rem;
-        font-size: 1.4rem;
-        border: none;
-        border-radius: 0.6rem;
         cursor: pointer;
         transition: all 0.2s ease;
+        background-color: $grey-900;
+        color: white;
+        @include text-preset-4-bold;
+        padding: 1.6rem;
+        width: 100%;
+        text-align: center;
+        border-radius: 0.8rem;
+
+        
   
-        &:first-of-type {
-          background-color: #4caf50;
-          color: white;
-  
-          &:hover {
-            background-color: #449e48;
-          }
         }
-  
-        &:last-of-type {
-          background-color: #ddd;
-  
-          &:hover {
-            background-color: #ccc;
-          }
+
         }
       }
-    }
-  }
-  
+
+      .color-name-container {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+
+        .color-name {
+          @include text-preset-4;
+          color: $grey-900;
+        
+        }
+
+        .already-used-label {
+          @include text-preset-4;
+          color: $grey-900;
+        }
+
+        &.already-used {
+          .color-name, .already-used-label {
+            opacity: 0.5;
+          }
+
+        }
+
+
+      }
+    

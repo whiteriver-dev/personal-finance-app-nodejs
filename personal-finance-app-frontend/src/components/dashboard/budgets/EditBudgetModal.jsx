@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './EditBudgetModal.scss';
 
-function EditBudgetModal({ budget, onClose, onBudgetUpdated }) {
+function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
   const [name, setName] = useState(budget.name);
   const [amount, setAmount] = useState(budget.amount);
   const [colors, setColors] = useState([]);

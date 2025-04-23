@@ -13,6 +13,7 @@ function Budgets({ userId }) {
     const [showAddModal, setAddShowModal] = useState(false);
     const [showEditModal, setEditModal] = useState(false);
     const [budgetToEdit, setBudgetToEdit] = useState(null);
+    const usedColors = budgets.map(b => b.color_id);
 
     const fetchBudgets = async () => {
       const res = await fetch(`http://localhost:5050/budgets-with-spent/${userId}`);
@@ -50,6 +51,7 @@ function Budgets({ userId }) {
                   userId={userId}
                   onClose={() => setAddShowModal(false)}
                   onBudgetCreated={fetchBudgets}
+                  usedColors={usedColors}
                 />
               )}
 
@@ -58,6 +60,7 @@ function Budgets({ userId }) {
                   budget={budgetToEdit}
                   onClose={() => setEditModal(false)}
                   onBudgetUpdated={fetchBudgets}
+                  usedColors={usedColors}
                 />
               )}
             </div>

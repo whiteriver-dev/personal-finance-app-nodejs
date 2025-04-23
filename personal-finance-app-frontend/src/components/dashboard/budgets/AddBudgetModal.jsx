@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './AddBudgetModal.scss';
 
-function AddBudgetModal({ userId, onClose, onBudgetCreated }) {
+function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [colors, setColors] = useState('');
@@ -67,13 +67,13 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated }) {
           </label>
 
           <label>
-            Amount:
+            Maximum Spend
             <input type="number" value={amount} placeholder='e.g 2000' onChange={(e) => setAmount(e.target.value)} />
           </label>
 
-          <label>Theme</label>
-          <div className="custom-dropdown" onClick={() => setDropdownOpen(!dropdownOpen)}>
-          <div className="custom-dropdown__selected">
+          <label>Theme
+          <div className="custom-dropdown" >
+          <div className="custom-dropdown__selected" onClick={() => setDropdownOpen(!dropdownOpen)}>
             {selectedColorId ? (
                 <>
                 {(() => {
@@ -92,22 +92,32 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated }) {
             </div>
             {dropdownOpen && (
               <div className="custom-dropdown__list">
-                {colors.map(color => (
-                <div
-                    key={color.id}
-                    className="custom-dropdown__option"
-                    onClick={() => {
-                    setSelectedColorId(color.id);
-                    setDropdownOpen(false);
-                    }}
-                  >
-                    <span className="color-circle" style={{ backgroundColor: color.hex }}></span>
-                    {color.name}
-                  </div>
-                ))}
+                {colors.map(color => {
+                  const isUsed = usedColors.includes(color.id);
+                  return (
+                  <div
+                      key={color.id}
+                      className={`custom-dropdown__option ${isUsed ? 'disabled' : ''}`}
+                      onClick={() => {
+                        if (!isUsed) {
+                          setSelectedColorId(color.id);
+                          setDropdownOpen(false);
+                        } 
+
+                      }}
+                    >
+                      <span className={`color-circle ${isUsed ? 'used' : ''}`} style={{ backgroundColor: color.hex }}></span>
+                      <div className={`color-name-container ${isUsed ? 'already-used' : ''}`}>
+                        <span className="color-name">{color.name}</span>
+                        {isUsed && <span className="already-used-label">Already used</span>}
+                      </div>
+                    </div>
+                  );
+    })}
               </div>
             )}
           </div>
+          </label>
 
           <div className="modal-actions">
             <button type="submit">Add Budget</button>
