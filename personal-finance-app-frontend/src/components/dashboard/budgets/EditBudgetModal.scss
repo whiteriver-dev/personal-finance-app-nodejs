@@ -1,0 +1,179 @@
+@use '../../../styles/mixins' as *;
+
+.edit-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+
+
+  
+  .edit-modal {
+    background-color: #ffffff;
+    padding: 3.2rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 56rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+    h2 {
+      @include text-preset-1;
+      color: $grey-900;
+      margin: 0;
+    }
+
+    button {
+        all: unset;
+        cursor: pointer;
+
+    }
+
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+  
+      label {
+        @include text-preset-4-bold;
+        display: flex;
+        flex-direction: column;
+        color: $grey-500;
+        gap: 0.4rem;
+
+        .input-with-prefix {
+          input {
+            padding-left: 4.2rem;
+          }
+        };
+  
+        input {
+          @include text-preset-4;
+          margin-top: 0.5rem;
+          padding: 1.2rem 2.0rem;
+          border: 1px solid $beige-500;
+          border-radius: 0.6rem;
+
+        }
+      }
+    }
+
+    .custom-dropdown {
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      background-color: white;
+
+      border-radius: 0.8rem;
+      border: 1px solid $beige-500;
+
+    
+      &__selected {
+        padding: 1.2rem 2.0rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+
+        span {
+          @include text-preset-4;
+          color: $grey-900;
+        }
+
+      }
+    
+      &__list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid $beige-500;
+        box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.1);
+        border-radius: 0.8rem;
+        max-height: 30rem;
+        overflow-y: auto;
+        z-index: 999;
+        padding: 0 2rem;
+
+
+      }
+    
+      &__option {
+        padding: 1.2rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+
+        
+        &:not(:last-child) {
+          border-bottom: 1px solid $grey-100;
+      }
+
+        &.disabled {
+          pointer-events: none;
+          cursor: not-allowed;
+        }
+      }
+
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 0.4rem;
+  
+      button {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background-color: $grey-900;
+        color: white;
+        @include text-preset-4-bold;
+        padding: 1.6rem;
+        width: 100%;
+        text-align: center;
+        border-radius: 0.8rem;
+
+        
+  
+        }
+
+        }
+        
+    .color-circle {
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 50%;
+
+
+      .color-name-container {
+        @include text-preset-4;
+
+      }
+    }
+
+  
+
+
+    
+
+
+  
