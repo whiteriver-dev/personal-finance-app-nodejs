@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './EditBudgetModal.scss';
 
 function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
@@ -7,6 +7,21 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
   const [colors, setColors] = useState([]);
   const [selectedColorId, setSelectedColorId] = useState(budget.color_id || '');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+  
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     fetch('http://localhost:5050/colors')
@@ -66,8 +81,8 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
           </label>
 
           <label>Color Tag:</label>
-          <div className="custom-dropdown" onClick={() => setDropdownOpen(!dropdownOpen)}>
-            <div className="custom-dropdown__selected">
+          <div className="custom-dropdown" onClick={() => setDropdownOpen(!dropdownOpen)} ref={dropdownRef} >
+            <div className="custom-dropdown__selected" >
               {selectedColorId ? (
                 <>
                   {(() => {
@@ -85,7 +100,7 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
               )}
             </div>
             {dropdownOpen && (
-              <div className="custom-dropdown__list">
+              <div className="custom-dropdown__list" >
                 {colors.map(color => (
                   <div
                     key={color.id}

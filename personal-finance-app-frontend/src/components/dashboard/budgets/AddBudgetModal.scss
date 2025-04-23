@@ -60,6 +60,12 @@
         flex-direction: column;
         color: $grey-500;
         gap: 0.4rem;
+
+        .input-with-prefix {
+          input {
+            padding-left: 4.2rem;
+          }
+        };
   
         input {
           @include text-preset-4;
@@ -149,6 +155,7 @@
       display: flex;
       justify-content: flex-end;
       gap: 1rem;
+      margin-top: 0.4rem;
   
       button {
         cursor: pointer;
@@ -193,4 +200,24 @@
 
 
       }
+
+      .input-with-prefix {
+        position: relative;
+        display: flex;
+        align-items: center;
+      
+        input {
+          width: 100%;
+
+        }
+      
+        .money-prefix {
+          @include text-preset-4;
+          position: absolute;
+          left: 2.0rem;
+          pointer-events: none;
+          bottom: 1.2rem;
+        }
+      }
+      
     

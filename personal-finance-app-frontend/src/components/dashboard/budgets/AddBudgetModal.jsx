@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './AddBudgetModal.scss';
 
 function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
@@ -7,6 +7,21 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
   const [colors, setColors] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedColorId, setSelectedColorId] = useState('');
+  const dropdownRef = useRef(null);
+  
+    useEffect(() => {
+      const handleClickOutside = (e) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+          setDropdownOpen(false);
+        }
+      };
+    
+      document.addEventListener('mousedown', handleClickOutside);
+    
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
 
 
   useEffect(() => {
@@ -68,11 +83,14 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
 
           <label>
             Maximum Spend
-            <input type="number" value={amount} placeholder='e.g 2000' onChange={(e) => setAmount(e.target.value)} />
+            <div className='input-with-prefix'>
+              <span className="money-prefix">$</span>
+              <input type="number" value={amount} placeholder='e.g 2000' onChange={(e) => setAmount(e.target.value)} />
+            </div>
           </label>
 
           <label>Theme
-          <div className="custom-dropdown" >
+          <div className="custom-dropdown" ref={dropdownRef} >
           <div className="custom-dropdown__selected" onClick={() => setDropdownOpen(!dropdownOpen)}>
             {selectedColorId ? (
                 <>
