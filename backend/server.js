@@ -13,6 +13,16 @@ app.use(cors({
   credentials: true,
 }));
 
+// UTILITY FUNCTIONS
+
+function capitalizeWords(str) {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 // Create the tables if they don't already exist
 db.serialize(() => {
   // Users table (for authentication)
@@ -253,9 +263,15 @@ app.post('/register', async (req, res) => {
 
   app.post('/budgets', (req, res) => {
     const { name, amount, user_id, color_id } = req.body;
+    
+    const formattedName = capitalizeWords(name);
+    if (formattedName.length > 30) {
+      return res.status(400).json({ message: 'Budget name must be 30 characters or fewer.' });
+    }
+
     const query = `INSERT INTO budgets (name, amount, user_id, color_id) VALUES (?, ?, ?, ?)`;
   
-    db.run(query, [name, amount, user_id, color_id], function (err) {
+    db.run(query, [formattedName, amount, user_id, color_id], function (err) {
       if (err) {
         console.error('Error adding budget:', err);
         return res.status(500).json({ message: 'Internal server error' });
@@ -271,6 +287,11 @@ app.post('/register', async (req, res) => {
   app.put('/budgets/:id', (req, res) => {
     const { id } = req.params;
     const { name, amount, color_id } = req.body;
+
+    const formattedName = capitalizeWords(name);
+    if (formattedName.length > 30) {
+      return res.status(400).json({ message: 'Budget name must be 30 characters or fewer.' });
+    }
   
     const query = `
       UPDATE budgets
@@ -278,7 +299,7 @@ app.post('/register', async (req, res) => {
       WHERE id = ?
     `;
   
-    db.run(query, [name, amount, color_id, id], function (err) {
+    db.run(query, [formattedName, amount, color_id, id], function (err) {
       if (err) {
         console.error('Error updating budget:', err);
         return res.status(500).json({ message: 'Failed to update budget' });

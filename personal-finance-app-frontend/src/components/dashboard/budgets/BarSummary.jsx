@@ -63,7 +63,10 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
                             <DeleteConfirmModal
                                 name={name}
                                 onConfirm={handleDelete}
-                                onCancel={() => setShowDeleteModal(false)}
+                                onCancel={() => {
+                                    setShowDeleteModal(false); 
+                                    setIsDropdownOpen(false);
+                                }}
                             />
                             )}
                         </div>

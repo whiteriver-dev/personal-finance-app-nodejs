@@ -72,6 +72,10 @@
           border: 1px solid $beige-500;
           border-radius: 0.6rem;
 
+          &::-webkit-outer-spin-button,
+          &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+          }
         }
       }
     }
