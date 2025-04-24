@@ -1,9 +1,11 @@
 import './BarSummary.scss';
 import React, { useState, useRef, useEffect} from 'react';
+import DeleteConfirmModal from './DeleteConfirmModal';
 
 function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudgetUpdated, onEdit }) {
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const dropdownRef = useRef(null);
 
 
@@ -32,7 +34,7 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
           if (!res.ok) throw new Error('Failed to delete');
       
           onBudgetUpdated(); 
-          setIsDropdownOpen(false);
+          setShowDeleteModal(false);
         } catch (err) {
           console.error('Error deleting budget:', err);
         }
@@ -56,7 +58,13 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
                     {isDropdownOpen && (
                         <div className="budget__dropdown">
                         <button className='budget__dropdown-edit' onClick={handleEdit}>Edit Budget</button>
-                        <button className='budget__dropdown-delete' onClick={handleDelete}>Delete Budget</button>
+                        <button className='budget__dropdown-delete' onClick={() => setShowDeleteModal(true)}>Delete Budget</button>
+                        {showDeleteModal && (
+                            <DeleteConfirmModal
+                                onConfirm={handleDelete}
+                                onCancel={() => setShowDeleteModal(false)}
+                            />
+                            )}
                         </div>
                     )}
                 </div>
