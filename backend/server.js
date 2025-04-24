@@ -263,7 +263,12 @@ app.post('/register', async (req, res) => {
 
   app.post('/budgets', (req, res) => {
     const { name, amount, user_id, color_id } = req.body;
-    
+
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount) || amount <= 0) {
+      return res.status(400).json({ message: 'Amount must be a positive number.' });
+    }
+
     const formattedName = capitalizeWords(name);
     if (formattedName.length > 30) {
       return res.status(400).json({ message: 'Budget name must be 30 characters or fewer.' });
@@ -271,7 +276,7 @@ app.post('/register', async (req, res) => {
 
     const query = `INSERT INTO budgets (name, amount, user_id, color_id) VALUES (?, ?, ?, ?)`;
   
-    db.run(query, [formattedName, amount, user_id, color_id], function (err) {
+    db.run(query, [formattedName, parsedAmount, user_id, color_id], function (err) {
       if (err) {
         console.error('Error adding budget:', err);
         return res.status(500).json({ message: 'Internal server error' });
@@ -287,6 +292,11 @@ app.post('/register', async (req, res) => {
   app.put('/budgets/:id', (req, res) => {
     const { id } = req.params;
     const { name, amount, color_id } = req.body;
+    
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount) || amount <= 0) {
+      return res.status(400).json({ message: 'Amount must be a positive number.' });
+    }
 
     const formattedName = capitalizeWords(name);
     if (formattedName.length > 30) {
