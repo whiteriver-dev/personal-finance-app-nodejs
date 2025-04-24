@@ -61,6 +61,7 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
                         <button className='budget__dropdown-delete' onClick={() => setShowDeleteModal(true)}>Delete Budget</button>
                         {showDeleteModal && (
                             <DeleteConfirmModal
+                                name={name}
                                 onConfirm={handleDelete}
                                 onCancel={() => setShowDeleteModal(false)}
                             />

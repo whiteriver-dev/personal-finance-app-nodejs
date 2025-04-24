@@ -1,5 +1,21 @@
 @use '../../../styles/mixins' as *;
 
+.delete-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h3 {
+        @include text-preset-1;
+        color: $grey-900;
+        margin: 0;
+    }
+    button {
+        padding: 0;
+    }
+}
+
 .delete-modal-backdrop {
     position: fixed;
     top: 0;
@@ -15,33 +31,46 @@
   
   .delete-modal {
     background: #fff;
-    padding: 2rem;
+    padding: 3.2rem;
     border-radius: 0.8rem;
     box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.2);
-    max-width: 400px;
-    text-align: center;
+    max-width: 56rem;
+
+    p {
+        @include text-preset-4;
+        color: $grey-500;
+        margin: 0;
+        margin-bottom: 2rem;
+    }
   }
   
   .delete-modal__actions {
     display: flex;
-    justify-content: space-around;
-    margin-top: 2rem;
+    flex-direction: column;
+    text-align: center;
+    @include text-preset-4;
+
+
+    .dlt-confirm-btn {
+        color: white;
+        background-color: $red;
+        border-radius: 0.8rem;
+        cursor: pointer;
+        width: 100%;
+        padding: 1.6rem 0;
+      }
+
+      .dlt-cancel-btn {
+        color: $grey-500;
+        background-color: none;
+        border: none;
+        border-radius: 0.8rem;
+        cursor: pointer;
+        width: 100%;
+        padding: 1.6rem 0;
+      }
+
   }
   
-  .confirm-btn {
-    background-color: #c94736;
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 0.4rem;
-    cursor: pointer;
-  }
+
   
-  .cancel-btn {
-    background-color: #ddd;
-    color: #333;
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 0.4rem;
-    cursor: pointer;
-  }
