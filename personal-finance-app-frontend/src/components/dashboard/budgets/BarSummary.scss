@@ -180,7 +180,12 @@
 // Dropdown menu for budget options
   .budget__options-container {
     position: relative;
+
+    button {
+      cursor: pointer;
+    }
   }
+  
   
   .budget__dropdown {
     position: absolute;

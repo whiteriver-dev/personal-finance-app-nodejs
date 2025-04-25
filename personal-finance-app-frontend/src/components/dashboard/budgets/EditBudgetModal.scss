@@ -147,7 +147,6 @@
   
       button {
         cursor: pointer;
-        transition: all 0.2s ease;
         background-color: $grey-900;
         color: white;
         @include text-preset-4-bold;
@@ -156,7 +155,10 @@
         text-align: center;
         border-radius: 0.8rem;
 
-        
+        &:hover {
+          background-color: $grey-500;
+          transition: background-color 0.2s ease-in-out;
+        }
   
         }
 

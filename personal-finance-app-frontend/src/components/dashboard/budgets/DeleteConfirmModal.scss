@@ -58,6 +58,11 @@
         cursor: pointer;
         width: 100%;
         padding: 1.6rem 0;
+
+        &:hover {
+            opacity: 0.8;
+            transition: background-color 0.2s ease-in-out;
+        }
       }
 
       .dlt-cancel-btn {
@@ -68,6 +73,11 @@
         cursor: pointer;
         width: 100%;
         padding: 1.6rem 0;
+
+        &:hover {
+          background-color: $grey-100;
+          transition: background-color 0.2s ease-in-out;
+      }
       }
 
   }

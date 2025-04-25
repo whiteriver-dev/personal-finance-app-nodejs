@@ -7,6 +7,12 @@
   background-color: $grey-900;
   border-radius: 0.8rem;
   padding: 1.6rem 1.6rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $grey-500;
+    transition: background-color 0.2s ease-in-out;
+  }
 }
 
 .budgets-header {
