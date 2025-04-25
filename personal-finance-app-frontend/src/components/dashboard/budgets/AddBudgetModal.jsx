@@ -78,14 +78,35 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
         <form onSubmit={handleSubmit}>
           <label>
             Budget Category
-            <input type="text" value={name} placeholder='Budget name' onChange={(e) => setName(e.target.value)} />
+            <input type="text" value={name} placeholder='Budget name' maxLength={30} onChange={(e) => setName(e.target.value)} />
           </label>
 
           <label>
             Maximum Spend
             <div className='input-with-prefix'>
               <span className="money-prefix">$</span>
-              <input type="number" value={amount} placeholder='e.g 2000' onChange={(e) => setAmount(e.target.value)} />
+              <input type="number"
+                     value={amount} 
+                     min="0" 
+                     step="0.01"
+                     placeholder='e.g 2000' 
+                     onChange={(e) => {
+                      const value = e.target.value;
+                  
+                      if (value === '') {
+                        setAmount('');
+                        return;
+                      }
+                  
+                      if (/^\d*\.?\d{0,2}$/.test(value)) { //This allows only numbers and up to 2 decimal places
+                        setAmount(value);
+                      }
+                    }}
+                     onKeyDown={(e) => {
+                      if (['-', '+', 'e', 'E'].includes(e.key)) {
+                        e.preventDefault();
+                      }
+                    }} />
             </div>
           </label>
 

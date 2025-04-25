@@ -269,6 +269,10 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Amount must be a positive number.' });
     }
 
+    if (!/^\d+(\.\d{1,2})?$/.test(amount.toString())) {
+      return res.status(400).json({ message: 'Amount must have at most 2 decimal places.' });
+    }
+
     const formattedName = capitalizeWords(name);
     if (formattedName.length > 30) {
       return res.status(400).json({ message: 'Budget name must be 30 characters or fewer.' });
@@ -292,10 +296,14 @@ app.post('/register', async (req, res) => {
   app.put('/budgets/:id', (req, res) => {
     const { id } = req.params;
     const { name, amount, color_id } = req.body;
-    
+
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || amount <= 0) {
       return res.status(400).json({ message: 'Amount must be a positive number.' });
+    }
+
+    if (!/^\d+(\.\d{1,2})?$/.test(amount.toString())) {
+      return res.status(400).json({ message: 'Amount must have at most 2 decimal places.' });
     }
 
     const formattedName = capitalizeWords(name);

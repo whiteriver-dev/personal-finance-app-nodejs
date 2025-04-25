@@ -72,7 +72,7 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
         <form onSubmit={handleSubmit}>
           <label>
             Budget Category
-            <input value={name} onChange={(e) => setName(e.target.value)} />
+            <input value={name} maxLength={30} onChange={(e) => setName(e.target.value)} />
           </label>
 
           <label>
@@ -82,7 +82,25 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
               <input
                 type="number"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                min="0"
+                step="0.01"
+                onKeyDown={(e) => {
+                  if (['-', '+', 'e', 'E'].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onChange={(e) => {
+                  const value = e.target.value;
+              
+                  if (value === '') {
+                    setAmount('');
+                    return;
+                  }
+              
+                  if (/^\d*\.?\d{0,2}$/.test(value)) { //This allows only numbers and up to 2 decimal places
+                    setAmount(value);
+                  }
+                }}
               />
             </div>
           </label>
