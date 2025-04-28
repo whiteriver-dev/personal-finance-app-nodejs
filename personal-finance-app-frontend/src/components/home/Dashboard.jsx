@@ -28,7 +28,7 @@ function Dashboard() {
             case 'overview':
                 return <Overview />;
             case 'transactions':
-                return <Transactions />;
+                return <Transactions userId={userId}/>;
             case 'budgets':
                 return <Budgets userId={userId}/>;
             case 'pots':

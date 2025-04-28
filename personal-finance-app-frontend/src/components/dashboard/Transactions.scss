@@ -1,7 +1,7 @@
 @use '../../styles/mixins.scss' as *;
 
 .transactions {
-
+    background-color: white;
 
     h1 {
         @include text-preset-1;

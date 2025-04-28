@@ -32,7 +32,7 @@ function Budgets({ userId }) {
         fetch(`http://localhost:5050/transactions/${userId}`)
           .then(res => res.json())
           .then(data => {
-            console.log("Fetched transactions:", data); // 👈 What does this show?
+            console.log("Fetched transactions:", data); 
             setTransactions(data);
           })
           .catch(err => console.error('Error fetching transactions:', err));

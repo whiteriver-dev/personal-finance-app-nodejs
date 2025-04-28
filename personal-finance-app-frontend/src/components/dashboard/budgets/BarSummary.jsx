@@ -9,7 +9,7 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
     const dropdownRef = useRef(null);
 
 
-    const percentage = Math.min((spent / amount) * 100, 100);
+    const percentage = Math.min((Math.abs(spent) / amount) * 100, 100);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -83,7 +83,7 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
                 </div>
                 <div className='bar-summary__spent-remaining'>
                 <span className='bar-summary__spent-remaining-colorcode' style={{ backgroundColor: color}}></span>
-                    <p className='spent'><span className='spent-remaining__label'>Spent</span><span className='spent-remaining__amount'>${spent}</span></p>
+                    <p className='spent'><span className='spent-remaining__label'>Spent</span><span className='spent-remaining__amount'>${Math.abs(spent)}</span></p>
                     <p className='remaining'><span className='spent-remaining__label'>Remaining</span><span className='spent-remaining__amount'>${amount}</span></p>
                 </div>
             </div>

@@ -1,2 +1,52 @@
 @use '../../../styles/mixins' as *;
 
+.transactions-table {
+    width: 100%;
+
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+  
+      th, td {
+        padding: 2.4rem 1.6rem;
+        text-align: left;
+        &:not(:last-child) {
+            border-bottom: 0.1rem solid rgba($grey-500, 0.15);
+        }
+
+        &:last-child {
+            text-align: right;
+        }
+      }
+  
+      th {
+        @include text-preset-5;
+        color: $grey-500;
+      }
+  
+      td {
+        @include text-preset-5;
+        color: $grey-500;
+      }
+    }
+  
+    .no-transactions {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+      font-style: italic;
+    }
+
+    .recipient {
+        color: $grey-900;
+        @include text-preset-4-bold;
+    }
+
+    .transaction-amount{
+        color: $grey-900;
+        @include text-preset-4-bold;
+    }
+  }
+  

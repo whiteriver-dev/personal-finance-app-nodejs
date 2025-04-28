@@ -3,16 +3,28 @@ import React, { useState, useEffect } from 'react';
 import Search from './transactions/Search';
 import SortBy from './transactions/SortBy';
 import SortCategory from './transactions/SortCategory';
+import TransactionsTable from './transactions/TransactionsTable';
 
-function Transactions( userId) {
+function Transactions( {userId} ) {
 
     const [budgets, setBudgets] = useState([]);
+    const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
       fetch(`http://localhost:5050/budgets/${userId}`)
         .then(res => res.json())
         .then(data => setBudgets(data))
         .catch(err => console.error('Error fetching budgets:', err));
+    }, [userId]);
+
+    useEffect(() => {
+    fetch(`http://localhost:5050/transactions/${userId}`)
+        .then(res => res.json())
+        .then(data => {
+        console.log("Fetched transactions:", data); 
+        setTransactions(data);
+        })
+        .catch(err => console.error('Error fetching transactions:', err));
     }, [userId]);
 
     const handleSortChange = (selectedCategory) => {
@@ -31,6 +43,9 @@ function Transactions( userId) {
                     <SortBy/>
                     <SortCategory budgets={budgets} onSortChange={handleSortChange}/>
                 </div>
+            </div>
+            <div className='transactions__table'>
+                <TransactionsTable transactions={transactions}/>
             </div>
         </div>
     );

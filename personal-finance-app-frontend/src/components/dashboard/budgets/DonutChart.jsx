@@ -10,7 +10,7 @@ function DonutChart({ data, width, height }) {
 
     const radius = Math.min(width, height) / 2;
     const totalBudget = d3.sum(data, d => d.amount);
-    const totalSpent = d3.sum(data, d => d.spent ?? 0);
+    const totalSpent = d3.sum(data, d => Math.abs(d.spent) ?? 0);
 
     const svg = d3.select(ref.current);
     svg.selectAll("*").remove(); // Clear previous renders
@@ -51,7 +51,7 @@ function DonutChart({ data, width, height }) {
       .attr("text-anchor", "middle")
       .attr("dy", "0em")
       .attr("class", "donut-center__label")
-      .text(`$${totalSpent}`);
+      .text(`$${Math.abs(totalSpent)}`);
 
     chart.append("text")
       .attr("text-anchor", "middle")
@@ -73,7 +73,7 @@ function DonutChart({ data, width, height }) {
             >
               <span className='legend__budget-name'>{budget.name}</span>
               <span className='legend__budget-total'>
-                <span className='legend__budget-spent'>${budget.spent || 0}</span>
+                <span className='legend__budget-spent'>${Math.abs(budget.spent) || 0}</span>
                 <span className='legend__budget-amount'> of ${budget.amount}</span>
               </span>
             </span>
