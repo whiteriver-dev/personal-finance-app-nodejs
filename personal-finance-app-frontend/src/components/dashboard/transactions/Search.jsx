@@ -12,21 +12,23 @@ function Search({ data, onSearchResults, placeholder }) {
         const observer = new ResizeObserver((entries) => {
           for (let entry of entries) {
             const width = entry.contentRect.width;
-            console.log('Container width:', width);
-            setIsSmall(width < 160); // adjust 300 to whatever you want as breakpoint
+            setIsSmall(width < 150);
           }
         });
       
-        if (containerRef.current) {
-          observer.observe(containerRef.current);
+        const element = containerRef.current; 
+      
+        if (element) {
+          observer.observe(element);
         }
       
         return () => {
-          if (containerRef.current) {
-            observer.unobserve(containerRef.current);
+          if (element) {
+            observer.unobserve(element); 
           }
         };
       }, []);
+      
       
 
     const handleSearch = (e) => {

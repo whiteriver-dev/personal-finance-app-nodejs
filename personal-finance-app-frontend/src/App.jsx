@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import AuthTemplate from './components/auth/AuthTemplate';
 import Dashboard from './components/home/Dashboard';
-import './App.scss'; // 
+import './App.scss'; 
 
 function App() {
   return (

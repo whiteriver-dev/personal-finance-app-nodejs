@@ -3,13 +3,19 @@
 .dashboard {
     display: flex;
     flex-direction: row;
+
+
     height: 100%;
+
     background-color: $beige-100;
 }
 
 .dashboard__content {
     width: 100%;
-    padding: 0 1.6rem;
+    box-sizing: border-box;
+    padding: 0 1.2rem;
+
+
 }
 
 
@@ -18,8 +24,9 @@
 
 .dashboard__content {
     width: 100%;
-    margin: 3.2rem 4.0rem;
+
     border-radius: 1.2rem;
+    padding: 0 4.0rem;
 
 }
 
