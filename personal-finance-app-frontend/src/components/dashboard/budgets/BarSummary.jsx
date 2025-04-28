@@ -97,7 +97,7 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
                         <div key={tx.id} className="bar-summary__latest-row">
                             <span className="latest-description">{tx.description}</span>
                             <span className="latest-amount-date">
-                                <span className="latest-amount">${tx.amount}</span>
+                                <span className="latest-amount">{tx.amount < 0 ? '-' : ''}${Math.abs(tx.amount)}</span>
                                 <span className="latest-date">
                                     {new Date(tx.date).toLocaleDateString('en-GB', {
                                     day: 'numeric',

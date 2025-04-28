@@ -20,7 +20,7 @@ function TransactionsTable({ transactions }) {
               <td className='recipient'>{tx.description}</td>
               <td>{tx.category}</td>
               <td>{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-              <td className='transaction-amount'>${tx.amount}</td>
+              <td className='transaction-amount'>{tx.amount < 0 ? '-' : ''}${Math.abs(tx.amount)}</td>
             </tr>
           ))}
         </tbody>
@@ -35,7 +35,7 @@ function TransactionsTable({ transactions }) {
               <span className="category">{tx.category}</span>
             </div>
             <div className="transactions-table__row">
-              <span className="transaction-amount">${tx.amount}</span>
+              <span className="transaction-amount">{tx.amount < 0 ? '-' : ''}${Math.abs(tx.amount)}</span>
               <span className="date">{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
             </div>
           </div>
