@@ -1,10 +1,11 @@
+import './TransactionsTable.scss';
 import React from 'react';
-import './TransactionsTable.scss'; // We'll create basic styling next
 
 function TransactionsTable({ transactions }) {
   return (
     <div className="transactions-table">
-      <table>
+      {/* Desktop view */}
+      <table className="transactions-table__desktop">
         <thead>
           <tr>
             <th>Recipient / Sender</th>
@@ -14,26 +15,32 @@ function TransactionsTable({ transactions }) {
           </tr>
         </thead>
         <tbody>
-          {transactions.length === 0 ? (
-            <tr>
-              <td colSpan="4" className="no-transactions">No transactions available</td>
+          {transactions.map(tx => (
+            <tr key={tx.id}>
+              <td className='recipient'>{tx.description}</td>
+              <td>{tx.category}</td>
+              <td>{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+              <td className='transaction-amount'>${tx.amount}</td>
             </tr>
-          ) : (
-            transactions.map((tx) => (
-              <tr key={tx.id}>
-                <td className='recipient'>{tx.description}</td>
-                <td>{tx.category}</td>
-                <td>{new Date(tx.date).toLocaleDateString('en-GB', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric'
-                })}</td>
-                <td className='transaction-amount'>${parseFloat(tx.amount).toFixed(2)}</td>
-              </tr>
-            ))
-          )}
+          ))}
         </tbody>
       </table>
+
+      {/* Mobile view */}
+      <div className="transactions-table__mobile">
+        {transactions.map(tx => (
+          <div key={tx.id} className="transactions-table__mobile-card">
+            <div className="transactions-table__row">
+              <span className="recipient">{tx.description}</span>
+              <span className="category">{tx.category}</span>
+            </div>
+            <div className="transactions-table__row">
+              <span className="transaction-amount">${tx.amount}</span>
+              <span className="date">{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

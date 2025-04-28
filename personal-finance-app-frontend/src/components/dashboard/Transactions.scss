@@ -1,37 +1,58 @@
 @use '../../styles/mixins.scss' as *;
 
-.transactions {
-    background-color: white;
 
-    h1 {
-        @include text-preset-1;
-        color: $grey-900;
-        background-color: $beige-100;
-        margin-top: 2.4rem;
-        margin-bottom: 3.2rem;
-    }
+.transactions__content-container {
+    background-color: white;
+    padding: 2.4rem 2.0rem;
+    border-radius: 1.2rem;
+    gap: 2.4rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .transactions__content {
-    background-color: white;
+    
     border-radius: 1.2rem;
     display: flex;
     justify-content: space-between;
 
-    padding: 2.0rem 2.0rem;
 
-}
+        
+    .sort-container {
+        display: flex;
+        gap: 2.4rem;
+    }
 
-.sort-container {
-    display: flex;
-    gap: 2.4rem;
-}
-
-@media (min-width: 768px) {
-    .transactions__content {
-        padding: 3.2rem 3.2rem
+    .transactions__table {
+        display: flex;
     }
     
+
+
+}
+
+
+@media (min-width: 1024px) {
+    .transactions {
+
+
+        h1 {
+            @include text-preset-1;
+            color: $grey-900;
+            background-color: $beige-100;
+            margin-top: 2.4rem;
+            margin-bottom: 3.2rem;
+        }
+    }
+    
+    .transactions__content-container {
+        background-color: white;
+        border-radius: 1.2rem;
+        padding: 3.2rem 3.2rem;
+    }
+    
+
+
 
 
 }

@@ -1,27 +1,21 @@
 @use '../../../styles/mixins' as *;
 
+
+
 .transactions-table {
     width: 100%;
 
-  
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 600px;
-  
-      th, td {
-        padding: 2.4rem 1.6rem;
-        text-align: left;
-        &:not(:last-child) {
-            border-bottom: 0.1rem solid rgba($grey-500, 0.15);
-        }
+    .recipient {
+        color: $grey-900;
+        @include text-preset-4-bold;
+    }
 
-        &:last-child {
-            text-align: right;
-        }
-      }
-  
-      th {
+    .transaction-amount {
+        color: $grey-900;
+        @include text-preset-4-bold;
+    }
+
+    th {
         @include text-preset-5;
         color: $grey-500;
       }
@@ -30,23 +24,101 @@
         @include text-preset-5;
         color: $grey-500;
       }
+  
+  /* Desktop */
+
+  .transactions-table {
+    width: 100%;
+    
+
+
+
+      .no-transactions {
+        text-align: center;
+        padding: 2rem;
+        color: #999;
+        font-style: italic;
+      }
+  
+
+
+
+  
+    &__desktop {
+      width: 100%;
+      border-collapse: collapse;
+  
+      th, td {
+        padding: 2.4rem 1.6rem;
+        text-align: left;
+        &:not(:last-child) {
+            border-bottom: 0.1rem solid rgba($grey-500, 0.15);
+      }
+    }
+
+
+    }
     }
   
-    .no-transactions {
-      text-align: center;
-      padding: 2rem;
-      color: #999;
-      font-style: italic;
+    &__mobile {
+      display: none;
+    }
+  
+    // Mobile 
+    @media (max-width: 768px) {
+
+        span .recipient {
+            @include text-preset-4-bold;
+            color: $grey-900;
+            text-align: left;
+        }
+
+        span {
+            @include text-preset-5;
+            color: $grey-500;
+
+        }
+
+        .transaction-amount, .date {
+            text-align: right;
+        }
+
+        .recipient, .category {
+            display: inline-block;
+            white-space: normal;
+        }
+
+      &__desktop {
+        display: none;
+      }
+      
+  
+      &__mobile {
+        display: block;
+      
+  
+        &-card {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        }
+  
+        &__row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            padding: 1.6rem 2.0rem;
+
+            &:not(:last-child) {
+                border-bottom: 0.1rem solid rgba($grey-500, 0.15);
+            }
+          }
+
+      }
+      
     }
 
-    .recipient {
-        color: $grey-900;
-        @include text-preset-4-bold;
-    }
-
-    .transaction-amount{
-        color: $grey-900;
-        @include text-preset-4-bold;
-    }
-  }
+    
+  
   

@@ -35,17 +35,19 @@ function Transactions( {userId} ) {
     return (
         <div className="transactions">
             <h1>Transactions</h1>
-            <div class='transactions__content'>
-                <div className='search-container'>
-                    <Search placeholder="Search transaction"/>
+            <div className='transactions__content-container'>
+                <div class='transactions__content'>
+                    <div className='search-container'>
+                        <Search placeholder="Search transaction"/>
+                    </div>
+                    <div className='sort-container'>
+                        <SortBy/>
+                        <SortCategory budgets={budgets} onSortChange={handleSortChange}/>
+                    </div>
                 </div>
-                <div className='sort-container'>
-                    <SortBy/>
-                    <SortCategory budgets={budgets} onSortChange={handleSortChange}/>
+                <div className='transactions__table'>
+                    <TransactionsTable transactions={transactions}/>
                 </div>
-            </div>
-            <div className='transactions__table'>
-                <TransactionsTable transactions={transactions}/>
             </div>
         </div>
     );
