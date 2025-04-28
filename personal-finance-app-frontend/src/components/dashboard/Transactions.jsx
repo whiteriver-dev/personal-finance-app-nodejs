@@ -4,11 +4,20 @@ import Search from './transactions/Search';
 import SortBy from './transactions/SortBy';
 import SortCategory from './transactions/SortCategory';
 import TransactionsTable from './transactions/TransactionsTable';
+import AddTransactionModal from './transactions/AddTransactionModal';
 
 function Transactions( {userId} ) {
 
     const [budgets, setBudgets] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [addTransactionsModal, setAddTransactionsModal] = useState(false);
+
+    
+    const fetchTransactions = async () => {
+        const res = await fetch(`http://localhost:5050/transactions/${userId}`);
+        const data = await res.json();
+        setTransactions(data);
+      };
 
     useEffect(() => {
       fetch(`http://localhost:5050/budgets/${userId}`)
@@ -32,9 +41,14 @@ function Transactions( {userId} ) {
         // You can now filter your transactions based on selectedCategory
       };
 
+      // 
+
     return (
         <div className="transactions">
-            <h1>Transactions</h1>
+            <div className='transactions__header'>
+                <h1>Transactions</h1>
+                <button className='add-transaction' onClick={() => setAddTransactionsModal(true)}>+ Add New Transaction</button> 
+            </div>
             <div className='transactions__content-container'>
                 <div class='transactions__content'>
                     <div className='search-container'>
@@ -49,6 +63,15 @@ function Transactions( {userId} ) {
                     <TransactionsTable transactions={transactions}/>
                 </div>
             </div>
+
+            {addTransactionsModal && (
+                <AddTransactionModal
+                    userId={userId}
+                    budgets={budgets}
+                    onClose={() => setAddTransactionsModal(false)}
+                    onTransactionCreated={fetchTransactions}
+                />
+            )}
         </div>
     );
 }
