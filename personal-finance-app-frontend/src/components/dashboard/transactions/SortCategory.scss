@@ -1,0 +1,112 @@
+@use '../../../styles/mixins.scss' as *;
+
+
+// Both desktop and mobile
+
+
+.sortcategory {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    justify-content: center;
+
+}
+
+.sortcategory__options {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    position: absolute;
+    width: 17.7rem;
+    top: 4rem;
+    left: -15rem;
+    padding: 1.2rem 2.0rem;
+    border-radius: 0.8rem;
+    border: 1px solid $grey-500;
+
+    background-color: white;
+
+
+    li {
+        @include text-preset-4;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+            &.selected{
+                font-weight: 700;
+            }
+
+            &:not(:last-child) {
+                border-bottom: 1px solid $grey-100;
+            }
+    }
+}
+
+// DESKTOP only
+
+.sortcategory__desktop {
+    display: none;
+
+    label {
+        @include text-preset-4;
+        color: $grey-500;
+        white-space: nowrap;
+    }
+
+    .sortcategory__dropdown {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-left: 0.8rem;
+        border: 1px solid $grey-500;
+        border-radius: 0.8rem;
+        padding: 1.2rem 2.0rem;
+        width: 17.7rem;
+
+        span {
+            @include text-preset-4;
+            color: $grey-900;
+        }
+    }
+}
+
+.sortcategory__icon.rotated {
+    transform: rotate(180deg);
+}
+
+
+
+.sortcategory__mobile {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+    }
+
+
+@media screen and (min-width: 768px) {
+    .sortcategory__desktop {
+        display: flex;
+        align-items: center;
+    }
+
+    .sortcategory__mobile {
+        display: none;
+    }
+
+    .sortcategory__options {
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+        position: absolute;
+        padding: 1.2rem 2.0rem;
+        border-radius: 0.8rem;
+        border: 1px solid $grey-500;
+        left: 6.7rem;
+        width: 17.7rem;
+    }
+
+}
+
+// Tablet only
+

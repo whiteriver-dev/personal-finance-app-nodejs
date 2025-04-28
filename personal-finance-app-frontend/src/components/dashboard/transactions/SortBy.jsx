@@ -48,7 +48,7 @@ function SortBy( { onSortChange }) {
                 </span>
             </button>
             <div className='sortby__desktop'>
-                <label>Sort by:</label>
+                <label>Sort by</label>
                 <div className='sortby__dropdown' onClick={() => setIsOpen(!isOpen)}>
                 <span>{options.find((opt) => opt.value ==selectedOption)?.label}</span>
                     <span class='sortby__icon'>
