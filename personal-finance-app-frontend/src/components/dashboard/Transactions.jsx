@@ -12,6 +12,20 @@ function Transactions( {userId} ) {
     const [transactions, setTransactions] = useState([]);
     const [addTransactionsModal, setAddTransactionsModal] = useState(false);
 
+    const handleDeleteTransaction = async (transactionId) => {
+        try {
+          const res = await fetch(`http://localhost:5050/transactions/${transactionId}`, {
+            method: 'DELETE',
+          });
+          if (!res.ok) throw new Error('Failed to delete transaction');
+      
+          // Refetch or update transactions after delete
+          fetchTransactions(); // Assuming you have fetchTransactions() already
+        } catch (err) {
+          console.error('Error deleting transaction:', err);
+        }
+      };
+
     
     const fetchTransactions = async () => {
         const res = await fetch(`http://localhost:5050/transactions/${userId}`);
@@ -60,7 +74,7 @@ function Transactions( {userId} ) {
                     </div>
                 </div>
                 <div className='transactions__table'>
-                    <TransactionsTable transactions={transactions}/>
+                    <TransactionsTable transactions={transactions} onDeleteTransaction={handleDeleteTransaction}/>
                 </div>
             </div>
 

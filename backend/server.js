@@ -23,6 +23,11 @@ function capitalizeWords(str) {
     .join(' ');
 }
 
+function capitalizeFirstLetter(str) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 // Create the tables if they don't already exist
 db.serialize(() => {
   // Users table (for authentication)
@@ -376,5 +381,74 @@ app.post('/register', async (req, res) => {
       res.json(rows);
     });
   });
+
+  //Transaction POSTs (add new transactions)
+
+  // POST /transactions
+app.post('/transactions', (req, res) => {
+  const { amount, description, category, date, user_id } = req.body;
+
+  // Validation
+  if (typeof amount !== 'number' || isNaN(amount)) {
+    return res.status(400).json({ message: 'Amount must be a valid number.' });
+  }
+
+  if (!description || typeof description !== 'string') {
+    return res.status(400).json({ message: 'Description is required.' });
+  }
+
+  if (!date || isNaN(Date.parse(date))) {
+    return res.status(400).json({ message: 'Date must be valid.' });
+  }
+
+  if (!user_id) {
+    return res.status(400).json({ message: 'User ID is required.' });
+  }
+
+  const formattedDescription = capitalizeFirstLetter(description.trim());
+
+  const query = `
+    INSERT INTO transactions (amount, description, category, date, user_id)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  db.run(query, [amount, formattedDescription, category || null, date, user_id], function (err) {
+    if (err) {
+      console.error('Error adding transaction:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    res.status(201).json({
+      id: this.lastID,
+      amount,
+      description: formattedDescription,
+      category: category || null,
+      date,
+      user_id
+    });
+  });
+});
+
+// Transaction DELETEs (delete transactions)
+
+app.delete('/transactions/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = `DELETE FROM transactions WHERE id = ?`;
+
+  db.run(query, [id], function (err) {
+    if (err) {
+      console.error('Error deleting transaction:', err);
+      return res.status(500).json({ message: 'Failed to delete transaction' });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ message: 'Transaction not found' });
+    }
+
+    res.json({ message: 'Transaction deleted successfully' });
+  });
+});
+
 
   
