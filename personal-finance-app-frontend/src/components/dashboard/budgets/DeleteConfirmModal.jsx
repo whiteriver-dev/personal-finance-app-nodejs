@@ -1,7 +1,7 @@
 import React from 'react';
 import './DeleteConfirmModal.scss';
 
-function DeleteConfirmModal({ name, onConfirm, onCancel }) {
+function DeleteConfirmModal({ name, onConfirm, onCancel, confirmMessage }) {
   return (
     <div className="delete-modal-backdrop">
       <div className="delete-modal">
@@ -13,7 +13,7 @@ function DeleteConfirmModal({ name, onConfirm, onCancel }) {
                     </svg>
             </button>
         </div>
-        <p>Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever.</p>
+        <p>{confirmMessage}</p>
         <div className="delete-modal__actions">
           <button onClick={onConfirm} className="dlt-confirm-btn">Yes, Confirm Deletion</button>
           <button onClick={onCancel} className="dlt-cancel-btn">No, Go back</button>

@@ -67,6 +67,7 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
                                     setShowDeleteModal(false); 
                                     setIsDropdownOpen(false);
                                 }}
+                                confirmMessage={'Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever.'}
                             />
                             )}
                         </div>
