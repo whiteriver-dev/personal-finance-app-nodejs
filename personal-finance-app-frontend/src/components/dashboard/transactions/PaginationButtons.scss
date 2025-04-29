@@ -1,0 +1,42 @@
+@use '../../../styles/mixins' as *;
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 2rem;
+
+  &__nav, &__page {
+    @include text-preset-4-bold;
+    background-color: white;
+    border: 1px solid $beige-500;
+    padding: 0.8rem 1.6rem;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    &.active {
+      background-color: $grey-900;
+      color: white;
+    }
+  }
+
+  &__pages {
+    display: flex;
+    gap: 0.8rem;
+  }
+}
+
+
+.pagination__dots {
+    @include text-preset-4-bold;
+    padding: 0.8rem 1.2rem;
+    color: $grey-500;
+  }
+  

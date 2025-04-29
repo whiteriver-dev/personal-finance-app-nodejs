@@ -5,12 +5,22 @@ import SortBy from './transactions/SortBy';
 import SortCategory from './transactions/SortCategory';
 import TransactionsTable from './transactions/TransactionsTable';
 import AddTransactionModal from './transactions/AddTransactionModal';
+import PaginationButtons from './transactions/PaginationButtons';
 
 function Transactions( {userId} ) {
 
     const [budgets, setBudgets] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [addTransactionsModal, setAddTransactionsModal] = useState(false);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const totalPages = Math.ceil(transactions.length / itemsPerPage);
+
+    const paginatedTransactions = transactions.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      );
 
     const handleDeleteTransaction = async (transactionId) => {
         try {
@@ -72,11 +82,19 @@ function Transactions( {userId} ) {
                         <SortBy/>
                         <SortCategory budgets={budgets} onSortChange={handleSortChange}/>
                     </div>
+                    
                 </div>
                 <div className='transactions__table'>
-                    <TransactionsTable transactions={transactions} onDeleteTransaction={handleDeleteTransaction}/>
+                    <TransactionsTable transactions={paginatedTransactions} onDeleteTransaction={handleDeleteTransaction}/>
                 </div>
+
+                <PaginationButtons 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                />
             </div>
+
 
             {addTransactionsModal && (
                 <AddTransactionModal
