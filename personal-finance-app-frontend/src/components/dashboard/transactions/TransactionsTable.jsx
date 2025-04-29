@@ -8,7 +8,7 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
       <table className="transactions-table__desktop">
         <thead>
           <tr>
-            <th>Recipient / Sender</th>
+            <th>Transaction</th>
             <th>Category</th>
             <th>Transaction Date</th>
             <th>Amount</th>
@@ -20,7 +20,7 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
               <td className='recipient'>{tx.description}</td>
               <td>{tx.category}</td>
               <td>{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-              <td className='transaction-amount'>{tx.amount < 0 ? '-' : ''}${Math.abs(tx.amount)}</td>
+              <td className={`transaction-amount ${tx.amount >= 0 ? 'positive' : 'negative'}`}> {tx.amount >= 0 ? `+$${tx.amount}` : `-$${Math.abs(tx.amount)}`}</td>
               <td className='transact-delete-btn'>        
                     <button onClick={() => onDeleteTransaction(tx.id)}>
                       ✕

@@ -15,6 +15,10 @@
         @include text-preset-4-bold;
         text-align: right;
 
+        &.positive {
+          color: $green;
+      }
+
     }
 
     th {
@@ -97,6 +101,8 @@
 
         .transaction-amount, .date {
             text-align: right;
+
+
         }
 
         .recipient, .category {
