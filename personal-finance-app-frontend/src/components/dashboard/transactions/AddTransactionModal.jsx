@@ -81,14 +81,14 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
           <div className="transaction-type-toggle">
             <button
               type="button"
-              className={isExpense ? 'active' : ''}
+              className={isExpense ? 'active' : 'inactive'}
               onClick={() => setIsExpense(true)}
             >
               Expense
             </button>
             <button
               type="button"
-              className={!isExpense ? 'active' : ''}
+              className={!isExpense ? 'active' : 'inactive'}
               onClick={() => setIsExpense(false)}
             >
               Income
@@ -97,7 +97,7 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
 
           {/* Description */}
           <label>
-            Recipient / Sender
+            Transaction
             <input 
               type="text" 
               value={description} 

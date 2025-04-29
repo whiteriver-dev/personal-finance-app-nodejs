@@ -34,6 +34,7 @@
   max-width: 56rem;
   display: flex;
   flex-direction: column;
+  gap: 2.4rem;
 
   h2 {
     @include text-preset-1;
@@ -44,6 +45,7 @@
   button {
     all: unset;
     cursor: pointer;
+
   }
 
   form {
@@ -203,3 +205,35 @@
     bottom: 1.2rem;
   }
 }
+
+.transaction-type-toggle {
+    display: flex;
+    gap: 1.2rem;
+
+    button {
+
+        &.active, &.inactive {
+            padding: 1.2rem;
+            border-radius: 0.8rem;
+        }
+
+        &.active {
+            background-color: $grey-900;
+            color: white;
+            @include text-preset-4-bold;
+
+        }
+        &.inactive {
+            background-color: white;
+            @include text-preset-4;
+            color: $grey-900;
+            border: 1px solid $beige-500;
+            
+
+        } 
+    }
+    
+
+    }
+
+
