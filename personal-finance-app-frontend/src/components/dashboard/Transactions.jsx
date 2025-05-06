@@ -6,27 +6,37 @@ import SortCategory from './transactions/SortCategory';
 import TransactionsTable from './transactions/TransactionsTable';
 import AddTransactionModal from './transactions/AddTransactionModal';
 import PaginationButtons from './transactions/PaginationButtons';
+import useDebounce from '../../utils/useDebounce';
 
 function Transactions({ userId }) {
+
+  // State for transactions and budgets
   const [budgets, setBudgets] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [addTransactionsModal, setAddTransactionsModal] = useState(false);
 
+  // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(totalCount / itemsPerPage);
 
+  // State for search query
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 400);
+
+
   // Fetch paginated transactions
   const fetchTransactions = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:5050/transactions?userId=${userId}&page=${currentPage}&limit=${itemsPerPage}`);
+      const res = await fetch(`http://localhost:5050/transactions?userId=${userId}&page=${currentPage}&limit=${itemsPerPage}&search=${debouncedSearchQuery}`);
       const data = await res.json();
       setTransactions(data);
     } catch (err) {
       console.error('Error fetching transactions:', err);
     }
-  }, [userId, currentPage]);
+  }, [userId, currentPage, itemsPerPage, debouncedSearchQuery]);
+  
 
   // Fetch total transaction count
   const fetchTransactionCount = useCallback(async () => {
@@ -82,7 +92,7 @@ function Transactions({ userId }) {
         <div className='transactions__top'>
           <div className='transactions__content'>
             <div className='search-container'>
-              <Search placeholder="Search transaction" />
+              <Search placeholder="Search transaction" onSearch={setSearchQuery} />
             </div>
             <div className='sort-container'>
               <SortBy />

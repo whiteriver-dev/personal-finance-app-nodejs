@@ -369,16 +369,18 @@ app.get('/transactions', (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
+  const search = req.query.search || '';
 
   const query = `
     SELECT id, amount, description, category, date
     FROM transactions
     WHERE user_id = ?
+      AND description LIKE ?
     ORDER BY date DESC
     LIMIT ? OFFSET ?
   `;
 
-  db.all(query, [userId, limit, offset], (err, rows) => {
+  db.all(query, [userId, `%${search}%`, limit, offset], (err, rows) => {
     if (err) {
       console.error('Error fetching paginated transactions:', err);
       return res.status(500).json({ message: 'Internal server error' });
@@ -388,21 +390,26 @@ app.get('/transactions', (req, res) => {
   });
 });
 
+
 app.get('/transactions/count', (req, res) => {
   const userId = req.query.userId;
+  const search = req.query.search || '';
 
-  db.get(
-    'SELECT COUNT(*) as total FROM transactions WHERE user_id = ?',
-    [userId],
-    (err, row) => {
-      if (err) {
-        console.error('Error getting count:', err);
-        return res.status(500).json({ message: 'Internal server error' });
-      }
+  const countQuery = `
+    SELECT COUNT(*) as total
+    FROM transactions
+    WHERE user_id = ?
+      AND description LIKE ?
+  `;
 
-      res.json({ total: row.total });
+  db.get(countQuery, [userId, `%${search}%`], (err, row) => {
+    if (err) {
+      console.error('Error getting transaction count:', err);
+      return res.status(500).json({ message: 'Internal server error' });
     }
-  );
+
+    res.json({ total: row.total });
+  });
 });
 
   //Transaction POSTs (add new transactions)

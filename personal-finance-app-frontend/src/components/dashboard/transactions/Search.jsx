@@ -1,10 +1,10 @@
 import './Search.scss';
 import React, { useState, useEffect, useRef } from 'react';
 
-function Search({ data, onSearchResults, placeholder }) {
-    const [searchTerm, setSearchTerm] = useState('');
+function Search({ placeholder, onSearch }) {
     const [isFocused, setIsFocused] = useState(false);
     const [isSmall, setIsSmall] = useState(false);
+    const [inputValue, setInputValue] = useState('');
 
     const containerRef = useRef(null);
 
@@ -31,19 +31,13 @@ function Search({ data, onSearchResults, placeholder }) {
       
       
 
-    const handleSearch = (e) => {
-        setSearchTerm(e.target.value);
 
-        if (e.target.value === '') {
-            onSearchResults(data);
-            return;
-        } else {
-            const filteredData = data.filter((transaction) => {
-                return transaction.description.toLowerCase().includes(e.target.value.toLowerCase());
-            });
-            onSearchResults(filteredData);
-        }
-    };
+
+      const handleChange = (e) => {
+        const value = e.target.value;
+        setInputValue(value);
+        onSearch(value);
+      };
 
     return (
         <div className='search-container'>
@@ -56,8 +50,8 @@ function Search({ data, onSearchResults, placeholder }) {
                         : isSmall 
                           ? "Search tran..." 
                           : placeholder}
-                    value={searchTerm}
-                    onChange={handleSearch}
+                    value={inputValue}
+                    onChange={handleChange}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     className='search-input'
