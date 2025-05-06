@@ -32,6 +32,24 @@ function Transactions({ userId }) {
   const [categoryFilter, setCategoryFilter] = useState('All Transactions');
   const categoryQuery = categoryFilter !== 'All Transactions' ? `&category=${categoryFilter}` : '';
 
+  // Handlers
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // reset page
+  };
+  
+  const handleSortChange = (sortOption) => {
+    setSort(sortOption);
+    setCurrentPage(1); // reset page
+  };
+  
+  const handleCategoryChange = (category) => {
+    setCategoryFilter(category);
+    setCurrentPage(1); // reset page
+  };
+  
+
   // Fetch paginated transactions
   const fetchTransactions = useCallback(async () => {
     try {
@@ -47,14 +65,16 @@ function Transactions({ userId }) {
   // Fetch total transaction count
   const fetchTransactionCount = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:5050/transactions/count?userId=${userId}`);
+      const categoryQuery = categoryFilter !== 'All Transactions' ? `&category=${categoryFilter}` : '';
+      const res = await fetch(
+        `http://localhost:5050/transactions/count?userId=${userId}&search=${debouncedSearchQuery}${categoryQuery}`
+      );
       const data = await res.json();
       setTotalCount(data.total);
     } catch (err) {
-      console.error('Error fetching transaction count:', err);
+      console.error('Error getting transaction count:', err);
     }
-  }, [userId]);
-
+  }, [userId, debouncedSearchQuery, categoryFilter]);
   const handleDeleteTransaction = async (transactionId) => {
     try {
       const res = await fetch(`http://localhost:5050/transactions/${transactionId}`, {
@@ -96,11 +116,11 @@ function Transactions({ userId }) {
         <div className='transactions__top'>
           <div className='transactions__content'>
             <div className='search-container'>
-              <Search placeholder="Search transaction" onSearch={setSearchQuery} />
+              <Search placeholder="Search transaction" onSearch={handleSearch} />
             </div>
             <div className='sort-container'>
-              <SortBy onSortChange={setSort} selectedOption={sort} />
-              <SortCategory budgets={budgets} onSortChange={setCategoryFilter} />
+              <SortBy onSortChange={handleSortChange} selectedOption={sort} />
+              <SortCategory budgets={budgets} onSortChange={handleCategoryChange} />
             </div>
           </div>
           <div className='transactions__table'>

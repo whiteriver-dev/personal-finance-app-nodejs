@@ -29,7 +29,7 @@ function Budgets({ userId }) {
       }, [userId]);
 
       useEffect(() => {
-        fetch(`http://localhost:5050/transactions/${userId}`)
+        fetch(`http://localhost:5050/transactions/recent/${userId}`)
           .then(res => res.json())
           .then(data => {
             console.log("Fetched transactions:", data); 

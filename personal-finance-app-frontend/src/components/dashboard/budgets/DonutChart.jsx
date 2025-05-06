@@ -51,13 +51,13 @@ function DonutChart({ data, width, height }) {
       .attr("text-anchor", "middle")
       .attr("dy", "0em")
       .attr("class", "donut-center__label")
-      .text(`$${Math.abs(totalSpent)}`);
+      .text(`$${Math.round(Math.abs(totalSpent))}`);
 
     chart.append("text")
       .attr("text-anchor", "middle")
       .attr("dy", "2.4rem")
       .attr("class", "donut-center__subtext")
-      .text(` of $${totalBudget} limit`);
+      .text(` of $${Math.round(totalBudget)} limit`);
   }, [data, width, height]);
 
   return (
@@ -73,8 +73,8 @@ function DonutChart({ data, width, height }) {
             >
               <span className='legend__budget-name'>{budget.name}</span>
               <span className='legend__budget-total'>
-                <span className='legend__budget-spent'>${Math.abs(budget.spent) || 0}</span>
-                <span className='legend__budget-amount'> of ${budget.amount}</span>
+                <span className='legend__budget-spent'>${Math.round(Math.abs(budget.spent ?? 0))}</span>
+                <span className='legend__budget-amount'> of ${Math.round(budget.amount ?? 0)}</span>
               </span>
             </span>
           </div>

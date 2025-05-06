@@ -414,15 +414,21 @@ app.get('/transactions', (req, res) => {
 app.get('/transactions/count', (req, res) => {
   const userId = req.query.userId;
   const search = req.query.search || '';
+  const category = req.query.category || '';
 
-  const countQuery = `
+  const query = `
     SELECT COUNT(*) as total
     FROM transactions
     WHERE user_id = ?
       AND description LIKE ?
+      ${category && category !== 'All Transactions' ? 'AND category = ?' : ''}
   `;
 
-  db.get(countQuery, [userId, `%${search}%`], (err, row) => {
+  const params = category && category !== 'All Transactions'
+    ? [userId, `%${search}%`, category]
+    : [userId, `%${search}%`];
+
+  db.get(query, params, (err, row) => {
     if (err) {
       console.error('Error getting transaction count:', err);
       return res.status(500).json({ message: 'Internal server error' });
@@ -430,6 +436,25 @@ app.get('/transactions/count', (req, res) => {
 
     res.json({ total: row.total });
   });
+});
+
+app.get('/transactions/recent/:userId', (req, res) => {
+  const userId = req.params.userId;
+  db.all(
+    `SELECT id, amount, description, category, date
+     FROM transactions
+     WHERE user_id = ?
+     ORDER BY date DESC
+     LIMIT 100`,
+    [userId],
+    (err, rows) => {
+      if (err) {
+        console.error('Error fetching recent transactions:', err);
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+      res.json(rows);
+    }
+  );
 });
 
   //Transaction POSTs (add new transactions)
