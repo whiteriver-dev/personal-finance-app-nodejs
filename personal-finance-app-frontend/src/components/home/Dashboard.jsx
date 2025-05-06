@@ -13,10 +13,10 @@ import RecurringBills from '../dashboard/RecurringBills';
 function Dashboard() {
 
     const [activeSection, setActiveSection] = useState('overview');
+
+
     const userId = 13;
 
-    
-    
 
  /*   const [name, setName] = useState('');
     const [email, setEmail] = useState('');

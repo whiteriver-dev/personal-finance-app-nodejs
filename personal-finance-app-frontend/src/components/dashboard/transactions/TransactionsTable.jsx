@@ -5,6 +5,7 @@ import DeleteConfirmModal from '../budgets/DeleteConfirmModal';
 function TransactionsTable({ transactions, onDeleteTransaction }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [transactionToDelete, setTransactionToDelete] = useState(null);
+  
 
                                       
   return (
@@ -50,7 +51,7 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
               <span className="category">{tx.category}</span>
             </div>
             <div className="transactions-table__row">
-              <span className="transaction-amount">{tx.amount < 0 ? '-' : ''}${Math.abs(tx.amount)}</span>
+              <span className={`transaction-amount ${tx.amount >= 0 ? 'positive' : 'negative'}`}> {tx.amount >= 0 ? `+$${tx.amount}` : `-$${Math.abs(tx.amount)}`}</span>
               <span className="date">{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
               <span className='transact-delete-btn'>        
                 <button onClick={() => {

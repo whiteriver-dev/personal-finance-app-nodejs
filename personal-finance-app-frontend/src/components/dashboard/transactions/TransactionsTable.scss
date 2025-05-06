@@ -13,7 +13,6 @@
     .transaction-amount {
         color: $grey-900;
         @include text-preset-4-bold;
-        text-align: right;
 
         &.positive {
           color: $green;
@@ -24,11 +23,14 @@
     th {
         @include text-preset-5;
         color: $grey-500;
+
       }
   
       td {
         @include text-preset-5;
         color: $grey-500;
+
+
       }
   
   /* Desktop */
@@ -52,32 +54,34 @@
     &__desktop {
       width: 100%;
       border-collapse: collapse;
-  
-      th, td {
-        padding: 2.4rem 1.6rem;
-        text-align: left;
-        &:not(:last-child) {
-            border-bottom: 0.1rem solid rgba($grey-500, 0.15);
-      }
 
       th {
+        text-align: left;
+
         &:last-child {
-          text-align: right;
+            text-align: right;
         }
       }
 
       td {
-        &:nth-last-child(2) {
-          text-align: right;
+        &:last-child, &:nth-last-child(2) {
+            text-align: right;
         }
+      }
+  
+      th, td {
+        padding: 2.4rem 1.6rem;
+
+        &:not(:last-child) {
+            border-bottom: 0.1rem solid rgba($grey-500, 0.15);
       }
 
 
-      
-    }
+ 
 
+      }
 
-    }
+   }
     }
   
     &__mobile {
@@ -96,6 +100,10 @@
         span {
             @include text-preset-5;
             color: $grey-500;
+
+            &.positive {
+              color: $green;
+          }
 
         }
 

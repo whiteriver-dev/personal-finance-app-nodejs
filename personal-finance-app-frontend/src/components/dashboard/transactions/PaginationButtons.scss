@@ -7,6 +7,8 @@
   gap: 1.2rem;
   margin-top: 2rem;
 
+
+
   &__nav, &__page {
     @include text-preset-4-bold;
     background-color: white;
@@ -25,11 +27,21 @@
       background-color: $grey-900;
       color: white;
     }
+
+    
+  }
+
+  &__page {
+    button:hover{
+      border-color: none;
+    }
   }
 
   &__pages {
     display: flex;
     gap: 0.8rem;
+
+    
   }
 }
 

@@ -364,23 +364,46 @@ app.post('/register', async (req, res) => {
 // TRANSACTIONS
 // Transaction GETs (fetch all transactions for a user)
 
-  app.get('/transactions/:userId', (req, res) => {
-    const userId = req.params.userId;
-  
-     db.all(`
-      SELECT id, amount, description, category, date, user_id 
-      FROM transactions 
-      WHERE user_id = ? 
-      ORDER BY date DESC
+app.get('/transactions', (req, res) => {
+  const userId = req.query.userId;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
 
-    `, [userId], (err, rows) => {
+  const query = `
+    SELECT id, amount, description, category, date
+    FROM transactions
+    WHERE user_id = ?
+    ORDER BY date DESC
+    LIMIT ? OFFSET ?
+  `;
+
+  db.all(query, [userId, limit, offset], (err, rows) => {
+    if (err) {
+      console.error('Error fetching paginated transactions:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    res.json(rows);
+  });
+});
+
+app.get('/transactions/count', (req, res) => {
+  const userId = req.query.userId;
+
+  db.get(
+    'SELECT COUNT(*) as total FROM transactions WHERE user_id = ?',
+    [userId],
+    (err, row) => {
       if (err) {
-        console.error('Error fetching transactions:', err);
+        console.error('Error getting count:', err);
         return res.status(500).json({ message: 'Internal server error' });
       }
-      res.json(rows);
-    });
-  });
+
+      res.json({ total: row.total });
+    }
+  );
+});
 
   //Transaction POSTs (add new transactions)
 
@@ -449,6 +472,38 @@ app.delete('/transactions/:id', (req, res) => {
     res.json({ message: 'Transaction deleted successfully' });
   });
 });
+
+// Transaction TESTING
+
+// Add this somewhere in server.js for testing (and remove it later!)
+app.post('/transactions/seed-test-data', (req, res) => {
+  const userId = req.body.userId || 1; // Use provided or default user
+  const insertStmt = db.prepare("INSERT INTO transactions (amount, description, category, date, user_id) VALUES (?, ?, ?, ?, ?)");
+
+  for (let i = 1; i <= 65; i++) {
+    const amount = ((Math.random() * 100 - 50).toFixed(2)); // random -50 to +50
+    const description = `Test Transaction ${i}`;
+    const category = ['Food', 'Bills', 'Shopping', 'Other'][i % 4];
+    const date = new Date(Date.now() - i * 86400000).toISOString();
+    insertStmt.run(amount, description, category, date, userId);
+  }
+
+  insertStmt.finalize(err => {
+    if (err) return res.status(500).json({ error: "Seeding failed" });
+    res.json({ message: 'Seeded 65 test transactions' });
+  });
+});
+
+app.delete('/transactions/clear-test-data', (req, res) => {
+  db.run(`DELETE FROM transactions WHERE description LIKE 'Test Transaction%'`, function(err) {
+    if (err) {
+      console.error('Error deleting test transactions:', err);
+      return res.status(500).json({ message: 'Failed to delete test data' });
+    }
+    res.json({ message: `Deleted ${this.changes} test transactions` });
+  });
+});
+
 
 
   
