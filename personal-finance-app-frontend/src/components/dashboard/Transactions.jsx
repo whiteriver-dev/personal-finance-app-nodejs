@@ -25,17 +25,23 @@ function Transactions({ userId }) {
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery, 400);
 
+  // State for sorting
+  const [sort, setSort] = useState("latest");
+
+  // State for sorting categories
+  const [categoryFilter, setCategoryFilter] = useState('All Transactions');
+  const categoryQuery = categoryFilter !== 'All Transactions' ? `&category=${categoryFilter}` : '';
 
   // Fetch paginated transactions
   const fetchTransactions = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:5050/transactions?userId=${userId}&page=${currentPage}&limit=${itemsPerPage}&search=${debouncedSearchQuery}`);
+      const res = await fetch(`http://localhost:5050/transactions?userId=${userId}&page=${currentPage}&limit=${itemsPerPage}&search=${debouncedSearchQuery}&sort=${sort}${categoryQuery}`);
       const data = await res.json();
       setTransactions(data);
     } catch (err) {
       console.error('Error fetching transactions:', err);
     }
-  }, [userId, currentPage, itemsPerPage, debouncedSearchQuery]);
+  }, [userId, currentPage, itemsPerPage, debouncedSearchQuery, sort, categoryQuery]);
   
 
   // Fetch total transaction count
@@ -74,9 +80,7 @@ function Transactions({ userId }) {
       .catch(err => console.error('Error fetching budgets:', err));
   }, [userId]);
 
-  const handleSortChange = (selectedCategory) => {
-    console.log('Selected category:', selectedCategory);
-  };
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -95,8 +99,8 @@ function Transactions({ userId }) {
               <Search placeholder="Search transaction" onSearch={setSearchQuery} />
             </div>
             <div className='sort-container'>
-              <SortBy />
-              <SortCategory budgets={budgets} onSortChange={handleSortChange} />
+              <SortBy onSortChange={setSort} selectedOption={sort} />
+              <SortCategory budgets={budgets} onSortChange={setCategoryFilter} />
             </div>
           </div>
           <div className='transactions__table'>

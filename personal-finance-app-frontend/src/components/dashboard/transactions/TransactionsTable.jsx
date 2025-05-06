@@ -24,8 +24,8 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
           {transactions.map(tx => (
             <tr key={tx.id}>
               <td className='recipient'>{tx.description}</td>
-              <td>{tx.category}</td>
-              <td>{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+              <td className='category'>{tx.category}</td>
+              <td className='date'>{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
               <td className={`transaction-amount ${tx.amount >= 0 ? 'positive' : 'negative'}`}> {tx.amount >= 0 ? `+$${tx.amount}` : `-$${Math.abs(tx.amount)}`}</td>
               <td className='transact-delete-btn'>        
                     <button onClick={() => {

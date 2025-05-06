@@ -370,17 +370,35 @@ app.get('/transactions', (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
   const search = req.query.search || '';
+  const sort = req.query.sort || 'latest';
+  const category = req.query.category || '';
 
-  const query = `
+  let orderBy;
+  switch (sort) {
+    case 'latest': orderBy = 'ORDER BY date DESC'; break;
+    case 'oldest': orderBy = 'ORDER BY date ASC'; break;
+    case 'a-z': orderBy = 'ORDER BY description ASC'; break;
+    case 'z-a': orderBy = 'ORDER BY description DESC'; break;
+    case 'highest': orderBy = 'ORDER BY amount DESC'; break;
+    case 'lowest': orderBy = 'ORDER BY amount ASC'; break;
+    default: orderBy = 'ORDER BY date DESC';
+  }
+
+  const baseQuery = `
     SELECT id, amount, description, category, date
     FROM transactions
     WHERE user_id = ?
       AND description LIKE ?
-    ORDER BY date DESC
+      ${category ? 'AND category = ?' : ''}
+    ${orderBy}
     LIMIT ? OFFSET ?
   `;
 
-  db.all(query, [userId, `%${search}%`, limit, offset], (err, rows) => {
+  const params = category
+    ? [userId, `%${search}%`, category, limit, offset]
+    : [userId, `%${search}%`, limit, offset];
+
+  db.all(baseQuery, params, (err, rows) => {
     if (err) {
       console.error('Error fetching paginated transactions:', err);
       return res.status(500).json({ message: 'Internal server error' });
@@ -389,6 +407,8 @@ app.get('/transactions', (req, res) => {
     res.json(rows);
   });
 });
+
+
 
 
 app.get('/transactions/count', (req, res) => {

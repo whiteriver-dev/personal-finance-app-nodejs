@@ -1,9 +1,8 @@
 import './SortBy.scss';
 import React, { useState, useEffect, useRef } from 'react';
 
-function SortBy( { onSortChange }) {
+function SortBy( { onSortChange, selectedOption }) {
 
-    const [selectedOption, setSelectedOption] = useState('latest');
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -17,9 +16,10 @@ function SortBy( { onSortChange }) {
     ]
 
     const handleSelection = (value) => {
-        setSelectedOption(value);
         setIsOpen(false);
         onSortChange(value);
+        console.log("selectedOption:", selectedOption);
+        console.log("options:", options);
     }
 
     useEffect(() => {
@@ -50,8 +50,8 @@ function SortBy( { onSortChange }) {
             <div className='sortby__desktop'>
                 <label>Sort by</label>
                 <div className='sortby__dropdown' onClick={() => setIsOpen(!isOpen)}>
-                <span>{options.find((opt) => opt.value ==selectedOption)?.label}</span>
-                    <span class='sortby__icon'>
+                <span>{options.find((opt) => opt.value == selectedOption)?.label}</span>
+                    <span className='sortby__icon'>
                         <svg
                             className={`sortby__icon ${isOpen ? 'rotated' : ''}`}
                             fill="#201F24" 
