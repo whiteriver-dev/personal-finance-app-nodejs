@@ -32,7 +32,7 @@ function Dashboard() {
             case 'budgets':
                 return <Budgets userId={userId}/>;
             case 'pots':
-                return <Pots />;
+                return <Pots userId={userId}/>;
             case 'recurring-bills':
                 return <RecurringBills />;
             default:

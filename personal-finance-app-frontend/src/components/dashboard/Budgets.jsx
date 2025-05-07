@@ -4,6 +4,7 @@ import DonutChart from './budgets/DonutChart';
 import BarSummary from './budgets/BarSummary';
 import AddBudgetModal from './budgets/AddBudgetModal';
 import EditBudgetModal from './budgets/EditBudgetModal';
+import ButtonPrimary from '../reusable/small/ButtonPrimary';
 
 
 function Budgets({ userId }) {
@@ -44,7 +45,7 @@ function Budgets({ userId }) {
         <div className="budgets">
             <div class='budgets-header'>
               <h1>Budgets</h1>
-              <button className='add-budget' onClick={() => setAddShowModal(true)}>+ Add New Budget</button>
+              <ButtonPrimary text="+ Add New Budget" onClick={() => setAddShowModal(true)} className='add-budget' />
 
               {showAddModal && (
                 <AddBudgetModal

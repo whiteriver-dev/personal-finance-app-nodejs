@@ -1,16 +1,16 @@
 @use '../../../styles/mixins.scss' as *;
 
 .button-primary {
+    all: unset;
     @include text-preset-4-bold;
-    background-color: $grey-900;
     color: white;
+    background-color: $grey-900;
     border-radius: 0.8rem;
-    transition: border-radius 0.8s;
-
+    padding: 1.6rem 1.6rem;
+    cursor: pointer;
+  
     &:hover {
-        background-color: $grey-500;
-        cursor: pointer;
-        border-radius: 3.6rem;
-        transition: border-radius 0.8s;
+      background-color: $grey-500;
+      transition: background-color 0.2s ease-in-out;
     }
 }

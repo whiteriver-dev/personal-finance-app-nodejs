@@ -1,0 +1,99 @@
+@use '../../../styles/mixins' as *;
+
+.pot {
+    background-color: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 1.2rem;
+    padding: 2.4rem 2.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  
+    &__header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 3.2rem;
+
+      h2 {
+        @include text-preset-2;
+        color: $grey-900;
+      }
+  
+      .pot__color {
+        width: 1.6rem;
+        height: 1.6rem;
+        border-radius: 50%;
+      }
+    }
+
+    &__saved {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        p {
+            @include text-preset-4;
+            color: $grey-500;
+        }
+
+        span {
+            @include text-preset-1;
+            color: $grey-900;
+        }
+    }
+  
+    &__progress-bar {
+      height: 1rem;
+      width: 100%;
+      background-color: $beige-100;;
+      border-radius: 8rem;
+      overflow: hidden;
+  
+      &-fill {
+        height: 100%;
+        transition: width 0.3s ease;
+      }
+    }
+  
+    &__details {
+      font-size: 1.2rem;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3.2rem;
+  
+      .pot__percentage {
+        margin: 0;
+        @include text-preset-5-bold;
+        color: $grey-500;
+      }
+
+      .pot__goal {
+        @include text-preset-5;
+        color: $grey-500;
+      }
+    }
+  
+    &__actions {
+      width: 100%;
+      display: flex;
+      gap: 1.6rem;
+      padding-bottom: 2.0rem;
+  
+      button {
+        all:unset;
+        @include text-preset-4-bold;
+        flex:auto;
+
+        color: $grey-900;
+        padding: 1.6rem 0;
+        border-radius: 0.8rem;
+        cursor: pointer;
+        text-align: center;
+        background-color: $beige-100;
+  
+      }
+    }
+  }
+  

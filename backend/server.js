@@ -556,6 +556,29 @@ app.delete('/transactions/clear-test-data', (req, res) => {
   });
 });
 
+// POTS
+
+// Pots GETs
+
+app.get('/pots/:userId', (req, res) => {
+  const userId = req.params.userId;
+
+  const query = `
+    SELECT id, name, saved, target, color
+    FROM pots
+    WHERE user_id = ?
+  `;
+
+  db.all(query, [userId], (err, rows) => {
+    if (err) {
+      console.error('Error fetching pots:', err.message);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    
+    res.status(200).json(rows);
+  });
+});
+
 
 
   
