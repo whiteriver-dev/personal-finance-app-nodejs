@@ -2,31 +2,51 @@ import './Pots.scss';
 import React, { useState, useEffect, useCallback } from 'react';
 import PotItem from './pots/PotItem';
 import AddPotModal from './pots/AddPotModal';
+import EditPotModal from './pots/EditPotModal';
 import ButtonPrimary from '../reusable/small/ButtonPrimary';
 
 function Pots({ userId }) {
   const [pots, setPots] = useState([]);
+  const [colors, setColors] = useState([]);
   const [showAddModal, setAddShowModal] = useState(false);
   const [showEditModal, setEditModal] = useState(false);
   const [potToEdit, setPotToEdit] = useState(null);
-  const usedColors = pots.map(p => p.color_id);
 
-  // Fetch Pots  const fetchPots = useCallback(async () => {
-    const fetchPots = useCallback(async () => {
+    // Fetch all colors
+    const fetchColors = useCallback(async () => {
         try {
-          const res = await fetch(`http://localhost:5050/pots/${userId}`);
-          if (!res.ok) throw new Error("Failed to fetch pots");
+          const res = await fetch(`http://localhost:5050/colors`);
+          if (!res.ok) throw new Error("Failed to fetch colors");
           const data = await res.json();
-          setPots(data);
+          setColors(data);
         } catch (err) {
-          console.error('Error fetching pots:', err);
+          console.error('Error fetching colors:', err);
         }
-      }, [userId]);
-    
-      // Initial data load with proper dependency management
-      useEffect(() => {
-        fetchPots();
-      }, [fetchPots]);
+      }, []);
+
+        // Get used color IDs
+        const usedColors = pots.map(p => {
+            const colorObj = colors.find(color => color.hex === p.color);
+            return colorObj ? colorObj.id : null;
+        }).filter(Boolean);
+  
+  // Fetching pots from backend
+  const fetchPots = useCallback(async () => {
+    try {
+      const res = await fetch(`http://localhost:5050/pots/${userId}`);
+      if (!res.ok) throw new Error("Failed to fetch pots");
+      const data = await res.json();
+      setPots(data);
+    } catch (err) {
+      console.error('Error fetching pots:', err);
+    }
+  }, [userId]);
+
+  // Initial data load
+  useEffect(() => {
+    fetchPots();
+    fetchColors();
+  }, [fetchPots, fetchColors]);
 
   return (
     <div className="pots">
@@ -46,8 +66,16 @@ function Pots({ userId }) {
       )}
 
       {/* Edit Pot Modal */}
-      {showEditModal && (
-        console.log("Pot to edit:", potToEdit) // Debugging line
+      {showEditModal && potToEdit && (
+        <EditPotModal
+          pot={potToEdit}
+          onClose={() => {
+            setEditModal(false);
+            setPotToEdit(null);
+          }}
+          onPotUpdated={fetchPots}
+          usedColors={usedColors}
+        />
       )}
 
       {/* Pot List */}
@@ -58,8 +86,8 @@ function Pots({ userId }) {
             pot={pot}
             onPotUpdated={fetchPots}
             onEdit={() => {
-              setPotToEdit(pot);
-              setEditModal(true);
+              setPotToEdit(pot); // Set the pot for editing
+              setEditModal(true); // Show the modal
             }}
           />
         ))}

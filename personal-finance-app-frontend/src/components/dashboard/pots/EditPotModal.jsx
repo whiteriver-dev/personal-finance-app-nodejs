@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EditPotModal.scss';
 
-function EditPotModal({ pot, onClose, onPotUpdated }) {
+function EditPotModal({ pot, onClose, onPotUpdated, usedColors }) {
   const [name, setName] = useState(pot.name);
   const [target, setTarget] = useState(pot.target);
   const [colors, setColors] = useState([]);
@@ -71,7 +71,7 @@ function EditPotModal({ pot, onClose, onPotUpdated }) {
             ✕
           </button>
         </div>
-        <p className='modal-description'>Edit your pot details and update your savings goal.</p>
+        <p className='modal-description'>If your savings targets change, feel free to update your pots.</p>
         <form onSubmit={handleSubmit}>
           <label>
             Pot Name
@@ -126,7 +126,8 @@ function EditPotModal({ pot, onClose, onPotUpdated }) {
 
               {dropdownOpen && (
                 <div className="custom-dropdown__list">
-                  {colors.map(color => (
+                  {colors.map(color => {
+                    const isUsed = usedColors.includes(color.id) && color.id !== pot.color;
                     <div
                       key={color.id}
                       className={`custom-dropdown__option ${color.hex === selectedColor ? 'selected' : ''}`}
@@ -135,10 +136,13 @@ function EditPotModal({ pot, onClose, onPotUpdated }) {
                         setDropdownOpen(false);
                       }}
                     >
-                      <span className="color-circle" style={{ backgroundColor: color.hex }}></span>
+                     <span className={`color-circle ${isUsed ? 'used' : ''}`} style={{ backgroundColor: color.hex }}></span>
+                     <div className={`color-name-container ${isUsed ? 'already-used' : ''}`}>
                       <span className="color-name">{color.name}</span>
+                      {isUsed && <span className="already-used-label">Already used</span>}
                     </div>
-                  ))}
+                    </div>
+})}
                 </div>
               )}
             </div>
