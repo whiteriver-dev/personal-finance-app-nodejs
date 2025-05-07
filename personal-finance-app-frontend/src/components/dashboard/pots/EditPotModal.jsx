@@ -127,29 +127,34 @@ function EditPotModal({ pot, onClose, onPotUpdated, usedColors }) {
               {dropdownOpen && (
                 <div className="custom-dropdown__list">
                   {colors.map(color => {
-                    const isUsed = usedColors.includes(color.id) && color.id !== pot.color;
-                    <div
-                      key={color.id}
-                      className={`custom-dropdown__option ${color.hex === selectedColor ? 'selected' : ''}`}
-                      onClick={() => {
-                        setSelectedColor(color.hex);
-                        setDropdownOpen(false);
-                      }}
-                    >
-                     <span className={`color-circle ${isUsed ? 'used' : ''}`} style={{ backgroundColor: color.hex }}></span>
-                     <div className={`color-name-container ${isUsed ? 'already-used' : ''}`}>
-                      <span className="color-name">{color.name}</span>
-                      {isUsed && <span className="already-used-label">Already used</span>}
-                    </div>
-                    </div>
-})}
+                    const isUsed = usedColors.includes(color.id) && color.hex !== pot.color;
+
+                    return (
+                      <div
+                        key={color.id}
+                        className={`custom-dropdown__option ${isUsed ? 'disabled' : ''}`}
+                        onClick={() => {
+                          if (!isUsed) {
+                            setSelectedColor(color.hex);
+                            setDropdownOpen(false);
+                          }
+                        }}
+                      >
+                        <span className={`color-circle ${isUsed ? 'used' : ''}`} style={{ backgroundColor: color.hex }}></span>
+                        <div className={`color-name-container ${isUsed ? 'already-used' : ''}`}>
+                          <span className="color-name">{color.name}</span>
+                          {isUsed && <span className="already-used-label">Already used</span>}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
           </label>
 
           <div className="modal-actions">
-            <button type="submit">Save</button>
+            <button type="submit">Save Changes</button>
           </div>
         </form>
       </div>
