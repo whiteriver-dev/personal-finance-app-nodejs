@@ -1,6 +1,6 @@
 import './TransactionsTable.scss';
 import React, { useState } from 'react';
-import DeleteConfirmModal from '../budgets/DeleteConfirmModal';
+import DeleteConfirmModal from '../../reusable/small/DeleteConfirmModal';
 
 function TransactionsTable({ transactions, onDeleteTransaction }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);

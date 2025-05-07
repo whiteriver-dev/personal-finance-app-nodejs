@@ -639,6 +639,76 @@ app.post('/pots', (req, res) => {
   });
 });
 
+// Pot PUTs
+
+app.put('/pots/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, target, color } = req.body;
+
+  // Validation
+  if (!name || typeof name !== 'string') {
+    return res.status(400).json({ message: 'Name is required and must be a string.' });
+  }
+
+  if (!target || typeof target !== 'number' || isNaN(target)) {
+    return res.status(400).json({ message: 'Target amount must be a valid number.' });
+  }
+
+  if (!color || typeof color !== 'string') {
+    return res.status(400).json({ message: 'Color must be a valid hex string.' });
+  }
+
+  const formattedName = name.trim();
+  const query = `
+    UPDATE pots
+    SET name = ?, target = ?, color = ?
+    WHERE id = ?
+  `;
+
+  db.run(query, [formattedName, target, color, id], function (err) {
+    if (err) {
+      console.error('Error updating pot:', err.message);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ message: 'Pot not found.' });
+    }
+
+    res.status(200).json({
+      id,
+      name: formattedName,
+      target,
+      color
+    });
+  });
+});
+
+// DELETE /pots/:id
+app.delete('/pots/:id', (req, res) => {
+  const potId = req.params.id;
+
+  if (!potId) {
+    return res.status(400).json({ message: 'Pot ID is required.' });
+  }
+
+  const query = `DELETE FROM pots WHERE id = ?`;
+
+  db.run(query, [potId], function (err) {
+    if (err) {
+      console.error('Error deleting pot:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ message: 'Pot not found.' });
+    }
+
+    res.status(200).json({ message: 'Pot deleted successfully.' });
+  });
+});
+
+
 
 
   

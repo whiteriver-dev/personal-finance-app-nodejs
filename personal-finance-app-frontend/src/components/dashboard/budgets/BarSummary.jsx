@@ -1,6 +1,6 @@
 import './BarSummary.scss';
 import React, { useState } from 'react';
-import DeleteConfirmModal from './DeleteConfirmModal';
+import DeleteConfirmModal from '../../reusable/small/DeleteConfirmModal';
 import OptionsDropdown from '../../reusable/small/OptionsDropdown';
 
 function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudgetUpdated, onEdit }) {
