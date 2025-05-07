@@ -579,6 +579,66 @@ app.get('/pots/:userId', (req, res) => {
   });
 });
 
+// Pots POSTs
+app.post('/pots', (req, res) => {
+  const { name, saved, target, user_id, color } = req.body;
+
+  // Validation
+  if (!name || typeof name !== 'string') {
+    return res.status(400).json({ message: 'Name is required and must be a string.' });
+  }
+
+  if (!target || typeof target !== 'number' || isNaN(target)) {
+    return res.status(400).json({ message: 'Target amount must be a valid number.' });
+  }
+
+  if (!user_id) {
+    return res.status(400).json({ message: 'User ID is required.' });
+  }
+
+  if (!color) {
+    return res.status(400).json({ message: 'Color is required.' });
+  }
+
+  const formattedName = capitalizeWords(name.trim());
+
+  const colorQuery = `SELECT hex FROM colors WHERE id = ?`;
+
+  db.get(colorQuery, [color], (err, row) => {
+    if (err) {
+      console.error('Error fetching color hex:', err.message);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (!row) {
+      return res.status(400).json({ message: 'Invalid color ID provided.' });
+    }
+
+    const colorHex = row.hex;
+
+    const query = `
+      INSERT INTO pots (name, saved, target, user_id, color)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+
+    db.run(query, [formattedName, saved ?? 0, target, user_id, colorHex], function (err) {
+      if (err) {
+        console.error('Error adding pot:', err.message);
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+
+      res.status(201).json({
+        id: this.lastID,
+        name: formattedName,
+        saved: saved ?? 0,
+        target,
+        user_id,
+        color: colorHex, // Now we are storing the hex value directly
+      });
+    });
+  });
+});
+
 
 
   

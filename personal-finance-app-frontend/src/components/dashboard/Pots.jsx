@@ -2,11 +2,14 @@ import './Pots.scss';
 import React, { useState, useEffect, useCallback } from 'react';
 import PotItem from './pots/PotItem';
 import ButtonPrimary from '../reusable/small/ButtonPrimary';
+import AddPotModal from './pots/AddPotModal';
 
 
 function Pots( { userId }) {
 
     const [pots, setPots] = useState([]);
+    const [showAddModal, setAddShowModal] = useState(false);
+    const usedColors = pots.map(b => b.color_id);
 
     const fetchPots = useCallback(async () => {
       try {
@@ -31,7 +34,15 @@ function Pots( { userId }) {
         <div className="pots">
             <div className='pots__header'>
                 <h1>Pots</h1>
-                <ButtonPrimary text="+ Create New Pot" onClick={() => console.log("Create new pot")} className='add-pot' />
+                <ButtonPrimary text="+ Create New Pot" onClick={() => setAddShowModal(true)} className='add-pot' />
+                {showAddModal && (
+                <AddPotModal
+                  userId={userId}
+                  onClose={() => setAddShowModal(false)}
+                  onPotCreated={fetchPots}
+                  usedColors={usedColors}
+                />
+              )}
             </div>
             <div className='pots__grid'>
             {pots.length > 0 ? (

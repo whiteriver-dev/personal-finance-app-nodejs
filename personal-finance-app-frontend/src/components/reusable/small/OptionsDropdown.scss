@@ -1,0 +1,57 @@
+@use '../../../styles/mixins' as *;
+
+.options__container {
+    position: relative;
+  
+    button {
+      cursor: pointer;
+    }
+
+    svg {
+
+        fill: #696868;
+      }
+  }
+
+  .options__toggle {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+    
+  .options__dropdown {
+    position: absolute;
+    right: 0;
+    top: 2.5rem;
+    background-color: white;
+    border: 1px solid #3a3a3a;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    min-width: 13.5rem;
+    padding: 0 2.0rem;
+  
+    .options__item {
+      all: unset;
+      padding: 1.2rem 0;
+      cursor: pointer;
+      font-size: 1.4rem;
+      color: #3a3a3a;
+      transition: background-color 0.2s;
+      border-bottom: 1px solid #eaeaea;
+  
+      &:hover {
+        background-color: #f8f8f8;
+      }
+    }
+  
+    .options__delete {
+      color: #C94736;
+    }
+  }
