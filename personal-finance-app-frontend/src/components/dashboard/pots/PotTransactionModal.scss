@@ -1,0 +1,118 @@
+/* PotTransactionModal.scss */
+
+.transaction-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.transaction-modal {
+  background-color: white;
+  width: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  padding: 20px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.modal-header h2 {
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.modal-header button {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #888;
+}
+
+.modal-description {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+form label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+form input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.transaction-progress-bar {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  height: 12px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.transaction-progress-bar-fill {
+  height: 100%;
+  transition: width 0.3s;
+}
+
+.transaction-progress-bar-fill.green {
+  background-color: #5cb85c;
+}
+
+.transaction-progress-bar-fill.red {
+  background-color: #d9534f;
+}
+
+.transaction-status {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.transaction-confirm-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.1rem;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.transaction-confirm-button.green {
+  background-color: #5cb85c;
+}
+
+.transaction-confirm-button.red {
+  background-color: #d9534f;
+}
+
+.transaction-confirm-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+

@@ -7,6 +7,7 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
   const percentage = Math.min(((pot.saved / pot.target) * 100).toFixed(2), 100);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+
   const handleDelete = async () => {
     try {
       const res = await fetch(`http://localhost:5050/pots/${pot.id}`, {
@@ -25,17 +26,15 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
     { label: 'Delete Pot', action: () => setShowDeleteModal(true) }
   ];
 
-  // ➕ Add Money Handler
   const handleAddClick = () => {
-    console.log('Add Money clicked for:', pot.name);
-    // Logic to open the Add Money modal or interface
+    console.log('Add clicked');
+  };
+  
+  const handleWithdrawClick = () => {
+    console.log('Withdraw clicked');
   };
 
-  // ➖ Withdraw Handler
-  const handleWithdrawClick = () => {
-    console.log('Withdraw clicked for:', pot.name);
-    // Logic to open the Withdraw modal or interface
-  };
+  
 
   return (
     <div className="pot" style={{ borderColor: pot.color }}>
@@ -75,6 +74,7 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
           confirmMessage={'Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever.'}
         />
       )}
+
     </div>
   );
 }
