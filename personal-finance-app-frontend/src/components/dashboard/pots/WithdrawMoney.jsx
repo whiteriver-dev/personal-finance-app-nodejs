@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import './WithdrawMoney.scss';
 
-function WithdrawMoney({ pot, onClose, onPotUpdated }) { 
+function WithdrawMoney({ pot, onClose, onPotUpdated }) {
   const [amount, setAmount] = useState('');
   const [updatedAmount, setUpdatedAmount] = useState(pot.saved);
 
+  // Handle amount change and update the visualization
   useEffect(() => {
     if (amount !== '' && !isNaN(amount)) {
-      const newAmount = Math.max(pot.saved - parseFloat(amount), 0); // Ensure it doesn't go negative
-      setUpdatedAmount(newAmount);
-    } else {
-      setUpdatedAmount(pot.saved);
+      const newAmount = pot.saved - parseFloat(amount);
+      setUpdatedAmount(newAmount < 0 ? 0 : newAmount); // Prevent negative amounts
+    } else if (amount === '') {
+      setUpdatedAmount(pot.saved); // Default back to saved if input is cleared
     }
   }, [amount, pot.saved]);
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,7 +25,7 @@ function WithdrawMoney({ pot, onClose, onPotUpdated }) {
     };
 
     try {
-      const res = await fetch(`http://localhost:5050/pots/${pot.id}`, {
+      const res = await fetch(`http://localhost:5050/pots/withdraw/${pot.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedPot),
@@ -38,8 +40,9 @@ function WithdrawMoney({ pot, onClose, onPotUpdated }) {
     }
   };
 
+  // Calculate percentages for the progress bar
   const currentPercentage = Math.min(((pot.saved / pot.target) * 100).toFixed(2), 100);
-  const subtractedPercentage = Math.min(((parseFloat(amount) || 0) / pot.target).toFixed(2) * 100, 100);
+  const subtractedPercentage = Math.min(((parseFloat(amount) || 0) / pot.target) * 100, 100);
   const totalPercentage = Math.max(currentPercentage - subtractedPercentage, 0).toFixed(2);
 
   return (
@@ -53,31 +56,34 @@ function WithdrawMoney({ pot, onClose, onPotUpdated }) {
         </div>
 
         <form onSubmit={handleSubmit}>
-            <div className="pot-transaction__header">
-                <span>New Amount</span><span>${pot.saved}</span>
-            </div>
-            <div className="pot-transaction__progress-bar">
-                <div
-                className="pot-transaction__progress-bar-fill"
-                style={{
-                    width: `${currentPercentage - subtractedPercentage}%`,
-                    borderRadius: subtractedPercentage === 0 ? '0 0.4rem 0.4rem 0' : '',
-                    borderRight: subtractedPercentage === 0 ? 'none' : '0.2rem solid white'
-                  }}
-                />
-                <div
-                className="pot-transaction__subtracted"
-                style={{
-                    width: `${subtractedPercentage}%`,
-                    right: `${100 - currentPercentage}%`
-                }}
-                />
-            </div>
-            
-            <div className="transaction-status">
-                <span className={`transaction-status__amount ${subtractedPercentage > 0 ? 'red' : ''}`}>{totalPercentage}%</span>
-                <span>Target of ${pot.target}</span>
-            </div>
+          <div className="pot-transaction__header">
+            <span>New Amount</span><span>${updatedAmount}</span>
+          </div>
+
+          <div className="pot-transaction__progress-bar">
+            <div
+              className="pot-transaction__progress-bar-fill"
+              style={{
+                width: `${totalPercentage}%`,
+                borderRadius: subtractedPercentage === 0 ? '0 0.8rem 0.8rem 0' : '',
+                borderRight: subtractedPercentage === 0 ? 'none' : '0.2rem solid white',
+              }}
+            />
+            <div
+              className="pot-transaction__subtracted"
+              style={{
+                width: `${subtractedPercentage}%`,
+                right: `${100 - currentPercentage}%`,
+              }}
+            />
+          </div>
+
+          <div className="transaction-status">
+            <span className={`transaction-status__amount ${subtractedPercentage > 0 ? 'red' : ''}`}>
+              {totalPercentage}%
+            </span>
+            <span>Target of ${pot.target}</span>
+          </div>
 
           <label>
             Amount to Withdraw
@@ -99,9 +105,8 @@ function WithdrawMoney({ pot, onClose, onPotUpdated }) {
             </div>
           </label>
           <div className="modal-actions">
-                <button type="submit">Confirm Withdrawal</button>
-            </div>
-          
+            <button type="submit">Confirm Withdrawal</button>
+          </div>
         </form>
       </div>
     </div>
@@ -109,4 +114,3 @@ function WithdrawMoney({ pot, onClose, onPotUpdated }) {
 }
 
 export default WithdrawMoney;
-

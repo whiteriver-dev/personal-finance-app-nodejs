@@ -690,6 +690,39 @@ app.put('/pots/:id', (req, res) => {
   });
 });
 
+// Pot PUT (Withdraw)
+app.put('/pots/withdraw/:id', (req, res) => {
+  const { id } = req.params;
+  const { saved } = req.body;
+
+  if (typeof saved !== 'number' || isNaN(saved) || saved < 0) {
+    return res.status(400).json({ message: 'Invalid saved amount.' });
+  }
+
+  const query = `
+    UPDATE pots
+    SET saved = ?
+    WHERE id = ?
+  `;
+
+  db.run(query, [saved, id], function (err) {
+    if (err) {
+      console.error('Error updating pot:', err.message);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ message: 'Pot not found.' });
+    }
+
+    res.status(200).json({
+      id,
+      saved,
+    });
+  });
+});
+
+
 
 // DELETE /pots/:id
 app.delete('/pots/:id', (req, res) => {
