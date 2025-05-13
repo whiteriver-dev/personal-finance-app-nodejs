@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import './AddMoney.scss';
+import './WithdrawMoney.scss';
 
-function AddMoney({ pot, onClose, onPotUpdated }) {
+function WithdrawMoney({ pot, onClose, onPotUpdated }) { 
   const [amount, setAmount] = useState('');
   const [updatedAmount, setUpdatedAmount] = useState(pot.saved);
 
   useEffect(() => {
     if (amount !== '' && !isNaN(amount)) {
-      const newAmount = pot.saved + parseFloat(amount);
+      const newAmount = Math.max(pot.saved - parseFloat(amount), 0); // Ensure it doesn't go negative
       setUpdatedAmount(newAmount);
     } else {
-      setUpdatedAmount(0);
+      setUpdatedAmount(pot.saved);
     }
   }, [amount, pot.saved]);
 
@@ -39,15 +39,14 @@ function AddMoney({ pot, onClose, onPotUpdated }) {
   };
 
   const currentPercentage = Math.min(((pot.saved / pot.target) * 100).toFixed(2), 100);
-  const addedPercentage = Math.min(((parseFloat(amount) || 0) / pot.target).toFixed(2) * 100, 100);
-  const totalPercentage = Math.min(currentPercentage + addedPercentage.toFixed(2), 100);
-  
+  const subtractedPercentage = Math.min(((parseFloat(amount) || 0) / pot.target).toFixed(2) * 100, 100);
+  const totalPercentage = Math.max(currentPercentage - subtractedPercentage, 0).toFixed(2);
 
   return (
     <div className="modal-backdrop">
       <div className="modal">
         <div className="modal-header">
-          <h2>Add to '{pot.name}'</h2>
+          <h2>Withdraw from '{pot.name}'</h2>
           <button type="button" onClick={onClose}>
             ✕
           </button>
@@ -61,29 +60,27 @@ function AddMoney({ pot, onClose, onPotUpdated }) {
                 <div
                 className="pot-transaction__progress-bar-fill"
                 style={{
-                    width: `${currentPercentage}%`,
-                    ...(addedPercentage === 0 ? { borderRadius: '0 0.8rem 0.8rem 0' } : {})
+                    width: `${currentPercentage - subtractedPercentage}%`,
+                    borderRadius: subtractedPercentage === 0 ? '0 0.4rem 0.4rem 0' : '',
+                    borderRight: subtractedPercentage === 0 ? 'none' : '0.2rem solid white'
                   }}
-                  
                 />
                 <div
-                className="pot-transaction__added"
+                className="pot-transaction__subtracted"
                 style={{
-                    width: `${addedPercentage}%`,
-                    left: `${currentPercentage}%`
+                    width: `${subtractedPercentage}%`,
+                    right: `${100 - currentPercentage}%`
                 }}
                 />
-                
             </div>
             
             <div className="transaction-status">
-                <span className={`transaction-status__amount ${addedPercentage > 0 ? 'green' : ''}`}>{totalPercentage > 0 ? totalPercentage : currentPercentage}%</span>
+                <span className={`transaction-status__amount ${subtractedPercentage > 0 ? 'red' : ''}`}>{totalPercentage}%</span>
                 <span>Target of ${pot.target}</span>
             </div>
 
-
           <label>
-            Amount to Add
+            Amount to Withdraw
             <div className='input-with-prefix'>
               <span className="money-prefix">$</span>
               <input
@@ -102,7 +99,7 @@ function AddMoney({ pot, onClose, onPotUpdated }) {
             </div>
           </label>
           <div className="modal-actions">
-                <button type="submit">Confirm Addition</button>
+                <button type="submit">Confirm Withdrawal</button>
             </div>
           
         </form>
@@ -111,4 +108,5 @@ function AddMoney({ pot, onClose, onPotUpdated }) {
   );
 }
 
-export default AddMoney;
+export default WithdrawMoney;
+

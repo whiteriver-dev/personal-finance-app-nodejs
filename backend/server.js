@@ -643,7 +643,7 @@ app.post('/pots', (req, res) => {
 
 app.put('/pots/:id', (req, res) => {
   const { id } = req.params;
-  const { name, target, color } = req.body;
+  const { name, target, color, saved } = req.body;
 
   // Validation
   if (!name || typeof name !== 'string') {
@@ -658,14 +658,19 @@ app.put('/pots/:id', (req, res) => {
     return res.status(400).json({ message: 'Color must be a valid hex string.' });
   }
 
+  if (typeof saved !== 'number' || isNaN(saved)) {
+    return res.status(400).json({ message: 'Saved amount must be a valid number.' });
+  }
+
   const formattedName = name.trim();
+  
   const query = `
     UPDATE pots
-    SET name = ?, target = ?, color = ?
+    SET name = ?, target = ?, color = ?, saved = ?
     WHERE id = ?
   `;
 
-  db.run(query, [formattedName, target, color, id], function (err) {
+  db.run(query, [formattedName, target, color, saved, id], function (err) {
     if (err) {
       console.error('Error updating pot:', err.message);
       return res.status(500).json({ message: 'Internal server error' });
@@ -679,10 +684,12 @@ app.put('/pots/:id', (req, res) => {
       id,
       name: formattedName,
       target,
-      color
+      color,
+      saved
     });
   });
 });
+
 
 // DELETE /pots/:id
 app.delete('/pots/:id', (req, res) => {

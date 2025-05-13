@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import OptionsDropdown from '../../reusable/small/OptionsDropdown';
 import DeleteConfirmModal from '../../reusable/small/DeleteConfirmModal';
 import AddMoney from './AddMoney';
+import WithdrawMoney from './WithdrawMoney';
 
 function PotItem({ pot, onEdit, onPotUpdated }) {
   const percentage = Math.min(((pot.saved / pot.target) * 100).toFixed(2), 100);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddMoneyModal, setShowAddMoneyModal] = useState(false);
+  const [showWithdrawMoneyModal, setShowWithdrawMoneyModal] = useState(false);
 
 
   const handleDelete = async () => {
@@ -35,6 +37,7 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
   
   const handleWithdrawClick = () => {
     console.log('Withdraw clicked');
+    setShowWithdrawMoneyModal(true);
   };
 
   
@@ -82,6 +85,14 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
         <AddMoney
           pot={pot}
           onClose={() => setShowAddMoneyModal(false)}
+          onPotUpdated={onPotUpdated}
+        />
+      )}
+
+      {showWithdrawMoneyModal && (
+        <WithdrawMoney
+          pot={pot}
+          onClose={() => setShowWithdrawMoneyModal(false)}
           onPotUpdated={onPotUpdated}
         />
       )}
