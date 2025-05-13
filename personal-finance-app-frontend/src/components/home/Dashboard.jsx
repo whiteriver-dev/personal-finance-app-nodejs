@@ -8,7 +8,6 @@ import Overview from '../dashboard/Overview';
 import Transactions from '../dashboard/Transactions';   
 import Budgets from '../dashboard/Budgets';
 import Pots from '../dashboard/Pots';
-import RecurringBills from '../dashboard/RecurringBills';
 
 function Dashboard() {
 
@@ -33,8 +32,6 @@ function Dashboard() {
                 return <Budgets userId={userId}/>;
             case 'pots':
                 return <Pots userId={userId}/>;
-            case 'recurring-bills':
-                return <RecurringBills />;
             default:
                 return <Overview />;
         }

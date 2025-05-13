@@ -2,10 +2,12 @@ import './PotItem.scss';
 import React, { useState } from 'react';
 import OptionsDropdown from '../../reusable/small/OptionsDropdown';
 import DeleteConfirmModal from '../../reusable/small/DeleteConfirmModal';
+import AddMoney from './AddMoney';
 
 function PotItem({ pot, onEdit, onPotUpdated }) {
   const percentage = Math.min(((pot.saved / pot.target) * 100).toFixed(2), 100);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAddMoneyModal, setShowAddMoneyModal] = useState(false);
 
 
   const handleDelete = async () => {
@@ -28,6 +30,7 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
 
   const handleAddClick = () => {
     console.log('Add clicked');
+    setShowAddMoneyModal(true);
   };
   
   const handleWithdrawClick = () => {
@@ -72,6 +75,14 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
             setShowDeleteModal(false);
           }}
           confirmMessage={'Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever.'}
+        />
+      )}
+
+      {showAddMoneyModal && (
+        <AddMoney
+          pot={pot}
+          onClose={() => setShowAddMoneyModal(false)}
+          onPotUpdated={onPotUpdated}
         />
       )}
 
