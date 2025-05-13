@@ -50,8 +50,9 @@ function AddMoney({ pot, onClose, onPotUpdated }) {
           <h2>Add to '{pot.name}'</h2>
           <button type="button" onClick={onClose}>
             ✕
-          </button>
+          </button>   
         </div>
+        <p className='modal-description'>Add money to your pot to keep it separate from your main balance. As soon as you add this money, it will be deducted from your current balance.</p>
 
         <form onSubmit={handleSubmit}>
           <div className="pot-transaction__header">

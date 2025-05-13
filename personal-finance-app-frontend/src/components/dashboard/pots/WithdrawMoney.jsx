@@ -55,6 +55,7 @@ function WithdrawMoney({ pot, onClose, onPotUpdated }) {
           </button>
         </div>
 
+        <p className='modal-description'>Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot.</p>
         <form onSubmit={handleSubmit}>
           <div className="pot-transaction__header">
             <span>New Amount</span><span>${updatedAmount}</span>
