@@ -25,7 +25,7 @@ function Dashboard() {
     const renderContent = () => {
         switch(activeSection) {
             case 'overview':
-                return <Overview />;
+                return <Overview userId={userId}/>;
             case 'transactions':
                 return <Transactions userId={userId}/>;
             case 'budgets':
@@ -33,7 +33,7 @@ function Dashboard() {
             case 'pots':
                 return <Pots userId={userId}/>;
             default:
-                return <Overview />;
+                return <Overview userId={userId}/>;
         }
     }
 
