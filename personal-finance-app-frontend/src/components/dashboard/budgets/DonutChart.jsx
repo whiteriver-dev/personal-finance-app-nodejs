@@ -74,7 +74,7 @@ function DonutChart({ data, width, height }) {
               <span className='legend__budget-name'>{budget.name}</span>
               <span className='legend__budget-total'>
                 <span className='legend__budget-spent'>${Math.round(Math.abs(budget.spent ?? 0))}</span>
-                <span className='legend__budget-amount'> of ${Math.round(budget.amount ?? 0)}</span>
+                <span className='legend__budget-amount'> <span>of </span><span>${Math.round(budget.amount ?? 0)}</span></span>
               </span>
             </span>
           </div>

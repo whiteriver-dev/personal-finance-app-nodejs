@@ -70,6 +70,11 @@
     .legend__budget-amount {
         @include text-preset-5;
         color: $grey-500;
+
+        span {
+            @include text-preset-5;
+            color: $grey-500;
+        }
     }
 
     .donut-center__label {

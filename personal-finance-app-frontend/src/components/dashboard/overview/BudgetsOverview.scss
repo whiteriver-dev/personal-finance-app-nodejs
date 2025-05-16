@@ -1,0 +1,77 @@
+@use '../../../styles/mixins.scss' as *;
+
+.budgets-overview {
+  background-color: white;
+  padding: 2.4rem 2.0rem;
+  border-radius: 1.2rem;
+
+  .overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    &__title {
+      color: $grey-900;
+    }
+
+    .see-details {
+      color: $grey-500;
+      @include text-preset-4;
+      cursor: pointer;
+      
+      span {
+        margin-left: 1.2rem;
+      }
+
+    }
+  }
+
+  .legend__budget{
+
+    &-name {
+        @include text-preset-5;
+        color: $grey-500;
+    }
+  
+    &-spent {
+        display: none;
+    }
+    &-amount {
+        :not(:first-child) {
+            @include text-preset-4-bold;
+            color: $grey-900;
+        }
+
+        :first-child {
+            display: none;
+        }
+        
+    }
+
+
+}
+
+  &__list {
+    .donut-chart {
+        padding: 0;
+
+        .donut-legend {
+            h2 {
+                display: none;
+            }
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+
+            &__label {
+                display: flex;
+                flex-direction: column;
+
+                &::before {
+                    height: 100%;
+                }
+            }
+        }
+    }
+  }
+}
