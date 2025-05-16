@@ -1,6 +1,6 @@
 import './Search.scss';
 import React, { useState, useEffect, useRef } from 'react';
-import SearchIcon from '../../reusable/small/Icons.jsx';
+import {SearchIcon} from '../../reusable/small/Icons.jsx';
 
 function Search({ placeholder, onSearch }) {
     const [isFocused, setIsFocused] = useState(false);

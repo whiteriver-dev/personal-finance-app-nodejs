@@ -2,10 +2,12 @@ import './Overview.scss';
 import React, { useEffect, useState} from 'react'; 
 import PotsOverview from './overview/PotsOverview';
 
-function Overview( {userId} ) {
+function Overview( {userId, setActiveSection} ) {
   const [pots, setPots] = useState([]);
  // const [budgets, setBudgets] = useState([]);
   const [totalSaved, setTotalSaved] = useState(0);
+
+
 
   // Fetch Data
   useEffect(() => {
@@ -51,7 +53,7 @@ function Overview( {userId} ) {
                 </div>
             </div>
             <div className='overview__grid'>
-                <PotsOverview pots={pots} totalSaved={totalSaved}/>
+                <PotsOverview pots={pots} totalSaved={totalSaved} setActiveSection={setActiveSection}/>
             </div>
         </div>
     );

@@ -2,7 +2,7 @@ import './PotsOverview.scss';
 import React from 'react';
 import { PotsOverviewIcon, CaretRightIcon } from '../../reusable/small/Icons';
 
-function PotsOverview({ pots, totalSaved} ) {
+function PotsOverview({ pots, totalSaved, setActiveSection} ) {
 
     const displayedPots = pots.slice(0, 4);
 
@@ -15,7 +15,12 @@ function PotsOverview({ pots, totalSaved} ) {
     <div className='pots-overview'>
       <div className='overview-header'>
         <h2 className='overview-header__title'>Pots</h2>
-        <button className='see-details'>See details <span><CaretRightIcon size='11' color='#201F24'/></span></button>
+        <button className='see-details'
+            onClick={() => {
+                setActiveSection('pots');
+            }}>
+            See details <span><CaretRightIcon size='11' color='#201F24'/></span>
+            </button>
         
       </div>
       <div className='pots-overview__total-saved-container'>

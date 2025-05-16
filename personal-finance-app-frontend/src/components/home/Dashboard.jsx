@@ -11,6 +11,7 @@ import Pots from '../dashboard/Pots';
 
 function Dashboard() {
 
+
     const [activeSection, setActiveSection] = useState('overview');
 
 
@@ -25,7 +26,7 @@ function Dashboard() {
     const renderContent = () => {
         switch(activeSection) {
             case 'overview':
-                return <Overview userId={userId}/>;
+                return <Overview userId={userId} setActiveSection={setActiveSection}/>;
             case 'transactions':
                 return <Transactions userId={userId}/>;
             case 'budgets':
@@ -33,7 +34,7 @@ function Dashboard() {
             case 'pots':
                 return <Pots userId={userId}/>;
             default:
-                return <Overview userId={userId}/>;
+                return <Overview userId={userId} setActiveSection={setActiveSection}/>;
         }
     }
 

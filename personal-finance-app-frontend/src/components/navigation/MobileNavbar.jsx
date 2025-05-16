@@ -1,6 +1,6 @@
 import React from "react";
 import "./MobileNavbar.scss";
-import { OverviewIcon, TransactionsIcon, BudgetsIcon, PotsIcon } from '../reusable/small/Icons';
+import { OverviewIcon, TransactionsIcon, BudgetIcon, PotsIcon } from '../reusable/small/Icons';
 
 function MobileNavbar({ activeSection, setActiveSection }) {
   return (
@@ -22,7 +22,7 @@ function MobileNavbar({ activeSection, setActiveSection }) {
       <button className={`navbar__item ${activeSection === "budgets" ? "active" : ""}`}
         onClick={() => setActiveSection("budgets")}>
         <span className="navbar__icon">
-          <BudgetsIcon size={19} color="#B3B3B3" />
+          <BudgetIcon size={19} color="#B3B3B3" />
         </span>
         <span className="navbar__text">Budgets</span>
       </button>
