@@ -26,6 +26,7 @@
     border: 1px solid $grey-500;
 
     background-color: white;
+    z-index: 9999;
 
 
     li {
@@ -62,6 +63,7 @@
         border-radius: 0.8rem;
         padding: 1.2rem 2.0rem;
         width: 17.7rem;
+
 
         span {
             @include text-preset-4;

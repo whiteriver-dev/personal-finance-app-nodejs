@@ -1,5 +1,6 @@
 import './PotsOverview.scss';
 import React from 'react';
+import { PotsOverviewIcon, CaretRightIcon } from '../../reusable/small/Icons';
 
 function PotsOverview({ pots, totalSaved} ) {
 
@@ -14,10 +15,13 @@ function PotsOverview({ pots, totalSaved} ) {
     <div className='pots-overview'>
       <div className='overview-header'>
         <h2 className='overview-header__title'>Pots</h2>
-        <p className='see-details'>See details</p>
+        <button className='see-details'>See details <span><CaretRightIcon size='11' color='#201F24'/></span></button>
+        
       </div>
       <div className='pots-overview__total-saved-container'>
-        <div className='pots-overview__total-saved__icon'></div>
+        <div className='pots-overview__total-saved__icon'>
+            <PotsOverviewIcon size={36} color='$green' />
+        </div>
         <div className='pots-overview__total-saved'>
           <h3>Total Saved</h3>
           <p>{formatCurrency(totalSaved)}</p>
