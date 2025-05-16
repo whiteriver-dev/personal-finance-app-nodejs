@@ -1,0 +1,62 @@
+@use '../../../styles/mixins.scss' as *;
+
+.transactions-overview {
+  background-color: white;
+  padding: 2.4rem 2.0rem;
+  border-radius: 1.2rem;
+
+  .overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    &__title {
+      color: $grey-900;
+    }
+
+    .see-details {
+      color: $grey-500;
+      @include text-preset-4;
+      cursor: pointer;
+      
+      span {
+        margin-left: 1.2rem;
+      }
+
+    }
+  }
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__name {
+        @include text-preset-4-bold;
+        color: $grey-900;
+    }
+
+    &__info {
+        text-align: right;
+        :first-child {
+            @include text-preset-4-bold;
+            color: $grey-900;
+
+        }
+
+        &.positive {
+            :first-child {
+                color: $green;
+            }
+        }
+
+        :last-child {
+            @include text-preset-5;
+            color: $grey-500;
+        }
+
+
+    }
+}
