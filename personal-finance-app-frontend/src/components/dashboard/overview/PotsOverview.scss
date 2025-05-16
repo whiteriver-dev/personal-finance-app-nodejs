@@ -42,6 +42,7 @@
   }
 
 
+
   &__total-saved-container {
     color: $grey-900;
     background-color: $beige-100;
@@ -74,6 +75,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.6rem;
+    width: 100%;
   }
 
 
@@ -117,3 +119,20 @@
     height: 100%;
     border-radius: 0.4rem;
   }
+
+@media (min-width: 768px) {
+    .pots-overview__content{
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      
+    }
+
+    .pots-overview__total-saved-container {
+      min-width: 24.7rem;
+      margin: 0;
+    }
+}
+
+
+

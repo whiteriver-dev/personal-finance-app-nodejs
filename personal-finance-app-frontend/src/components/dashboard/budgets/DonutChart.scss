@@ -96,9 +96,10 @@
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
+        padding-bottom: 3rem;
 
         .donut-legend {
-            width: 29.66rem;
+            max-width: 29.66rem;
         }
     }
   }
