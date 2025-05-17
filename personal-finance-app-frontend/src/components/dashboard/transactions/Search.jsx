@@ -9,6 +9,7 @@ function Search({ placeholder, onSearch }) {
 
     const containerRef = useRef(null);
 
+    // Changes input size based on screen size
     useEffect(() => {
         const observer = new ResizeObserver((entries) => {
           for (let entry of entries) {
@@ -66,3 +67,6 @@ function Search({ placeholder, onSearch }) {
  }
 
 export default Search;
+
+
+// Pre-deployment code check DONE

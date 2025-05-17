@@ -38,3 +38,6 @@ function MobileNavbar({ activeSection, setActiveSection }) {
 }
 
 export default MobileNavbar;
+
+
+// Pre-deployment code check DONE

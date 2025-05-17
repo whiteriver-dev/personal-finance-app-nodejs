@@ -19,8 +19,6 @@ function SortBy( { onSortChange, selectedOption }) {
     const handleSelection = (value) => {
         setIsOpen(false);
         onSortChange(value);
-        console.log("selectedOption:", selectedOption);
-        console.log("options:", options);
     }
 
     useEffect(() => {
@@ -67,3 +65,6 @@ function SortBy( { onSortChange, selectedOption }) {
 }
 
 export default SortBy;
+
+
+// Pre-deployment code check DONE

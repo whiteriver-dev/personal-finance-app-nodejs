@@ -107,3 +107,6 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
 };
 
 export default BarSummary;
+
+
+// Pre-deployment code check DONE

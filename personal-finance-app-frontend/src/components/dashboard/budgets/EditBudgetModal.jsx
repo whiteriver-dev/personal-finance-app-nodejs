@@ -22,6 +22,7 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
     };
   }, []);
 
+  // Closes dropdown when clicked outside of it
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -167,3 +168,6 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
 }
 
 export default EditBudgetModal;
+
+
+// Pre-deployment code check DONE

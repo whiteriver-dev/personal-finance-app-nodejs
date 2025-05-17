@@ -68,3 +68,6 @@ function Sidebar({  activeSection, setActiveSection }) {
 }
 
 export default Sidebar;
+
+
+// Pre-deployment code check DONE

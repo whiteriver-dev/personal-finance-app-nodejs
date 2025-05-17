@@ -31,12 +31,10 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
   ];
 
   const handleAddClick = () => {
-    console.log('Add clicked');
     setShowAddMoneyModal(true);
   };
   
   const handleWithdrawClick = () => {
-    console.log('Withdraw clicked');
     setShowWithdrawMoneyModal(true);
   };
 
@@ -102,3 +100,6 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
 }
 
 export default PotItem;
+
+
+// Pre-deployment code check DONE

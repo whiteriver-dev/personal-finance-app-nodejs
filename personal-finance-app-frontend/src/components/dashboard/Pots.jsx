@@ -42,7 +42,6 @@ function Pots({ userId }) {
     }
   }, [userId]);
 
-  // Initial data load
   useEffect(() => {
     fetchPots();
     fetchColors();
@@ -55,7 +54,6 @@ function Pots({ userId }) {
         <ButtonPrimary text="+ Add New Pot" onClick={() => setAddShowModal(true)} className='add-pot' />
       </div>
 
-      {/* Add Pot Modal */}
       {showAddModal && (
         <AddPotModal
           userId={userId}
@@ -65,7 +63,6 @@ function Pots({ userId }) {
         />
       )}
 
-      {/* Edit Pot Modal */}
       {showEditModal && potToEdit && (
         <EditPotModal
           pot={potToEdit}
@@ -78,7 +75,6 @@ function Pots({ userId }) {
         />
       )}
 
-      {/* Pot List */}
       <div className='pots__grid'>
         {pots.map((pot) => (
           <PotItem
@@ -86,8 +82,8 @@ function Pots({ userId }) {
             pot={pot}
             onPotUpdated={fetchPots}
             onEdit={() => {
-              setPotToEdit(pot); // Set the pot for editing
-              setEditModal(true); // Show the modal
+              setPotToEdit(pot); 
+              setEditModal(true); 
             }}
           />
         ))}
@@ -97,3 +93,6 @@ function Pots({ userId }) {
 }
 
 export default Pots;
+
+
+// Pre-deployment code check DONE

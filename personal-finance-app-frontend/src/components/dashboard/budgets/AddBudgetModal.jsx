@@ -9,7 +9,7 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
   const [selectedColorId, setSelectedColorId] = useState('');
   const dropdownRef = useRef(null);
 
-  // Handle Click Outside
+  // Closes dropdown in modal when clicked outside of it
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -183,3 +183,5 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
 }
 
 export default AddBudgetModal;
+
+// Pre-deployment code check DONE

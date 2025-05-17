@@ -10,7 +10,7 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
                                       
   return (
     <div className="transactions-table">
-      {/* Desktop view */}
+
       <table className="transactions-table__desktop">
         <thead>
           <tr>
@@ -40,7 +40,7 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
       </table>
       
 
-      {/* Mobile view */}
+
       <div className="transactions-table__mobile">
         {transactions.map(tx => (
           <div key={tx.id} className="transactions-table__mobile-card">
@@ -90,3 +90,6 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
 }
 
 export default TransactionsTable;
+
+
+// Pre-deployment code check DONE

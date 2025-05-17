@@ -23,7 +23,7 @@ function Transactions({ userId }) {
 
   // State for search query
   const [searchQuery, setSearchQuery] = useState('');
-  const debouncedSearchQuery = useDebounce(searchQuery, 400);
+  const debouncedSearchQuery = useDebounce(searchQuery, 400); // Ensures 400 millisecond delay after typing has stopped to submit query to database - reduce bandwidth
 
   // State for sorting
   const [sort, setSort] = useState("latest");
@@ -155,3 +155,6 @@ function Transactions({ userId }) {
 }
 
 export default Transactions;
+
+
+// Pre-deployment code check DONE

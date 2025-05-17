@@ -33,7 +33,6 @@ function Budgets({ userId }) {
         fetch(`http://localhost:5050/transactions/recent/${userId}`)
           .then(res => res.json())
           .then(data => {
-            console.log("Fetched transactions:", data); 
             setTransactions(data);
           })
           .catch(err => console.error('Error fetching transactions:', err));
@@ -104,4 +103,5 @@ function Budgets({ userId }) {
 
 export default Budgets;
 
-// <DonutChart data={budgets} width={240} height={240} />
+
+// Pre-deployment code check DONE

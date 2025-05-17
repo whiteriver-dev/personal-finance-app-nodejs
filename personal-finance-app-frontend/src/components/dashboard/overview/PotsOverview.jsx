@@ -4,7 +4,7 @@ import { PotsOverviewIcon, CaretRightIcon } from '../../reusable/small/Icons';
 
 function PotsOverview({ pots, totalSaved, setActiveSection} ) {
 
-    const displayedPots = pots.slice(0, 4);
+    const displayedPots = pots.slice(0, 4); // Maximum of 4 pots in overview
 
   // Format to currency
   const formatCurrency = (amount) => {
@@ -54,3 +54,6 @@ function PotsOverview({ pots, totalSaved, setActiveSection} ) {
 }
 
 export default PotsOverview;
+
+
+// Pre-deployment code check DONE

@@ -73,7 +73,6 @@ function Register() {
         if (response.ok) {
             navigate('/login');
         }   else {
-            console.log('Registration failed: ' + data.message);
             setErrors({ backend: data.message });
         }
 
@@ -128,3 +127,5 @@ function Register() {
 }
 
 export default Register;
+
+// Pre-deployment code check DONE

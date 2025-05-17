@@ -163,3 +163,6 @@ function EditPotModal({ pot, onClose, onPotUpdated, usedColors }) {
 }
 
 export default EditPotModal;
+
+
+// Pre-deployment code check DONE

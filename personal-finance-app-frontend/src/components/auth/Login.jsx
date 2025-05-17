@@ -62,7 +62,6 @@ function Login() {
             localStorage.setItem('email', data.email);
             navigate('/dashboard');
         } else {
-            console.log('Login failed: ' + data.message);
             setErrors({ backend: data.message });
         }
 
@@ -110,4 +109,6 @@ function Login() {
 
 
 export default Login;
+
+// Pre-deployment code check DONE
 

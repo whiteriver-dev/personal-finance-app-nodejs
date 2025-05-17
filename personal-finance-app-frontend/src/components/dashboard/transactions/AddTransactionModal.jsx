@@ -77,7 +77,6 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* Transaction Type Switch */}
           <div className="transaction-type-toggle">
             <button
               type="button"
@@ -95,7 +94,6 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
             </button>
           </div>
 
-          {/* Description */}
           <label>
             Transaction
             <input 
@@ -108,7 +106,6 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
             />
           </label>
 
-          {/* Amount */}
           <label>
             Amount
             <div className="input-with-prefix">
@@ -134,7 +131,6 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
             </div>
           </label>
 
-          {/* Budget Category */}
           {isExpense && (
             <label>
               Category
@@ -166,7 +162,6 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
             </label>
           )}
 
-          {/* Submit */}
           <div className="modal-actions">
             <button type="submit">Add Transaction</button>
           </div>
@@ -177,3 +172,6 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
 }
 
 export default AddTransactionModal;
+
+
+// Pre-deployment code check DONE

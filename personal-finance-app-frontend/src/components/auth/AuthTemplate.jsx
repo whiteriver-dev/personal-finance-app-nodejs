@@ -35,3 +35,5 @@ function AuthTemplate() {
 }
 
 export default AuthTemplate;
+
+// Pre-deployment code check DONE

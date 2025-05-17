@@ -171,3 +171,6 @@ function AddPotModal({ userId, onClose, onPotCreated, usedColors }) {
 }
 
 export default AddPotModal;
+
+
+// Pre-deployment code check DONE
