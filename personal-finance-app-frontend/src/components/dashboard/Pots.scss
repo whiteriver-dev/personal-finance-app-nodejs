@@ -12,8 +12,11 @@
     justify-content: space-between;
     margin-bottom: 3.2rem;
     margin-top: 3.2rem;
+    align-items: center;
 
     h1 {
+      @include text-preset-1;
+      color: $grey-900;
         margin: 0;
     }
   }

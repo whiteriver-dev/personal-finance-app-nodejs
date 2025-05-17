@@ -2,12 +2,25 @@
 
 .pagination {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 1.2rem;
   margin-top: 2rem;
 
+  svg {
+    fill: $grey-900;
+  }
 
+
+&__nav {
+  &:hover:not(.active):not(:disabled) {
+    color: white;
+
+    svg {
+      fill: white;
+    }
+  }
+}
 
   &__nav, &__page {
     @include text-preset-4-bold;
@@ -18,8 +31,23 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
 
+    
+
+    span {
+        @include text-preset-4-bold;
+
+        &.prev {
+          margin-left: 1.2rem;
+        }
+
+        &.next {
+          margin-right: 1.2rem;
+        }
+
+    }
+
     &:disabled {
-      cursor: not-allowed;
+      cursor: default;
       opacity: 0.5;
     }
 
@@ -27,6 +55,13 @@
       background-color: $grey-900;
       color: white;
     }
+
+    &:hover:not(.active):not(:disabled) {
+      background-color: $beige-500;
+      color: white;
+
+      }
+    
 
     
   }

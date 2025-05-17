@@ -45,10 +45,15 @@
       color: #3a3a3a;
       transition: background-color 0.2s;
       border-bottom: 1px solid #eaeaea;
-  
-      &:hover {
-        background-color: #f8f8f8;
+
+      &:first-child:hover {
+        color: $grey-500;
       }
+
+      &:last-child:hover {
+        opacity: 0.8;
+      }
+  
     }
   
     .options__delete {

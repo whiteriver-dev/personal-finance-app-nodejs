@@ -99,6 +99,11 @@
         text-align: center;
         background-color: $beige-100;
   
+
+        &:hover {
+          background-color: white;
+          outline: 1px solid $grey-900;
+        }
       }
     }
   }

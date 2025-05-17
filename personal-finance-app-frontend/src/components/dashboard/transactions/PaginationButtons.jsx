@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './PaginationButtons.scss';
+import { CaretLeftIcon, CaretRightIcon } from '../../reusable/small/Icons.jsx';
 
 function PaginationButtons({ currentPage, totalPages, onPageChange }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -65,7 +66,7 @@ function PaginationButtons({ currentPage, totalPages, onPageChange }) {
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        Prev
+      <CaretLeftIcon size={9} className='caret-icon-pagbtns'/>  <span className='prev'>Prev</span>
       </button>
 
       <div className="pagination__pages">
@@ -91,7 +92,7 @@ function PaginationButtons({ currentPage, totalPages, onPageChange }) {
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        Next
+        <span className='next'>Next</span> <CaretRightIcon size={9}  className='caret-icon-pagbtns'/>
       </button>
     </div>
   );
