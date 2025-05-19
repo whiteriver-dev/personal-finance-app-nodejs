@@ -119,8 +119,9 @@ function Register() {
                             )
                         } 
                         disabled={isLoading}/>
+
                 </form>
-                <p>Already have an account? <Link to="/login">Login</Link></p>
+                <p>Already have an account? <Link to="/login" className='login-link'>Login</Link></p>
             </div>
         </div>
     );

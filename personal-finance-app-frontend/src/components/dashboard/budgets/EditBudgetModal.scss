@@ -32,7 +32,7 @@
     max-width: 56rem;
     display: flex;
     flex-direction: column;
-  }
+  
   
     h2 {
       @include text-preset-1;
@@ -78,6 +78,7 @@
           }
         }
       }
+    }
     }
 
     .custom-dropdown {

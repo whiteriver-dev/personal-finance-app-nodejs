@@ -37,7 +37,6 @@
     }
 
     button {
-        height: 5.3rem;
         border-radius: 0.8rem;
         border: 2px solid;
     }
@@ -67,6 +66,18 @@
 
 .password-input {
     margin-bottom: 3.2rem;
+}
+
+.register-link {
+    all: unset;
+    @include text-preset-4-bold;
+    color: $grey-900;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+        color: $grey-500;
+    }
 }
 
 @media screen and (min-width: 768px) {

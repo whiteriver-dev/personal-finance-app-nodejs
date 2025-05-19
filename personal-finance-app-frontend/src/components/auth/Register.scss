@@ -39,7 +39,6 @@
     }
 
     button {
-        height: 5.3rem;
         border-radius: 0.8rem;
         border: 2px solid;
     }
@@ -88,6 +87,19 @@
 input.error {
     border: 2px solid $red;
 }
+
+.login-link {
+    all: unset;
+    @include text-preset-4-bold;
+    color: $grey-900;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+        color: $grey-500;
+    }
+}
+
 
 @media screen and (min-width: 768px) {
     .register {
