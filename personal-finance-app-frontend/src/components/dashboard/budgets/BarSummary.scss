@@ -145,6 +145,12 @@
     }
 
   }
+
+  .bar-summary__latest-empty {
+    @include text-preset-5;
+    color: $grey-500;
+
+  }
   
   .latest-description {
     @include text-preset-5-bold;

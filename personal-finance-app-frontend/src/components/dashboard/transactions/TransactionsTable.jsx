@@ -20,6 +20,7 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
             <th>Amount</th>
           </tr>
         </thead>
+
         <tbody>
           {transactions.map(tx => (
             <tr key={tx.id}>
@@ -37,10 +38,9 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
             
           ))}
         </tbody>
+  
       </table>
-      
-
-
+        
       <div className="transactions-table__mobile">
         {transactions.map(tx => (
           <div key={tx.id} className="transactions-table__mobile-card">
@@ -69,6 +69,7 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
         ))}
         
       </div>
+               
       {showDeleteModal && transactionToDelete && (
         <DeleteConfirmModal
           name={transactionToDelete.description}

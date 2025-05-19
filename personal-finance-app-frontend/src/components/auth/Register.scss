@@ -75,11 +75,12 @@
 
 .error {
     color: $red;
+    @include text-preset-5-bold;
 }
 
 .backend-error {
     color: $red;
-    font-size: 1.6rem;
+    @include text-preset-5-bold;
     align-self: center;
     font-weight: 500;
 }

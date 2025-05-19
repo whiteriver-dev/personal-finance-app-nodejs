@@ -46,7 +46,7 @@ function Login() {
 
         // Login request to backend
 
-        const response = await fetch('http://localhost:5000/login', {
+        const response = await fetch('http://localhost:5050/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -60,6 +60,7 @@ function Login() {
             localStorage.setItem('token', data.token);
             localStorage.setItem('name', data.name);
             localStorage.setItem('email', data.email);
+            localStorage.setItem('userId', data.userId);
             navigate('/dashboard');
         } else {
             setErrors({ backend: data.message });

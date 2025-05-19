@@ -12,7 +12,7 @@ function BudgetsOverview({ budgets, setActiveSection }) {
                     onClick={() => {
                         setActiveSection('budgets');
                     }}>
-                    See details <span><CaretRightIcon size='11' color='#201F24'/></span>
+                    See details <span><CaretRightIcon size='9' color='#201F24'/></span>
                 </button>
             </div>
             <div className='budgets-overview__list'>

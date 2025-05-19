@@ -1,6 +1,6 @@
 import './Dashboard.scss';
-import React, {/*useEffect,*/ useState} from 'react';
-// import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import MobileNavbar from '../navigation/MobileNavbar';
 import Sidebar from '../navigation/Sidebar';
@@ -12,18 +12,41 @@ import Pots from '../dashboard/Pots';
 function Dashboard() {
 
 
+    // Application state
     const [activeSection, setActiveSection] = useState('overview');
+  /*  const [name, setName] = useState('');
+    const [email, setEmail] = useState('');*/
+    const [userId, setUserId] = useState(null);
+    const navigate = useNavigate(); 
+
+    /**
+     * Fetch user data from local storage and set to state.
+     * Redirects to login if no token is found.
+     */
+    useEffect(() => { 
+        const token = localStorage.getItem('token');
+   /*     const name = localStorage.getItem('name');
+        const email = localStorage.getItem('email'); */
+        const storedUserId = localStorage.getItem('userId');
+
+        if (!token) {
+            navigate('/login');
+        } else {
+       /*     setName(name);
+            setEmail(email);   
+            setToken(token); */
+            setUserId(storedUserId);
+        }
+    }, [navigate]); 
 
 
-    const userId = 13;
-
-
- /*   const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [token, setToken] = useState(''); 
-    const navigate = useNavigate(); */
-
+    /**
+     * Renders the correct section based on the activeSection state.
+     */
     const renderContent = () => {
+        if (!userId) {
+            return <div>Loading...</div>;
+        }
         switch(activeSection) {
             case 'overview':
                 return <Overview userId={userId} setActiveSection={setActiveSection}/>;
@@ -36,25 +59,8 @@ function Dashboard() {
             default:
                 return <Overview userId={userId} setActiveSection={setActiveSection}/>;
         }
-    }
+    };
 
- /*   useEffect(() => { 
-        const token = localStorage.getItem('token');
-        const name = localStorage.getItem('name');
-        const email = localStorage.getItem('email');
-
-        if (!token) {
-            navigate('/login');
-        }
-
-        setName(name);
-        setEmail(email);   
-        setToken(token);
-
-    }, [navigate]); */
-
-
-    
     return (
         <div className="dashboard">
             <MobileNavbar activeSection={activeSection} setActiveSection={setActiveSection} />
@@ -65,6 +71,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-
-// Pre-deployment code check DONE - need to come back here to configure for deployment

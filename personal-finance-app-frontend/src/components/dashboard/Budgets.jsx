@@ -37,6 +37,8 @@ function Budgets({ userId }) {
           })
           .catch(err => console.error('Error fetching transactions:', err));
       }, [userId]);
+
+      console.log(userId);
       
 
 

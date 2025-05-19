@@ -39,6 +39,12 @@
     width: 100%;
     
 
+    &-empty {
+      @include text-preset-3;
+      text-align: center;
+      align-content: center;
+    }
+
 
       .no-transactions {
         text-align: center;
@@ -97,6 +103,11 @@
   
     // Mobile 
     @media (max-width: 768px) {
+
+      .transactions-table-empty {
+        display: flex;
+        justify-content: center;
+      }
 
         span .recipient {
             @include text-preset-4-bold;

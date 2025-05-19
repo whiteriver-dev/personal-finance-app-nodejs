@@ -19,7 +19,7 @@ function PotsOverview({ pots, totalSaved, setActiveSection} ) {
             onClick={() => {
                 setActiveSection('pots');
             }}>
-            See details <span><CaretRightIcon size='11' color='#201F24'/></span>
+            See details <span><CaretRightIcon size='9' color='#201F24'/></span>
             </button>
         
       </div>

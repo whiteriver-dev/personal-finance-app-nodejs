@@ -13,9 +13,11 @@
 
     &__title {
       color: $grey-900;
+      @include text-preset-2;
     }
 
     .see-details {
+      all:unset;
       color: $grey-500;
       @include text-preset-4;
       &:hover {
@@ -24,6 +26,9 @@
       
       span {
         margin-left: 1.2rem;
+        svg {
+          fill: $grey-500;
+        }
       }
 
     }

@@ -19,9 +19,12 @@ const formatCurrency = (amount) => {
                 onClick={() => {
                     setActiveSection('transactions');
                 }}>
-                See details <span><CaretRightIcon size='11' color='#201F24'/></span>
+                See details <span><CaretRightIcon size='9' color='#201F24'/></span>
                 </button>
             </div>
+            {transactions.length === 0 ? (
+                    <p className="transactions-overview__list-empty">No recent transactions</p>
+                ) : (
             <div className='transactions-overview__list'>
                 {lastFiveTransactions.map((transaction) => (
                     <div key={transaction.id} className='transaction-item'>
@@ -36,6 +39,7 @@ const formatCurrency = (amount) => {
                     </div>
                     ))}
             </div>
+                )}
         </div>
     );
 }

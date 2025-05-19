@@ -83,64 +83,103 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Backend validation - ensures that the name, email, and password are provided
-  if (!email || !password || !name || password.length < 0) {
-    return res.status(400).json({ message: 'Name, email, and password must be provided. Password should be at least 6 characters long.' });
+  // --- Validation ---
+  if (!email || !password || !name) {
+    return res.status(400).json({ message: 'Name, email, and password must be provided.' });
   }
 
-  // Name validation: check for valid name (letters and spaces only)
+  if (password.length < 6) {
+    return res.status(400).json({ message: 'Password should be at least 6 characters long.' });
+  }
+
+  // Name validation: only letters and spaces allowed
   const nameRegex = /^[a-zA-Z\s]+$/;
   if (!nameRegex.test(name)) {
     return res.status(400).json({ message: 'Name must only contain letters and spaces.' });
   }
 
-  // Validation for password length
-  if (!email || !password || password.length < 6) {
-    return res.status(400).json({ message: 'Password should be at least 6 characters long' });
-  }
-
-  // Check if the email format is valid
+  // Email format validation
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Email is invalid' });
   }
 
-  // Capitalize name before storing it
+  // Capitalize name
   const capitalizedName = name
-  .split(' ')
-  .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-  .join(' ');
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 
   try {
-      // Check if the email already exists in the database
-      db.get('SELECT * FROM users WHERE email = ?', [email], async (err, existingUser) => {
-          if (err) {
-              return res.status(500).json({ message: 'Error checking for existing user' });
-          }
-          if (existingUser) {
-              return res.status(400).json({ message: 'Email already registered' }); // Return message as JSON
-          }
+    // Check if the email already exists
+    db.get('SELECT * FROM users WHERE email = ?', [email], async (err, existingUser) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error checking for existing user' });
+      }
+      if (existingUser) {
+        return res.status(400).json({ message: 'Email already registered' });
+      }
 
-          // If email does not exist, continue with registration
-          const saltRounds = 10;
-          const hashedPassword = await bcrypt.hash(password, saltRounds);
+      // If the email is unique, hash the password
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-          // Insert the user into the database
-          const stmt = db.prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
-          stmt.run(capitalizedName, email, hashedPassword, function (err) {
-              if (err) {
-                  return res.status(500).json({ message: 'Error registering user' }); // Return message as JSON
-              }
-              res.status(201).json({ message: 'User created', userId: this.lastID }); // Return success as JSON
+      // --- Insert User ---
+      const insertUserQuery = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+      db.run(insertUserQuery, [capitalizedName, email, hashedPassword], function (err) {
+        if (err) {
+          console.error('Error inserting user:', err.message);
+          return res.status(500).json({ message: 'Error registering user' });
+        }
+
+        const userId = this.lastID;
+
+        // --- Default Budgets ---
+        const budgets = [
+          { name: 'Entertainment', amount: 50, color_id: 1 },
+          { name: 'Bills', amount: 750, color_id: 3 },
+          { name: 'Dining Out', amount: 75, color_id: 2 },
+          { name: 'Personal Care', amount: 100, color_id: 4 }
+        ];
+
+        budgets.forEach((budget) => {
+          const budgetQuery = `INSERT INTO budgets (name, amount, user_id, color_id) VALUES (?, ?, ?, ?)`;
+          db.run(budgetQuery, [budget.name, budget.amount, userId, budget.color_id], (err) => {
+            if (err) {
+              console.error(`Error inserting budget ${budget.name}:`, err.message);
+            }
           });
-          stmt.finalize();
+        });
+
+        // --- Default Pots ---
+        const pots = [
+          { name: 'Savings', saved: 0, target: 5000, color: '#277C78' },
+          { name: 'Concert Ticket', saved: 0, target: 300, color: '#626070' },
+          { name: 'Gift', saved: 0, target: 150, color: '#82C9D7' },
+          { name: 'New Laptop', saved: 0, target: 2500, color: '#F2CDAC' },
+          { name: 'Holiday', saved: 0, target: 3000, color: '#826CB0' }
+        ];
+
+        pots.forEach((pot) => {
+          const potQuery = `INSERT INTO pots (name, saved, target, user_id, color) VALUES (?, ?, ?, ?, ?)`;
+          db.run(potQuery, [pot.name, pot.saved, pot.target, userId, pot.color], (err) => {
+            if (err) {
+              console.error(`Error inserting pot ${pot.name}:`, err.message);
+            }
+          });
+        });
+
+        // --- Registration Success ---
+        res.status(201).json({ message: 'User created successfully', userId });
       });
+    });
   } catch (err) {
-      console.message(err);
-      res.status(500).json({ message: 'Error hashing password' }); // Return message as JSON
+    console.error('Error during registration:', err.message);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -167,14 +206,15 @@ app.post('/register', async (req, res) => {
           expiresIn: '1h', // Token validity (1 hour)
         });
   
-        res.send({ 
+        res.json({ 
           message: 'Login successful', 
-          token, 
+          token,
+          userId: user.id, 
           name: user.name, 
           email: user.email,
         }); // Send the token to the client
       } else {
-        res.status(401).send('Invalid username or password.');
+        res.status(401).json('Invalid username or password.');
       }
     });
   });
