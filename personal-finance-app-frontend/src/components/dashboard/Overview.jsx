@@ -8,8 +8,7 @@ function Overview( {userId, setActiveSection} ) {
   const [pots, setPots] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
-  const [totalSaved, setTotalSaved] = useState(0);
-
+  const [totalSaved, setTotalSaved] = useState(0)
 
 
   // Fetch Data
@@ -33,7 +32,7 @@ function Overview( {userId, setActiveSection} ) {
         setBudgets(budgetsData);
 
         // Calculate total saved
-        const total = potsData.reduce((acc, pot) => acc + pot.saved, 0);
+        const total = potsData.reduce((acc, pot) => Number(acc) + Number(pot.saved), 0);
         setTotalSaved(total);
       } catch (err) {
         console.error('Error fetching data:', err);
