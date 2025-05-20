@@ -13,6 +13,11 @@
     }
     button {
         padding: 0;
+        background-color: white;
+
+        :hover {
+          fill: $grey-900;
+        }
     }
 }
 
@@ -58,6 +63,7 @@
         cursor: pointer;
         width: 100%;
         padding: 1.6rem 0;
+        @include text-preset-4-bold;
 
         &:hover {
             opacity: 0.8;
@@ -67,12 +73,13 @@
 
       .dlt-cancel-btn {
         color: $grey-500;
-        background-color: none;
+        background-color: white;
         border: none;
         border-radius: 0.8rem;
         cursor: pointer;
         width: 100%;
         padding: 1.6rem 0;
+        @include text-preset-4-bold;
 
         &:hover {
           background-color: $grey-100;

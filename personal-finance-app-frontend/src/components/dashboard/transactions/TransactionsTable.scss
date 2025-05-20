@@ -5,6 +5,10 @@
 .transactions-table {
     width: 100%;
 
+    button {
+      all: unset;
+    }
+
     .recipient {
         color: $grey-900;
         @include text-preset-4-bold;
@@ -167,9 +171,12 @@
           }
 
           .transact-delete-btn {
+
             position: absolute;
             right: -0.5rem;
             top: 2.5rem;
+
+
           }
 
       }

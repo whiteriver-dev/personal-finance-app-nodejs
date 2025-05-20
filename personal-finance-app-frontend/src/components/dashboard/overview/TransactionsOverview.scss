@@ -4,6 +4,15 @@
   background-color: white;
   padding: 2.4rem 2.0rem;
   border-radius: 1.2rem;
+  
+
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
 
   &__list-empty {
     background-color: $beige-100;
@@ -17,7 +26,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 3.2rem;
+
+
 
     &__title {
       color: $grey-900;
@@ -71,6 +82,8 @@
             @include text-preset-5;
             color: $grey-500;
         }
+
+
 
 
     }

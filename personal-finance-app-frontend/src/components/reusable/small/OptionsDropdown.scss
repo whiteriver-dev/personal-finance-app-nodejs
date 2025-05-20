@@ -5,6 +5,7 @@
   
     button {
       cursor: pointer;
+
     }
 
     svg {
@@ -36,6 +37,7 @@
     flex-direction: column;
     min-width: 13.5rem;
     padding: 0 2.0rem;
+    @include text-preset-4;
   
     .options__item {
       all: unset;

@@ -34,7 +34,13 @@ const formatCurrency = (amount) => {
                         </div>
                         <div className={`transaction-item__info ${transaction.amount < 0 ? 'negative' : 'positive'}`}>
                             <span>{formatCurrency(transaction.amount)}</span>
-                            <p>{new Date(transaction.date).toLocaleDateString()}</p>
+                            <p>
+                                {new Date(transaction.date).toLocaleDateString('en-GB', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric',
+                                })}
+                            </p>
                         </div>
                     </div>
                     ))}

@@ -2,11 +2,10 @@
 @use './styles/mixins' as *;
 /* CSS Reset */
 
-body {
-  height: 100vh;
-}
+
 
 button {
   cursor: pointer;
+  border: none;
 }
 

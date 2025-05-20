@@ -56,11 +56,11 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
                     <span className='bar-summary__spent-remaining-colorcode' style={{ backgroundColor: color }}></span>
                     <p className='spent'>
                         <span className='spent-remaining__label'>Spent</span>
-                        <span className='spent-remaining__amount'>${Math.abs(spent)}</span>
+                        <span className='spent-remaining__amount'>${Math.abs(amount)}</span>
                     </p>
                     <p className='remaining'>
                         <span className='spent-remaining__label'>Remaining</span>
-                        <span className='spent-remaining__amount'>${amount}</span>
+                        <span className='spent-remaining__amount'>${amount + spent}</span>
                     </p>
                 </div>
             </div>
