@@ -39,6 +39,9 @@ function AddMoney({ pot, onClose, onPotUpdated }) {
     }
   };
 
+  pot.saved = Number(pot.saved);
+  pot.target = Number(pot.target);
+
   const currentPercentage = Math.min(((pot.saved / pot.target) * 100).toFixed(2), 100);
   const addedPercentage = Math.min(((parseFloat(amount) || 0) / pot.target) * 100, 100);
   const totalPercentage = Math.min(currentPercentage + addedPercentage, 100).toFixed(2);

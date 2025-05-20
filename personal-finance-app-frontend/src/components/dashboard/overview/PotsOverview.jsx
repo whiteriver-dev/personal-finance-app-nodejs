@@ -8,7 +8,9 @@ function PotsOverview({ pots, totalSaved, setActiveSection} ) {
 
   // Format to currency
   const formatCurrency = (amount) => {
-    return `$${amount.toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+    const num = Number(amount);
+    if (isNaN(num)) return "$0.00";
+    return `$${num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
   };
 
   return (

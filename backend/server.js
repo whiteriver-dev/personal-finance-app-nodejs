@@ -1,20 +1,22 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const db = require('./db');  // Import the db connection
-const app = express();
-const bcrypt = require('bcrypt'); 
+const pool = require('./db');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = "fryingpan69";
+const SECRET_KEY = process.env.SECRET_KEY;
 const authenticateToken = require('./middleware/authMiddleware');
-app.use(express.json());  // Middleware to parse JSON requests
+
+const app = express();
+
+app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173', // allow Vite frontend
+  origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
 
 // UTILITY FUNCTIONS
-
 function capitalizeWords(str) {
   return str
     .toLowerCase()
@@ -28,62 +30,7 @@ function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// Create the tables if they don't already exist
-db.serialize(() => {
-  // Users table (for authentication)
-  db.run(`CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT NOT NULL,
-    password TEXT NOT NULL,
-    name TEXT NOT NULL
-  )`);
-
-  // Transactions table
-  db.run(`CREATE TABLE IF NOT EXISTS transactions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    amount REAL,
-    description TEXT,
-    category TEXT,
-    date TEXT,
-    user_id INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-  )`);
-
-  // Budgets table
-  db.run(`CREATE TABLE IF NOT EXISTS budgets (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    amount REAL,
-    user_id INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-  )`);
-
-  // Pots (savings) table
-  db.run(`CREATE TABLE IF NOT EXISTS pots (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    amount REAL,
-    user_id INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-  )`);
-
-  // Recurring bills table
-  db.run(`CREATE TABLE IF NOT EXISTS recurring_bills (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    amount REAL,
-    due_date TEXT,
-    user_id INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-  )`);
-});
-
-const PORT = 5050;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-
+// ---- USER REGISTRATION ----
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -91,320 +38,245 @@ app.post('/register', async (req, res) => {
   if (!email || !password || !name) {
     return res.status(400).json({ message: 'Name, email, and password must be provided.' });
   }
-
   if (password.length < 6) {
     return res.status(400).json({ message: 'Password should be at least 6 characters long.' });
   }
-
-  // Name validation: only letters and spaces allowed
   const nameRegex = /^[a-zA-Z\s]+$/;
   if (!nameRegex.test(name)) {
     return res.status(400).json({ message: 'Name must only contain letters and spaces.' });
   }
-
-  // Email format validation
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Email is invalid' });
   }
 
-  // Capitalize name
-  const capitalizedName = name
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
+  const capitalizedName = capitalizeWords(name.trim());
 
   try {
     // Check if the email already exists
-    db.get('SELECT * FROM users WHERE email = ?', [email], async (err, existingUser) => {
-      if (err) {
-        return res.status(500).json({ message: 'Error checking for existing user' });
-      }
-      if (existingUser) {
-        return res.status(400).json({ message: 'Email already registered' });
-      }
+    const { rows: existingUsers } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (existingUsers.length > 0) {
+      return res.status(400).json({ message: 'Email already registered' });
+    }
 
-      // If the email is unique, hash the password
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      // --- Insert User ---
-      const insertUserQuery = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
-      db.run(insertUserQuery, [capitalizedName, email, hashedPassword], function (err) {
-        if (err) {
-          console.error('Error inserting user:', err.message);
-          return res.status(500).json({ message: 'Error registering user' });
-        }
+    // Insert new user
+    const userInsert = await pool.query(
+      'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id',
+      [capitalizedName, email, hashedPassword]
+    );
+    const userId = userInsert.rows[0].id;
 
-        const userId = this.lastID;
+    // --- Default Budgets ---
+    const budgets = [
+      { name: 'Entertainment', amount: 50, color_id: 1 },
+      { name: 'Bills', amount: 750, color_id: 3 },
+      { name: 'Dining Out', amount: 75, color_id: 2 },
+      { name: 'Personal Care', amount: 100, color_id: 4 }
+    ];
+    for (const b of budgets) {
+      await pool.query(
+        'INSERT INTO budgets (name, amount, user_id, color_id) VALUES ($1, $2, $3, $4)',
+        [b.name, b.amount, userId, b.color_id]
+      );
+    }
 
-        // --- Default Budgets ---
-        const budgets = [
-          { name: 'Entertainment', amount: 50, color_id: 1 },
-          { name: 'Bills', amount: 750, color_id: 3 },
-          { name: 'Dining Out', amount: 75, color_id: 2 },
-          { name: 'Personal Care', amount: 100, color_id: 4 }
-        ];
+    // --- Default Pots ---
+    const pots = [
+      { name: 'Savings', saved: 0, target: 5000, color: '#277C78' },
+      { name: 'Concert Ticket', saved: 0, target: 300, color: '#626070' },
+      { name: 'Gift', saved: 0, target: 150, color: '#82C9D7' },
+      { name: 'New Laptop', saved: 0, target: 2500, color: '#F2CDAC' },
+      { name: 'Holiday', saved: 0, target: 3000, color: '#826CB0' }
+    ];
+    for (const p of pots) {
+      await pool.query(
+        'INSERT INTO pots (name, saved, target, user_id, color) VALUES ($1, $2, $3, $4, $5)',
+        [p.name, p.saved, p.target, userId, p.color]
+      );
+    }
 
-        budgets.forEach((budget) => {
-          const budgetQuery = `INSERT INTO budgets (name, amount, user_id, color_id) VALUES (?, ?, ?, ?)`;
-          db.run(budgetQuery, [budget.name, budget.amount, userId, budget.color_id], (err) => {
-            if (err) {
-              console.error(`Error inserting budget ${budget.name}:`, err.message);
-            }
-          });
-        });
-
-        // --- Default Pots ---
-        const pots = [
-          { name: 'Savings', saved: 0, target: 5000, color: '#277C78' },
-          { name: 'Concert Ticket', saved: 0, target: 300, color: '#626070' },
-          { name: 'Gift', saved: 0, target: 150, color: '#82C9D7' },
-          { name: 'New Laptop', saved: 0, target: 2500, color: '#F2CDAC' },
-          { name: 'Holiday', saved: 0, target: 3000, color: '#826CB0' }
-        ];
-
-        pots.forEach((pot) => {
-          const potQuery = `INSERT INTO pots (name, saved, target, user_id, color) VALUES (?, ?, ?, ?, ?)`;
-          db.run(potQuery, [pot.name, pot.saved, pot.target, userId, pot.color], (err) => {
-            if (err) {
-              console.error(`Error inserting pot ${pot.name}:`, err.message);
-            }
-          });
-        });
-
-        // --- Registration Success ---
-        res.status(201).json({ message: 'User created successfully', userId });
-      });
-    });
+    res.status(201).json({ message: 'User created successfully', userId });
   } catch (err) {
     console.error('Error during registration:', err.message);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
+// ---- LOGIN ----
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    const user = rows[0];
+    if (!user) return res.status(404).json({ message: 'Invalid username or password.' });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
+      const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+      res.json({ 
+        message: 'Login successful', 
+        token,
+        userId: user.id,
+        name: user.name,
+        email: user.email,
+      });
+    } else {
+      res.status(401).json({ message: 'Invalid username or password.' });
+    }
+  } catch (err) {
+    res.status(500).send('Error retrieving user');
+  }
+});
 
+// ---- USERS ----
+app.get('/users', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM users');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).send('Error retrieving users');
+  }
+});
 
-  app.post('/login', (req, res) => {
-    const { email, password } = req.body;
-  
-    // Retrieve the user from the database
-    db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
-      if (err) {
-        return res.status(500).send('Error retrieving user');
-      }
-      if (!user) {
-        return res.status(404).send('Invalid username or password.');
-      }
-  
-      // Compare the entered password with the hashed password
-      const isMatch = await bcrypt.compare(password, user.password);
-  
-      if (isMatch) {
-        // Generate a JWT token
-        const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
-          expiresIn: '1h', // Token validity (1 hour)
-        });
-  
-        res.json({ 
-          message: 'Login successful', 
-          token,
-          userId: user.id, 
-          name: user.name, 
-          email: user.email,
-        }); // Send the token to the client
-      } else {
-        res.status(401).json('Invalid username or password.');
-      }
-    });
-  });
+app.get('/users/:id', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT name FROM users WHERE id = $1', [req.params.id]);
+    if (!rows[0]) return res.status(404).json({ message: 'User not found' });
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ message: 'Error retrieving user' });
+  }
+});
 
-  // USERS
-  // User GETs (fetch all users)
+app.get('/dashboard', authenticateToken, (req, res) => {
+  res.send({ message: `Welcome ${req.user.email}, to your dashboard!` });
+});
 
-  app.get('/users', (req, res) => {
-    db.all('SELECT * FROM users', [], (err, rows) => {
-      if (err) {
-        return res.status(500).send('Error retrieving users');
-      }
-      res.json(rows);
-    });
-  });
+// ---- BUDGETS CRUD ----
 
-  app.get('/users/:id', (req, res) => {
-    const userId = req.params.id;
-    db.get('SELECT name FROM users WHERE id = ?', [userId], (err, row) => {
-      if (err) return res.status(500).json({ message: 'Error retrieving user' });
-      if (!row) return res.status(404).json({ message: 'User not found' });
-      res.json(row); // returns { name: 'User Name' }
-    });
-  });
-  
-  app.get('/dashboard', authenticateToken, (req, res) => {
-    res.send({ message: `Welcome ${req.user.email}, to your dashboard!` });
-  });
-
-  // BUDGETS CRUD OPERATIONS
-
-  // Budget GETs (fetch all budgets for a user)
-
-  app.get('/budgets-with-spent/:userId', async (req, res) => {
-    const userId = req.params.userId;
-  
-    const query = `
+// Budgets with spent
+app.get('/budgets-with-spent/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  const query = `
     SELECT 
-        b.id, 
-        b.name, 
-        b.amount, 
-        b.color_id,          
-        c.hex AS color,     
-        IFNULL(SUM(t.amount), 0) as spent
-      FROM budgets b
-      LEFT JOIN transactions t 
-        ON t.category = b.name AND t.user_id = ?
-      LEFT JOIN colors c 
-        ON b.color_id = c.id
-      WHERE b.user_id = ?
-      GROUP BY b.id
+      b.id, 
+      b.name, 
+      b.amount, 
+      b.color_id,          
+      c.hex AS color,     
+      COALESCE(SUM(t.amount), 0) as spent
+    FROM budgets b
+    LEFT JOIN transactions t 
+      ON t.category = b.name AND t.user_id = $1
+    LEFT JOIN colors c 
+      ON b.color_id = c.id
+    WHERE b.user_id = $1
+    GROUP BY b.id, c.hex
+  `;
+  try {
+    const { rows } = await pool.query(query, [userId]);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).send('Database error');
+  }
+});
 
-    `;
-  
-    db.all(query, [userId, userId], (err, rows) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send('Database error');
-      }
-      res.json(rows);
-    });
-  });
-  
-  app.get('/budgets/:userId', (req, res) => {
-    const userId = req.params.userId;
-  
-    const query = `
-      SELECT 
-        b.id, 
-        b.name, 
-        b.amount, 
-        b.color_id, 
-        c.name AS color_name, 
-        c.hex AS color
-      FROM budgets b
-      LEFT JOIN colors c ON b.color_id = c.id
-      WHERE b.user_id = ?;
-    `;
-  
-    db.all(query, [userId], (err, rows) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Error fetching budgets' });
-      }
-      res.json(rows);
-    });
-  });
+// Budgets GET
+app.get('/budgets/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  const query = `
+    SELECT 
+      b.id, 
+      b.name, 
+      b.amount, 
+      b.color_id, 
+      c.name AS color_name, 
+      c.hex AS color
+    FROM budgets b
+    LEFT JOIN colors c ON b.color_id = c.id
+    WHERE b.user_id = $1;
+  `;
+  try {
+    const { rows } = await pool.query(query, [userId]);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching budgets' });
+  }
+});
 
-  
-  //Budget POSTs (add new budgets)
+// Budgets POST
+app.post('/budgets', async (req, res) => {
+  const { name, amount, user_id, color_id } = req.body;
+  const parsedAmount = parseFloat(amount);
+  if (isNaN(parsedAmount) || parsedAmount <= 0) {
+    return res.status(400).json({ message: 'Amount must be a positive number.' });
+  }
+  if (!/^\d+(\.\d{1,2})?$/.test(amount.toString())) {
+    return res.status(400).json({ message: 'Amount must have at most 2 decimal places.' });
+  }
+  const formattedName = capitalizeWords(name);
+  if (formattedName.length > 30) {
+    return res.status(400).json({ message: 'Budget name must be 30 characters or fewer.' });
+  }
+  const query = `INSERT INTO budgets (name, amount, user_id, color_id) VALUES ($1, $2, $3, $4) RETURNING id`;
+  try {
+    const { rows } = await pool.query(query, [formattedName, parsedAmount, user_id, color_id]);
+    res.status(201).json({ id: rows[0].id, name, amount, user_id });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
-  app.post('/budgets', (req, res) => {
-    const { name, amount, user_id, color_id } = req.body;
+// Budgets PUT
+app.put('/budgets/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, amount, color_id } = req.body;
+  const parsedAmount = parseFloat(amount);
+  if (isNaN(parsedAmount) || parsedAmount <= 0) {
+    return res.status(400).json({ message: 'Amount must be a positive number.' });
+  }
+  if (!/^\d+(\.\d{1,2})?$/.test(amount.toString())) {
+    return res.status(400).json({ message: 'Amount must have at most 2 decimal places.' });
+  }
+  const formattedName = capitalizeWords(name);
+  if (formattedName.length > 30) {
+    return res.status(400).json({ message: 'Budget name must be 30 characters or fewer.' });
+  }
+  const query = `UPDATE budgets SET name = $1, amount = $2, color_id = $3 WHERE id = $4`;
+  try {
+    await pool.query(query, [formattedName, amount, color_id, id]);
+    res.json({ message: 'Budget updated successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to update budget' });
+  }
+});
 
-    const parsedAmount = parseFloat(amount);
-    if (isNaN(parsedAmount) || amount <= 0) {
-      return res.status(400).json({ message: 'Amount must be a positive number.' });
-    }
+// Budgets DELETE
+app.delete('/budgets/:id', async (req, res) => {
+  const { id } = req.params;
+  const query = `DELETE FROM budgets WHERE id = $1`;
+  try {
+    await pool.query(query, [id]);
+    res.json({ message: 'Budget deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete budget' });
+  }
+});
 
-    if (!/^\d+(\.\d{1,2})?$/.test(amount.toString())) {
-      return res.status(400).json({ message: 'Amount must have at most 2 decimal places.' });
-    }
+// ---- COLORS ----
+app.get('/colors', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM colors');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching colors' });
+  }
+});
 
-    const formattedName = capitalizeWords(name);
-    if (formattedName.length > 30) {
-      return res.status(400).json({ message: 'Budget name must be 30 characters or fewer.' });
-    }
-
-    const query = `INSERT INTO budgets (name, amount, user_id, color_id) VALUES (?, ?, ?, ?)`;
-  
-    db.run(query, [formattedName, parsedAmount, user_id, color_id], function (err) {
-      if (err) {
-        console.error('Error adding budget:', err);
-        return res.status(500).json({ message: 'Internal server error' });
-      }
-  
-      res.status(201).json({ id: this.lastID, name, amount, user_id });
-    });
-  });
-
-  
-  //Budget PUTs (update budgets)
-
-  app.put('/budgets/:id', (req, res) => {
-    const { id } = req.params;
-    const { name, amount, color_id } = req.body;
-
-    const parsedAmount = parseFloat(amount);
-    if (isNaN(parsedAmount) || amount <= 0) {
-      return res.status(400).json({ message: 'Amount must be a positive number.' });
-    }
-
-    if (!/^\d+(\.\d{1,2})?$/.test(amount.toString())) {
-      return res.status(400).json({ message: 'Amount must have at most 2 decimal places.' });
-    }
-
-    const formattedName = capitalizeWords(name);
-    if (formattedName.length > 30) {
-      return res.status(400).json({ message: 'Budget name must be 30 characters or fewer.' });
-    }
-  
-    const query = `
-      UPDATE budgets
-      SET name = ?, amount = ?, color_id = ?
-      WHERE id = ?
-    `;
-  
-    db.run(query, [formattedName, amount, color_id, id], function (err) {
-      if (err) {
-        console.error('Error updating budget:', err);
-        return res.status(500).json({ message: 'Failed to update budget' });
-      }
-  
-      res.json({ message: 'Budget updated successfully' });
-    });
-  });
-  
-  //Budget DELETEs (delete budgets)  
-  app.delete('/budgets/:id', (req, res) => {
-    const { id } = req.params;
-  
-    const query = `DELETE FROM budgets WHERE id = ?`;
-  
-    db.run(query, [id], function (err) {
-      if (err) {
-        console.error('Error deleting budget:', err);
-        return res.status(500).json({ message: 'Failed to delete budget' });
-      }
-  
-      res.json({ message: 'Budget deleted successfully' });
-    });
-  });
-  
-  
-  
-  // Color GETs (fetch all colors for budgets)
-  app.get('/colors', (req, res) => {
-    db.all('SELECT * FROM colors', [], (err, rows) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Error fetching colors' });
-      }
-      res.json(rows);
-    });
-  });
-
-// TRANSACTIONS
-// Transaction GETs (fetch all transactions for a user)
-
-app.get('/transactions', (req, res) => {
+// ---- TRANSACTIONS ----
+// GET (paginated)
+app.get('/transactions', async (req, res) => {
   const userId = req.query.userId;
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -424,302 +296,192 @@ app.get('/transactions', (req, res) => {
     default: orderBy = 'ORDER BY date DESC';
   }
 
-  const baseQuery = `
+  let baseQuery = `
     SELECT id, amount, description, category, date
     FROM transactions
-    WHERE user_id = ?
-      AND description LIKE ?
-      ${category ? 'AND category = ?' : ''}
-    ${orderBy}
-    LIMIT ? OFFSET ?
+    WHERE user_id = $1
+      AND description ILIKE $2
   `;
+  const params = [userId, `%${search}%`];
 
-  const params = category
-    ? [userId, `%${search}%`, category, limit, offset]
-    : [userId, `%${search}%`, limit, offset];
+  if (category) {
+    baseQuery += ` AND category = $3`;
+    params.push(category);
+  }
+  baseQuery += ` ${orderBy} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+  params.push(limit, offset);
 
-  db.all(baseQuery, params, (err, rows) => {
-    if (err) {
-      console.error('Error fetching paginated transactions:', err);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-
+  try {
+    const { rows } = await pool.query(baseQuery, params);
     res.json(rows);
-  });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-
-
-
-app.get('/transactions/count', (req, res) => {
+// Transaction count
+app.get('/transactions/count', async (req, res) => {
   const userId = req.query.userId;
   const search = req.query.search || '';
   const category = req.query.category || '';
-
-  const query = `
+  let query = `
     SELECT COUNT(*) as total
     FROM transactions
-    WHERE user_id = ?
-      AND description LIKE ?
-      ${category && category !== 'All Transactions' ? 'AND category = ?' : ''}
+    WHERE user_id = $1
+      AND description ILIKE $2
   `;
-
-  const params = category && category !== 'All Transactions'
-    ? [userId, `%${search}%`, category]
-    : [userId, `%${search}%`];
-
-  db.get(query, params, (err, row) => {
-    if (err) {
-      console.error('Error getting transaction count:', err);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-
-    res.json({ total: row.total });
-  });
+  const params = [userId, `%${search}%`];
+  if (category && category !== 'All Transactions') {
+    query += ` AND category = $3`;
+    params.push(category);
+  }
+  try {
+    const { rows } = await pool.query(query, params);
+    res.json({ total: rows[0].total });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-app.get('/transactions/recent/:userId', (req, res) => {
+// Recent transactions
+app.get('/transactions/recent/:userId', async (req, res) => {
   const userId = req.params.userId;
-  db.all(
-    `SELECT id, amount, description, category, date
-     FROM transactions
-     WHERE user_id = ?
-     ORDER BY date DESC
-     LIMIT 100`,
-    [userId],
-    (err, rows) => {
-      if (err) {
-        console.error('Error fetching recent transactions:', err);
-        return res.status(500).json({ message: 'Internal server error' });
-      }
-      res.json(rows);
-    }
-  );
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, amount, description, category, date
+      FROM transactions
+      WHERE user_id = $1
+      ORDER BY date DESC
+      LIMIT 100`,
+      [userId]
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-  //Transaction POSTs (add new transactions)
-
-  // POST /transactions
-app.post('/transactions', (req, res) => {
+// POST transaction
+app.post('/transactions', async (req, res) => {
   const { amount, description, category, date, user_id } = req.body;
-
-  // Validation
   if (typeof amount !== 'number' || isNaN(amount)) {
     return res.status(400).json({ message: 'Amount must be a valid number.' });
   }
-
   if (!description || typeof description !== 'string') {
     return res.status(400).json({ message: 'Description is required.' });
   }
-
   if (!date || isNaN(Date.parse(date))) {
     return res.status(400).json({ message: 'Date must be valid.' });
   }
-
   if (!user_id) {
     return res.status(400).json({ message: 'User ID is required.' });
   }
-
   const formattedDescription = capitalizeFirstLetter(description.trim());
-
-  const query = `
-    INSERT INTO transactions (amount, description, category, date, user_id)
-    VALUES (?, ?, ?, ?, ?)
-  `;
-
-  db.run(query, [amount, formattedDescription, category || null, date, user_id], function (err) {
-    if (err) {
-      console.error('Error adding transaction:', err);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-
+  try {
+    const result = await pool.query(
+      `INSERT INTO transactions (amount, description, category, date, user_id)
+       VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+      [amount, formattedDescription, category || null, date, user_id]
+    );
     res.status(201).json({
-      id: this.lastID,
+      id: result.rows[0].id,
       amount,
       description: formattedDescription,
       category: category || null,
       date,
       user_id
     });
-  });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-// Transaction DELETEs (delete transactions)
-
-app.delete('/transactions/:id', (req, res) => {
+// DELETE transaction
+app.delete('/transactions/:id', async (req, res) => {
   const { id } = req.params;
-
-  const query = `DELETE FROM transactions WHERE id = ?`;
-
-  db.run(query, [id], function (err) {
-    if (err) {
-      console.error('Error deleting transaction:', err);
-      return res.status(500).json({ message: 'Failed to delete transaction' });
-    }
-
-    if (this.changes === 0) {
+  try {
+    const result = await pool.query(`DELETE FROM transactions WHERE id = $1`, [id]);
+    if (result.rowCount === 0) {
       return res.status(404).json({ message: 'Transaction not found' });
     }
-
     res.json({ message: 'Transaction deleted successfully' });
-  });
-});
-
-// Transaction TESTING
-
-// Add this somewhere in server.js for testing (and remove it later!)
-app.post('/transactions/seed-test-data', (req, res) => {
-  const userId = req.body.userId || 1; // Use provided or default user
-  const insertStmt = db.prepare("INSERT INTO transactions (amount, description, category, date, user_id) VALUES (?, ?, ?, ?, ?)");
-
-  for (let i = 1; i <= 65; i++) {
-    const amount = ((Math.random() * 100 - 50).toFixed(2)); // random -50 to +50
-    const description = `Test Transaction ${i}`;
-    const category = ['Food', 'Bills', 'Shopping', 'Other'][i % 4];
-    const date = new Date(Date.now() - i * 86400000).toISOString();
-    insertStmt.run(amount, description, category, date, userId);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete transaction' });
   }
-
-  insertStmt.finalize(err => {
-    if (err) return res.status(500).json({ error: "Seeding failed" });
-    res.json({ message: 'Seeded 65 test transactions' });
-  });
 });
 
-app.delete('/transactions/clear-test-data', (req, res) => {
-  db.run(`DELETE FROM transactions WHERE description LIKE 'Test Transaction%'`, function(err) {
-    if (err) {
-      console.error('Error deleting test transactions:', err);
-      return res.status(500).json({ message: 'Failed to delete test data' });
-    }
-    res.json({ message: `Deleted ${this.changes} test transactions` });
-  });
-});
-
-// POTS
-
-// Pots GETs
-
-app.get('/pots/:userId', (req, res) => {
+// ---- POTS ----
+app.get('/pots/:userId', async (req, res) => {
   const userId = req.params.userId;
-
-  const query = `
-    SELECT id, name, saved, target, color
-    FROM pots
-    WHERE user_id = ?
-  `;
-
-  db.all(query, [userId], (err, rows) => {
-    if (err) {
-      console.error('Error fetching pots:', err.message);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-    
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, name, saved, target, color
+       FROM pots
+       WHERE user_id = $1
+       ORDER BY id ASC`,
+      [userId]
+    );
     res.status(200).json(rows);
-  });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-// Pots POSTs
-app.post('/pots', (req, res) => {
+app.post('/pots', async (req, res) => {
   const { name, saved, target, user_id, color } = req.body;
-
-  // Validation
   if (!name || typeof name !== 'string') {
     return res.status(400).json({ message: 'Name is required and must be a string.' });
   }
-
   if (!target || typeof target !== 'number' || isNaN(target)) {
     return res.status(400).json({ message: 'Target amount must be a valid number.' });
   }
-
   if (!user_id) {
     return res.status(400).json({ message: 'User ID is required.' });
   }
-
   if (!color) {
     return res.status(400).json({ message: 'Color is required.' });
   }
-
   const formattedName = capitalizeWords(name.trim());
-
-  const colorQuery = `SELECT hex FROM colors WHERE id = ?`;
-
-  db.get(colorQuery, [color], (err, row) => {
-    if (err) {
-      console.error('Error fetching color hex:', err.message);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-
-    if (!row) {
-      return res.status(400).json({ message: 'Invalid color ID provided.' });
-    }
-
-    const colorHex = row.hex;
-
-    const query = `
-      INSERT INTO pots (name, saved, target, user_id, color)
-      VALUES (?, ?, ?, ?, ?)
-    `;
-
-    db.run(query, [formattedName, saved ?? 0, target, user_id, colorHex], function (err) {
-      if (err) {
-        console.error('Error adding pot:', err.message);
-        return res.status(500).json({ message: 'Internal server error' });
-      }
-
-      res.status(201).json({
-        id: this.lastID,
-        name: formattedName,
-        saved: saved ?? 0,
-        target,
-        user_id,
-        color: colorHex, // Now we are storing the hex value directly
-      });
+  try {
+    const result = await pool.query(
+      `INSERT INTO pots (name, saved, target, user_id, color)
+      VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+      [formattedName, saved ?? 0, target, user_id, color]
+    );
+    res.status(201).json({
+      id: result.rows[0].id,
+      name: formattedName,
+      saved: saved ?? 0,
+      target,
+      user_id,
+      color,
     });
-  });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-// Pot PUTs
-
-app.put('/pots/:id', (req, res) => {
+app.put('/pots/:id', async (req, res) => {
   const { id } = req.params;
   const { name, target, color, saved } = req.body;
-
-  // Validation
   if (!name || typeof name !== 'string') {
     return res.status(400).json({ message: 'Name is required and must be a string.' });
   }
-
   if (!target || typeof target !== 'number' || isNaN(target)) {
     return res.status(400).json({ message: 'Target amount must be a valid number.' });
   }
-
   if (!color || typeof color !== 'string') {
     return res.status(400).json({ message: 'Color must be a valid hex string.' });
   }
-
   if (typeof saved !== 'number' || isNaN(saved)) {
     return res.status(400).json({ message: 'Saved amount must be a valid number.' });
   }
-
   const formattedName = name.trim();
-  
-  const query = `
-    UPDATE pots
-    SET name = ?, target = ?, color = ?, saved = ?
-    WHERE id = ?
-  `;
-
-  db.run(query, [formattedName, target, color, saved, id], function (err) {
-    if (err) {
-      console.error('Error updating pot:', err.message);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-
-    if (this.changes === 0) {
-      return res.status(404).json({ message: 'Pot not found.' });
-    }
-
+  try {
+    await pool.query(
+      `UPDATE pots SET name = $1, target = $2, color = $3, saved = $4 WHERE id = $5`,
+      [formattedName, target, color, saved, id]
+    );
     res.status(200).json({
       id,
       name: formattedName,
@@ -727,68 +489,49 @@ app.put('/pots/:id', (req, res) => {
       color,
       saved
     });
-  });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-// Pot PUT (Withdraw)
-app.put('/pots/withdraw/:id', (req, res) => {
+app.put('/pots/withdraw/:id', async (req, res) => {
   const { id } = req.params;
   const { saved } = req.body;
-
   if (typeof saved !== 'number' || isNaN(saved) || saved < 0) {
     return res.status(400).json({ message: 'Invalid saved amount.' });
   }
-
-  const query = `
-    UPDATE pots
-    SET saved = ?
-    WHERE id = ?
-  `;
-
-  db.run(query, [saved, id], function (err) {
-    if (err) {
-      console.error('Error updating pot:', err.message);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-
-    if (this.changes === 0) {
+  try {
+    const result = await pool.query(
+      `UPDATE pots SET saved = $1 WHERE id = $2`,
+      [saved, id]
+    );
+    if (result.rowCount === 0) {
       return res.status(404).json({ message: 'Pot not found.' });
     }
-
-    res.status(200).json({
-      id,
-      saved,
-    });
-  });
+    res.status(200).json({ id, saved });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-
-
-// DELETE /pots/:id
-app.delete('/pots/:id', (req, res) => {
+app.delete('/pots/:id', async (req, res) => {
   const potId = req.params.id;
-
   if (!potId) {
     return res.status(400).json({ message: 'Pot ID is required.' });
   }
-
-  const query = `DELETE FROM pots WHERE id = ?`;
-
-  db.run(query, [potId], function (err) {
-    if (err) {
-      console.error('Error deleting pot:', err);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-
-    if (this.changes === 0) {
+  try {
+    const result = await pool.query(`DELETE FROM pots WHERE id = $1`, [potId]);
+    if (result.rowCount === 0) {
       return res.status(404).json({ message: 'Pot not found.' });
     }
-
     res.status(200).json({ message: 'Pot deleted successfully.' });
-  });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-
-
-
-  
+// ---- SERVER LISTEN ----
+const PORT = process.env.PORT || 5050;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
+});

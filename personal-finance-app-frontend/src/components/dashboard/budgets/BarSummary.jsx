@@ -6,6 +6,8 @@ import OptionsDropdown from '../../reusable/small/OptionsDropdown';
 function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudgetUpdated, onEdit }) {
   
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    amount = Number(amount);
+    spent = Number(spent);
 
     // Handlers
     const handleEdit = () => {
