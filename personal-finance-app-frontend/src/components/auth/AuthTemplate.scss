@@ -71,8 +71,12 @@ html, body {
         font-size: 0.8rem;
         width: 60%;
 
+        h1 {
+            @include text-preset-1;
+        }
+
         p {
-            font-size: 1rem;
+            @include text-preset-4;
         }
     }
 }
