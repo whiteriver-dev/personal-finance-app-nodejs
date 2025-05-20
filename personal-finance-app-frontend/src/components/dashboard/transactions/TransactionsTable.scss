@@ -43,6 +43,8 @@
       @include text-preset-3;
       text-align: center;
       align-content: center;
+      justify-content: center;;
+      margin-top: 8rem;
     }
 
 
@@ -172,6 +174,10 @@
 
       }
       
+    }
+
+    @media screen and (max-width: 1023px) {
+
     }
 
 
