@@ -7,6 +7,7 @@ import TransactionsTable from './transactions/TransactionsTable';
 import AddTransactionModal from './transactions/AddTransactionModal';
 import PaginationButtons from './transactions/PaginationButtons';
 import useDebounce from '../../utils/useDebounce';
+import { API_URL } from '../../utils/api';
 
 function Transactions({ userId }) {
 
@@ -53,7 +54,7 @@ function Transactions({ userId }) {
   // Fetch paginated transactions
   const fetchTransactions = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:5050/transactions?userId=${userId}&page=${currentPage}&limit=${itemsPerPage}&search=${debouncedSearchQuery}&sort=${sort}${categoryQuery}`);
+      const res = await fetch(`${API_URL}/transactions?userId=${userId}&page=${currentPage}&limit=${itemsPerPage}&search=${debouncedSearchQuery}&sort=${sort}${categoryQuery}`);
       const data = await res.json();
       setTransactions(data);
     } catch (err) {
@@ -67,7 +68,7 @@ function Transactions({ userId }) {
     try {
       const categoryQuery = categoryFilter !== 'All Transactions' ? `&category=${categoryFilter}` : '';
       const res = await fetch(
-        `http://localhost:5050/transactions/count?userId=${userId}&search=${debouncedSearchQuery}${categoryQuery}`
+        `${API_URL}/transactions/count?userId=${userId}&search=${debouncedSearchQuery}${categoryQuery}`
       );
       const data = await res.json();
       setTotalCount(data.total);
@@ -77,7 +78,7 @@ function Transactions({ userId }) {
   }, [userId, debouncedSearchQuery, categoryFilter]);
   const handleDeleteTransaction = async (transactionId) => {
     try {
-      const res = await fetch(`http://localhost:5050/transactions/${transactionId}`, {
+      const res = await fetch(`${API_URL}/transactions/${transactionId}`, {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Failed to delete transaction');
@@ -94,7 +95,7 @@ function Transactions({ userId }) {
   }, [fetchTransactions, fetchTransactionCount]);
 
   useEffect(() => {
-    fetch(`http://localhost:5050/budgets/${userId}`)
+    fetch(`${API_URL}/budgets/${userId}`)
       .then(res => res.json())
       .then(data => setBudgets(data))
       .catch(err => console.error('Error fetching budgets:', err));

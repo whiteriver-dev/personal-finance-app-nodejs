@@ -4,6 +4,7 @@ import PotItem from './pots/PotItem';
 import AddPotModal from './pots/AddPotModal';
 import EditPotModal from './pots/EditPotModal';
 import ButtonPrimary from '../reusable/small/ButtonPrimary';
+import { API_URL } from '../../utils/api';
 
 function Pots({ userId }) {
   const [pots, setPots] = useState([]);
@@ -15,7 +16,7 @@ function Pots({ userId }) {
     // Fetch all colors
     const fetchColors = useCallback(async () => {
         try {
-          const res = await fetch(`http://localhost:5050/colors`);
+          const res = await fetch(`${API_URL}/colors`);
           if (!res.ok) throw new Error("Failed to fetch colors");
           const data = await res.json();
           setColors(data);
@@ -33,7 +34,7 @@ function Pots({ userId }) {
   // Fetching pots from backend
   const fetchPots = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:5050/pots/${userId}`);
+      const res = await fetch(`${API_URL}/pots/${userId}`);
       if (!res.ok) throw new Error("Failed to fetch pots");
       const data = await res.json();
       setPots(data);

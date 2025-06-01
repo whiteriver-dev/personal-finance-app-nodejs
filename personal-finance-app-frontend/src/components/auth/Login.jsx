@@ -3,6 +3,7 @@ import './Login.scss';
 import ButtonPrimary from '../reusable/small/ButtonPrimary';
 import { PulseLoader } from 'react-spinners';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../../utils/api'; 
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -46,7 +47,7 @@ function Login() {
 
         // Login request to backend
 
-        const response = await fetch('http://localhost:5050/login', {
+        const response = await fetch(`${API_URL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })

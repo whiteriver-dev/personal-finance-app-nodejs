@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EditPotModal.scss';
+import { API_URL } from '../../../utils/api';
 
 function EditPotModal({ pot, onClose, onPotUpdated, usedColors }) {
   const [name, setName] = useState(pot.name);
@@ -11,7 +12,7 @@ function EditPotModal({ pot, onClose, onPotUpdated, usedColors }) {
 
   // Fetch colors from the backend
   useEffect(() => {
-    fetch('http://localhost:5050/colors')
+    fetch(`${API_URL}/colors`)
       .then(res => res.json())
       .then(data => setColors(data))
       .catch(err => console.error('Error fetching colors:', err));
@@ -47,7 +48,7 @@ function EditPotModal({ pot, onClose, onPotUpdated, usedColors }) {
     };
 
     try {
-      const res = await fetch(`http://localhost:5050/pots/${pot.id}`, {
+      const res = await fetch(`${API_URL}/pots/${pot.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedPot),

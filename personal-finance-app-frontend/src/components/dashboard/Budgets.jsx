@@ -5,6 +5,7 @@ import BarSummary from './budgets/BarSummary';
 import AddBudgetModal from './budgets/AddBudgetModal';
 import EditBudgetModal from './budgets/EditBudgetModal';
 import ButtonPrimary from '../reusable/small/ButtonPrimary';
+import { API_URL } from '../../utils/api';
 
 
 function Budgets({ userId }) {
@@ -17,20 +18,20 @@ function Budgets({ userId }) {
     const usedColors = budgets.map(b => b.color_id);
 
     const fetchBudgets = async () => {
-      const res = await fetch(`http://localhost:5050/budgets-with-spent/${userId}`);
+      const res = await fetch(`${API_URL}/budgets-with-spent/${userId}`);
       const data = await res.json();
       setBudgets(data);
     };
     
       useEffect(() => { // Fetch $ spent of Budgets
-        fetch(`http://localhost:5050/budgets-with-spent/${userId}`)
+        fetch(`${API_URL}/budgets-with-spent/${userId}`)
           .then((res) => res.json())
           .then((data) => setBudgets(data))
           .catch((err) => console.error('Error fetching budgets:', err));
       }, [userId]);
 
       useEffect(() => {
-        fetch(`http://localhost:5050/transactions/recent/${userId}`)
+        fetch(`${API_URL}/transactions/recent/${userId}`)
           .then(res => res.json())
           .then(data => {
             setTransactions(data);

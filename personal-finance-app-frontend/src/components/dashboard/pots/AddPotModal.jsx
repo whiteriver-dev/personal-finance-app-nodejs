@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './AddPotModal.scss';
+import { API_URL } from '../../../utils/api';
 
 function AddPotModal({ userId, onClose, onPotCreated, usedColors }) {
   const [name, setName] = useState('');
@@ -25,7 +26,7 @@ function AddPotModal({ userId, onClose, onPotCreated, usedColors }) {
 
 
   useEffect(() => {
-    fetch('http://localhost:5050/colors')
+    fetch(`${API_URL}/colors`)
       .then(res => res.json())
       .then(data => setColors(data));
   }, []);
@@ -50,7 +51,7 @@ function AddPotModal({ userId, onClose, onPotCreated, usedColors }) {
   
     try {
 
-      const res = await fetch('http://localhost:5050/pots', {
+      const res = await fetch(`${API_URL}/pots`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newPot),

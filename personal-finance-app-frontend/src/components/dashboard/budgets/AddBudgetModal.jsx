@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './AddBudgetModal.scss';
+import { API_URL } from '../../../utils/api';
 
 function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
   const [name, setName] = useState('');
@@ -26,7 +27,7 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
 
   // Fetch Colors
   useEffect(() => {
-    fetch('http://localhost:5050/colors')
+    fetch(`${API_URL}/colors`)
       .then(res => res.json())
       .then(data => setColors(data));
   }, []);
@@ -51,7 +52,7 @@ function AddBudgetModal({ userId, onClose, onBudgetCreated, usedColors }) {
     };
 
     try {
-      const res = await fetch('http://localhost:5050/budgets', {
+      const res = await fetch(`${API_URL}/budgets`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newBudget),

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './AddTransactionModal.scss';
+import { API_URL } from '../../../utils/api';
 
 function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
   const [description, setDescription] = useState('');
@@ -11,7 +12,7 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    fetch(`http://localhost:5050/budgets/${userId}`)
+    fetch(`${API_URL}/budgets/${userId}`)
       .then(res => res.json())
       .then(data => setBudgets(data));
   }, [userId]);
@@ -51,7 +52,7 @@ function AddTransactionModal({ userId, onClose, onTransactionCreated }) {
     };
 
     try {
-      const res = await fetch('http://localhost:5050/transactions', {
+      const res = await fetch(`${API_URL}/transactions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newTransaction),

@@ -4,6 +4,7 @@ import OptionsDropdown from '../../reusable/small/OptionsDropdown';
 import DeleteConfirmModal from '../../reusable/small/DeleteConfirmModal';
 import AddMoney from './AddMoney';
 import WithdrawMoney from './WithdrawMoney';
+import { API_URL } from '../../../utils/api';
 
 function PotItem({ pot, onEdit, onPotUpdated }) {
   const percentage = Math.min(((pot.saved / pot.target) * 100).toFixed(2), 100);
@@ -14,7 +15,7 @@ function PotItem({ pot, onEdit, onPotUpdated }) {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`http://localhost:5050/pots/${pot.id}`, {
+      const res = await fetch(`${API_URL}/pots/${pot.id}`, {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Failed to delete');

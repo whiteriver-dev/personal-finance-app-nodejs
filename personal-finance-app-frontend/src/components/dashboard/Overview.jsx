@@ -3,6 +3,7 @@ import React, { useEffect, useState} from 'react';
 import PotsOverview from './overview/PotsOverview';
 import TransactionsOverview from './overview/TransactionsOverview';
 import BudgetsOverview from './overview/BudgetsOverview';
+import { API_URL } from '../../utils/api';
 
 function Overview( {userId, setActiveSection} ) {
   const [pots, setPots] = useState([]);
@@ -15,16 +16,16 @@ function Overview( {userId, setActiveSection} ) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const potsRes = await fetch(`http://localhost:5050/pots/${userId}`);
+        const potsRes = await fetch(`${API_URL}/pots/${userId}`);
         const potsData = await potsRes.json();
-        const budgetsRes = await fetch(`http://localhost:5050/budgets-with-spent/${userId}`);
+        const budgetsRes = await fetch(`${API_URL}/budgets-with-spent/${userId}`);
         
         if (!potsRes.ok || !budgetsRes.ok) throw new Error('Failed to fetch data');
 
 
         const budgetsData = await budgetsRes.json();
 
-        const transactionsRes = await fetch(`http://localhost:5050/transactions?userId=${userId}`);
+        const transactionsRes = await fetch(`${API_URL}/transactions?userId=${userId}`);
         const transactionsData = await transactionsRes.json();
 
         setPots(potsData);

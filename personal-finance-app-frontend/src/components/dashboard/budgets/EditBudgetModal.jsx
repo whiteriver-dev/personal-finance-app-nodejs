@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EditBudgetModal.scss';
+import { API_URL } from '../../../utils/api';
 
 function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
   const [name, setName] = useState(budget.name);
@@ -10,7 +11,7 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
   const dropdownRef = useRef();
 
   useEffect(() => {
-    fetch('http://localhost:5050/colors')
+    fetch(`${API_URL}/colors`)
       .then(res => res.json())
       .then(data => setColors(data));
   }, []);
@@ -43,7 +44,7 @@ function EditBudgetModal({ budget, onClose, onBudgetUpdated, usedColors }) {
     };
 
     try {
-      const res = await fetch(`http://localhost:5050/budgets/${budget.id}`, {
+      const res = await fetch(`${API_URL}/budgets/${budget.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedBudget),

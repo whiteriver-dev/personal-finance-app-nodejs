@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './WithdrawMoney.scss';
+import { API_URL } from '../../../utils/api';
 
 function WithdrawMoney({ pot, onClose, onPotUpdated }) {
   const [amount, setAmount] = useState('');
@@ -25,7 +26,7 @@ function WithdrawMoney({ pot, onClose, onPotUpdated }) {
     };
 
     try {
-      const res = await fetch(`http://localhost:5050/pots/withdraw/${pot.id}`, {
+      const res = await fetch(`${API_URL}/pots/withdraw/${pot.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedPot),

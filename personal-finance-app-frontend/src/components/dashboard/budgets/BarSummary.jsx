@@ -2,7 +2,7 @@ import './BarSummary.scss';
 import React, { useState } from 'react';
 import DeleteConfirmModal from '../../reusable/small/DeleteConfirmModal';
 import OptionsDropdown from '../../reusable/small/OptionsDropdown';
-
+import { API_URL } from '../../../utils/api';
 function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudgetUpdated, onEdit }) {
   
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -16,7 +16,7 @@ function BarSummary({ budgetId, name, spent, amount, color, transactions, onBudg
 
     const handleDelete = async () => {
         try {
-            const res = await fetch(`http://localhost:5050/budgets/${budgetId}`, {
+            const res = await fetch(`${API_URL}/budgets/${budgetId}`, {
                 method: 'DELETE',
             });
             if (!res.ok) throw new Error('Failed to delete');

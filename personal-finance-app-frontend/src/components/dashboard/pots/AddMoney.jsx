@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './AddMoney.scss';
+import { API_URL } from '../../../utils/api';
 
 function AddMoney({ pot, onClose, onPotUpdated }) {
   const [amount, setAmount] = useState('');
@@ -24,7 +25,7 @@ function AddMoney({ pot, onClose, onPotUpdated }) {
     };
 
     try {
-      const res = await fetch(`http://localhost:5050/pots/${pot.id}`, {
+      const res = await fetch(`${API_URL}/pots/${pot.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedPot),

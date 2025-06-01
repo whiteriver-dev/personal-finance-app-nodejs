@@ -3,6 +3,7 @@ import './Register.scss';
 import ButtonPrimary from '../reusable/small/ButtonPrimary';
 import { PulseLoader } from 'react-spinners';
 import { useNavigate, Link } from 'react-router-dom'; 
+import { API_URL } from '../../utils/api';
 
 
 function Register() {
@@ -60,7 +61,7 @@ function Register() {
 
         // Request to the backend
 
-        const response = await fetch('http://localhost:5050/register', {
+        const response = await fetch(`${API_URL}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password }),
