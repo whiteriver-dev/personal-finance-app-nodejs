@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['https://project1.whiteriver-dev.com', 'personal-finance-app-nodejs-e1geysihk-whiteriver-devs-projects.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
