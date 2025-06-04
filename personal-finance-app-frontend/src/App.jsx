@@ -13,7 +13,7 @@ function App() {
         <Route path="/login" element={<AuthTemplate/>} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/componenttest" element={<Dashboard />} />
+        <Route path="/componenttest" element={<Dashboard userId={1} />} />
       </Routes>
     </div>
   </Router>

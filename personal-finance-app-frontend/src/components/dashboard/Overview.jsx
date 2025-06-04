@@ -11,6 +11,21 @@ function Overview( {userId, setActiveSection} ) {
   const [budgets, setBudgets] = useState([]);
   const [totalSaved, setTotalSaved] = useState(0)
 
+function formatCurrency(amount) {
+  const sign = amount < 0 ? '-' : '';
+  return `${sign}$${Math.abs(amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+const INCOME = transactions
+  .filter(tx => Number(tx.amount) > 0)
+  .reduce((sum, tx) => sum + Number(tx.amount), 0);
+
+const EXPENSES = transactions
+  .filter(tx => Number(tx.amount) < 0)
+  .reduce((sum, tx) => sum + Math.abs(Number(tx.amount)), 0);
+
+const BALANCE = INCOME - EXPENSES;
+
 
   // Fetch Data
   useEffect(() => {
@@ -49,15 +64,15 @@ function Overview( {userId, setActiveSection} ) {
             <div className='balance-income-expenses'>
                 <div className='balance-income-expenses__item dark'>
                     <h2 className='balance-income-expenses__item-header'>Current Balance</h2>
-                    <p className='balance-income-expenses__item-value'>$0.00</p>
+                    <p className='balance-income-expenses__item-value'>{formatCurrency(BALANCE)}</p>
                 </div>
                 <div className='balance-income-expenses__item'>
                     <h2 className='balance-income-expenses__item-header'>Income</h2>
-                    <p className='balance-income-expenses__item-value'>$0.00</p>
+                    <p className='balance-income-expenses__item-value'>{formatCurrency(INCOME)}</p>
                 </div>
                 <div className='balance-income-expenses__item'>
                     <h2 className='balance-income-expenses__item-header'>Expenses</h2>
-                    <p className='balance-income-expenses__item-value'>$0.00</p>
+                    <p className='balance-income-expenses__item-value'>{formatCurrency(EXPENSES)}</p>
                 </div>
             </div>
             <div className='overview__grid'>
